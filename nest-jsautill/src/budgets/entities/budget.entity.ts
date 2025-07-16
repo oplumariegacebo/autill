@@ -1,0 +1,31 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Budgets {
+  @PrimaryGeneratedColumn() 
+  Id: number;
+
+  @Column('text')
+  IdBusiness: string;
+
+  @Column()
+  Name: string;
+
+  @Column() 
+  ClientId: number;
+
+  @Column()
+  ClientName: string;
+
+  @Column()
+  Date: string;
+
+  @Column('text')
+  DescriptionItems: string;
+
+  @Column()
+  Price: number;
+
+  @Column()
+  CloseIt: boolean;
+}
