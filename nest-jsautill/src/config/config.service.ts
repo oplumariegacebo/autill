@@ -21,8 +21,7 @@ class ConfigService {
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
-    const entitiesPath = path.join(__dirname, '**', '*.entity{.ts,.js}');
-    console.log(`[DEBUG] TypeORM entities path: ${entitiesPath}`);
+    const entitiesPath = path.join(__dirname, '**', '*.entity{.js,.ts}');
 
     return {
       type: 'mysql',
