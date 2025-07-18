@@ -8,7 +8,7 @@ import { BudgetsModule } from 'src/budgets/budgets.module';
 import { Users } from 'src/users/entities/user.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service'; 
 
 @Module({
   imports: [
