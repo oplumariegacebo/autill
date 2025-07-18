@@ -21,7 +21,15 @@ class ConfigService {
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
-    const entitiesPath = path.join(__dirname, '**', '*.entity{.js,.ts}');
+    // console.log para depurar la ruta
+    console.log(`[DEBUG] __dirname en ConfigService: ${__dirname}`);
+
+    // Esta ruta asume que los archivos compilados (.js) están en una estructura similar a la de src
+    // por ejemplo, si ConfigService.js está en dist/config/ y Users.entity.js está en dist/users/
+    // entonces necesitamos ir "un nivel arriba" para buscar en todas las subcarpetas de dist
+    const entitiesPath = path.join(__dirname, '..', '**', '*.entity{.js,.ts}'); // OJO: .ts también para desarrollo local
+    
+    console.log(`[DEBUG] Ruta de entidades calculada: ${entitiesPath}`);
 
     return {
       type: 'mysql',
