@@ -1,10 +1,10 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'; 
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import path from 'path';
 
 require('dotenv').config();
 
 class ConfigService {
-  constructor(private env: { [k: string]: string | undefined }) {}
+  constructor(private env: { [k: string]: string | undefined }) { }
 
   private getValue(key: string, throwOnMissing = true): string {
     const value = this.env[key];
@@ -20,18 +20,21 @@ class ConfigService {
     return this;
   }
 
-  public getTypeOrmConfig(): TypeOrmModuleOptions { 
-    return {
-      type: 'mysql', 
+  public getTypeOrmConfig(): TypeOrmModuleOptions {
+    const entitiesPath = path.join(__dirname, '**', '*.entity{.ts,.js}');
+    console.log(`[DEBUG] TypeORM entities path: ${entitiesPath}`);
 
-      host: this.getValue('APP_HOST'), 
+    return {
+      type: 'mysql',
+
+      host: this.getValue('APP_HOST'),
       port: parseInt(this.getValue('APP_PORT')),
       username: this.getValue('APP_USER'),
       password: this.getValue('APP_PASSWORD'),
       database: this.getValue('APP_DATABASE'),
 
-      entities: [path.join(__dirname, '**', '*.entity{.ts,.js}')], 
-      synchronize: true, 
+      entities: [entitiesPath],
+      synchronize: true,
     };
   }
 }
