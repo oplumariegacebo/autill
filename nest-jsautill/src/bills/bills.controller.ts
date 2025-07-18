@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Param, Delete, UseGuards, Get } from '@nestjs/common';
 import { BillsService } from './bills.service';
 import { Bills } from './entities/bill.entity';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('Bills')
 @UseGuards(AuthGuard)

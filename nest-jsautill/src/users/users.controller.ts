@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards 
 import { UsersService } from './users.service';
 import { CreateClientDto } from 'src/clients/dto/create-client.dto';
 import { Users } from './entities/user.entity';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('Users')
 @UseGuards(AuthGuard)

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { BudgetsService } from './budgets.service';
 import { BudgetDto } from './dto/budget.dto';
 import { Budgets } from './entities/budget.entity';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('Budgets')
 @UseGuards(AuthGuard)
