@@ -3,7 +3,7 @@ import { Budgets } from './entities/budget.entity';
 import { BudgetsService } from './budgets.service';
 import { BudgetsController } from './budgets.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from 'src/utilities/auth.module';
+import { AuthModule } from '../utilities/auth.module';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service'; 
