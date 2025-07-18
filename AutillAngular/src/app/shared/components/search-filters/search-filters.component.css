@@ -1,0 +1,14 @@
+.input-container {
+    position: relative;
+  }
+  
+  .input {
+    padding-right: 30px;
+  }
+  
+  .mat-datepicker-toggle {
+    position: absolute;
+    top: 56%;
+    right: 10px;
+    transform: translateY(-50%);
+  }

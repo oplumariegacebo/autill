@@ -1,0 +1,103 @@
+<div class="relative overflow-x-auto">
+    @if(errorMessage){
+    <app-errors [errorMessage]="errorMessage"></app-errors>
+    } @else { @if(budgets){ @if(budgets.data.length > 0){
+    <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
+    <div class="min-h-screen w-full bg-white dark:bg-gray-800">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-10 py-3">nombre</th>
+                    <th scope="col" class="px-10 py-3">cliente</th>
+                    <th scope="col" class="px-8 py-3">fecha</th>
+                    <th scope="col" class="px-8 py-3">precio</th>
+                    <th scope="col" class="flex justify-center px-1 py-3">
+                        <button (click)="openTaskDialog('', 0)"
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                            <svg class="svg-icon" viewBox="0 0 20 20">
+                                <path
+                                    d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10">
+                                </path>
+                            </svg>
+                            <span class="pl-1">Nuevo Presupuesto</span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (b of budgets.data; track b.Id){
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-10 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ b.Name }}
+                    </th>
+                    <td class="px-10 py-3">
+                        {{ b.ClientName }}
+                    </td>
+                    <td class="px-8 py-3">
+                        {{ b.Date }}
+                    </td>
+                    <td class="px-8 py-3">{{ b.Price }} €</td>
+                    <td class="flex justify-center px-1 py-3">
+                        @if(b.CloseIt === false){
+                        <button (click)="openTaskDialog('edit', b.Id)"
+                            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-3 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-blue-600 dark:hover:bg-blue-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Editar
+                        </button>
+                        <button (click)="openTaskDialog('generateBill', b.Id)"
+                            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-green-600 dark:hover:bg-green-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Generar Factura
+                        </button>
+                        }
+                        <button (click)="commonService.generatePDF('save','budget', b.Id)"
+                            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-yellow-600 dark:hover:bg-yellow-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Descargar
+                            <img class="inline-block w-6 h-6 rounded"
+                                src="https://img.icons8.com/?size=100&id=13417&format=png&color=000000" />
+                        </button>
+                        <button (click)="sendEmail(b)"
+                            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-white-600 dark:hover:bg-white-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Mandar Email
+                            <img class="inline-block w-6 h-6 rounded"
+                                src="https://img.icons8.com/?size=100&id=xLIkjgcmFOsC&format=png&color=000000" />
+                        </button>
+                        <button (click)="deleteBudget(b.Id)"
+                            class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-red-600 dark:hover:bg-red-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <app-paginator [allItems]="allBudgets" (updateItems)="updateItems($event)"></app-paginator>
+    </div>
+    }@else { @if(budgets.noFilterData === 1){
+    <div class="flex items-center justify-center h-screen">
+        <p class="text-center">No hay presupuestos.</p>
+        <button (click)="openTaskDialog('', 0)"
+            class="hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+            <svg class="svg-icon" viewBox="0 0 20 20">
+                <path
+                    d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10">
+                </path>
+            </svg>
+            <span class="pl-1">Nuevo Presupuesto</span>
+        </button>
+    </div>
+    }@else {
+    <nav class="flex px-5 py-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+            <li class="inline-flex items-center">
+                <a href="/budgets" class="inline-flex items-center text-xl">
+                    < Presupuestos </a>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="flex items-center justify-center h-screen">
+        <p class="text-center">
+            No hay presupuestos que coincidan con la búsqueda.
+        </p>
+    </div>
+    } } } }
+</div>

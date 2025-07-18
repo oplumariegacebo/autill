@@ -1,0 +1,66 @@
+@if(bills){ @if(bills.count > 0){
+    <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
+    <div class="min-h-screen w-full bg-white dark:bg-gray-800">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-10 py-3">nombre</th>
+                    <th scope="col" class="px-10 py-3">cliente</th>
+                    <th scope="col" class="px-8 py-3">fecha</th>
+                    <th scope="col" class="px-8 py-3">precio</th>
+                    <th scope="col" class="px-10 py-3">estado</th>
+                    <th scope="col" class="flex justify-center px-8 py-3">acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (b of bills.data; track b.Id){
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-10 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ b.Name }}
+                    </th>
+                    <td class="px-10 py-3">
+                        {{ b.ClientName }}
+                    </td>
+                    <td class="px-8 py-3">
+                        {{ b.Date }}
+                    </td>
+                    <td class="px-8 py-3">
+                        {{ b.Price }} €
+                    </td>
+                    <td class="px-10 py-3">
+                        @if(b.Cashed){
+                            <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                Cobrado
+                            </span>
+                        }@else {
+                            <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                Pendiente
+                            </span>   
+                        }
+                    </td>
+                    <td class="flex justify-center px-8 py-3">
+                        @if(!b.Cashed){
+                            <button (click)="cashed(b.Id)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-yellow-600 dark:hover:bg-yellow-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                Cobrar <img class="inline-block w-6 h-6 rounded" src="https://img.icons8.com/?size=100&id=13417&format=png&color=000000" /> 
+                            </button>
+                        }
+                        <button (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-yellow-600 dark:hover:bg-yellow-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Descargar <img class="inline-block w-6 h-6 rounded" src="https://img.icons8.com/?size=100&id=13417&format=png&color=000000" /> 
+                        </button>
+                        <button (click)="deleteBill(b.Id)" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-md text-sm px-5 py-1 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-red-600 dark:hover:bg-red-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <app-paginator [allItems]="allBills" (updateItems)="updateItems($event)"></app-paginator>
+    </div>
+    }@else {
+    <div class="flex items-center justify-center h-screen">
+        <p class="text-center">No hay facturas.</p>
+    </div>
+    } }
