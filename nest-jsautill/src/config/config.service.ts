@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'; 
+import path from 'path';
 
 require('dotenv').config();
 
@@ -29,7 +30,7 @@ class ConfigService {
       password: this.getValue('APP_PASSWORD'),
       database: this.getValue('APP_DATABASE'),
 
-      entities: ['dist/**/*.entity.js'], 
+      entities: [path.join(__dirname, '**', '*.entity{.ts,.js}')], 
       synchronize: true, 
     };
   }
