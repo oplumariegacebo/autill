@@ -3,7 +3,7 @@ import { UpdateBillDto } from './dto/update-bill.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bills } from './entities/bill.entity';
-import { BudgetsService } from 'src/budgets/budgets.service';
+import { BudgetsService } from '../budgets/budgets.service';
 
 @Injectable()
 export class BillsService {

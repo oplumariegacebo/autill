@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateClientDto } from 'src/clients/dto/create-client.dto';
+import { CreateClientDto } from '../clients/dto/create-client.dto';
 import { Users } from './entities/user.entity';
 import { AuthGuard } from '../auth/auth.guard';
 
