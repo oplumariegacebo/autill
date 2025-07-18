@@ -12,7 +12,7 @@ async function bootstrap() {
   });*/
   app.enableCors({
     allowedHeaders: '*',
-    origin: 'http://localhost:4200',
+    origin: 'https://autill-front.vercel.app',
     methods: '*',
     credentials: true,
   });
