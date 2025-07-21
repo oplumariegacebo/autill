@@ -14,9 +14,13 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   isLogin: boolean = false;
   dataComplete = false;
-    isMenuOpen: boolean = false; // Ensure the menu is closed by default
+  isMenuOpen: boolean = false;
+  screenWidth: number = window.innerWidth;
 
   constructor(private router: Router) {
+    window.addEventListener('resize', () => {
+      this.screenWidth = window.innerWidth;
+    });
   }
 
   ngOnInit() {
@@ -29,6 +33,6 @@ export class AppComponent {
   }
 
   onMenuStateChange(open: boolean) {
-    this.isMenuOpen = open; // Update menu state based on header button click
+    this.isMenuOpen = open;
   }
 }

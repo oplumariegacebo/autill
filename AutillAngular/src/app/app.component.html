@@ -1,9 +1,10 @@
-@if(!isLogin){
-    <app-header (menuStateChange)="onMenuStateChange($event)"></app-header>
-    <div [ngClass]="{'blur-sm pointer-events-none': isMenuOpen}">
-      <router-outlet></router-outlet>
-    </div>
-    <app-footer></app-footer>
-}@else {
+<ng-container *ngIf="!isLogin; else loggedIn">
+  <app-header (menuStateChange)="onMenuStateChange($event)"></app-header>
+  <div [ngClass]="{'blur-sm pointer-events-none': isMenuOpen && screenWidth < 1024}" class="bg-gray-900 min-h-screen m-0 p-0">
     <router-outlet></router-outlet>
-}
+  </div>
+  <app-footer></app-footer>
+</ng-container>
+<ng-template #loggedIn>
+  <router-outlet></router-outlet>
+</ng-template>
