@@ -1,6 +1,8 @@
 @if(!isLogin){
-    <app-header></app-header>
-    <router-outlet></router-outlet>
+    <app-header (menuStateChange)="onMenuStateChange($event)"></app-header>
+    <div [ngClass]="{'blur-sm pointer-events-none': isMenuOpen}">
+      <router-outlet></router-outlet>
+    </div>
     <app-footer></app-footer>
 }@else {
     <router-outlet></router-outlet>
