@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
@@ -8,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent],
+imports: [CommonModule, HeaderComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
