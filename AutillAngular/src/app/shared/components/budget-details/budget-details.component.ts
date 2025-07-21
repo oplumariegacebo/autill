@@ -81,17 +81,23 @@ export class BudgetDetailsComponent {
   }
 
   onClose(): void {
-    if (this.items[this.items.length - 1].TotalConcept == 0) {
-      this.items.pop();
-    }
-    this.dialogRef.close({ data: this.items });
+    // Filtrar solo los productos con nombre y unidades válidas
+    const itemsValidos = this.items.filter(item => {
+      return item.Name && item.Name.trim() !== '' && item.Units > 0;
+    });
+    this.dialogRef.close({ data: itemsValidos });
   }
 
   addItem(id: number, type:string) {
     if(type === 'form'){
+      const itemName = this.detailsForm.controls['Item' + (id-1)].value;
+      if (!itemName || itemName.trim() === '') {
+        // No añadir si el producto está vacío
+        return;
+      }
       let units = parseFloat(this.detailsForm.controls['Units' + (id-1)].value);
 
-      this.items[(id-1)].Name = this.detailsForm.controls['Item' + (id-1)].value;
+      this.items[(id-1)].Name = itemName;
       this.items[(id-1)].Units = units;
       this.items[(id-1)].Price = parseFloat(this.lasItemAdded.Price);
       this.items[(id-1)].TotalConcept = Number((units * this.items[(id-1)].Price).toFixed(2));
@@ -100,9 +106,14 @@ export class BudgetDetailsComponent {
 
       this.items.push({ Id: id, Name: '', Units: 0, Price: 0, TotalConcept: 0 });
     }else{
+      const itemName = this.detailsForm.controls['Item' + id].value;
+      if (!itemName || itemName.trim() === '') {
+        // No añadir si el producto está vacío
+        return;
+      }
       let units = parseFloat(this.detailsForm.controls['Units' + id].value);
 
-      this.items[id].Name = this.detailsForm.controls['Item' + id].value;
+      this.items[id].Name = itemName;
       this.items[id].Units = units;
       this.items[id].Price = parseFloat(this.lasItemAdded.Price);
       this.items[id].TotalConcept = Number((units * this.items[id].Price).toFixed(2));
@@ -149,9 +160,11 @@ export class BudgetDetailsComponent {
 
   addItems() {
     this.addItem(this.items.length - 1, 'new');
-    //this.items.pop();
-
-    this.onClose();
+    // Filtrar solo los productos con nombre y unidades válidas
+    const itemsValidos = this.items.filter(item => {
+      return item.Name && item.Name.trim() !== '' && item.Units > 0;
+    });
+    this.dialogRef.close({ data: itemsValidos });
   }
 
   unitsChange(idItem: number, event: any) {
