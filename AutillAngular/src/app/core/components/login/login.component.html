@@ -9,7 +9,7 @@
         </a>
 
         @if(!register_option){
-          <div [@openClose] class="p-8 rounded-2xl bg-white shadow">
+          <div [@openClose] class="p-8 rounded-2xl bg-white shadow text-gray-900 dark:text-white">
             <h2 class="text-gray-800 text-center text-2xl font-bold">Iniciar Sesión</h2>
             <form [formGroup]="loginForm" class="mt-8 space-y-4">
               <div>
@@ -78,7 +78,7 @@
             </form>
           </div>
         }@else {
-          <div class="p-8 mb-6 rounded-2xl bg-white shadow">
+          <div class="p-8 mb-6 rounded-2xl bg-white shadow text-gray-900 dark:text-white">
             <h2 class="text-gray-800 text-center text-2xl font-bold">Registrarse</h2>
             <form [formGroup]="registerForm" class="mt-8 space-y-4">
               <div>
