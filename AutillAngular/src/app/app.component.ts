@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from './core/services/api.service';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from "./core/components/footer/footer.component";
 import { HeaderComponent } from './core/components/header/header.component';
@@ -16,8 +17,9 @@ export class AppComponent {
   dataComplete = false;
   isMenuOpen: boolean = false;
   screenWidth: number = window.innerWidth;
+  private refreshInterval: any;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private apiService: ApiService) {
     window.addEventListener('resize', () => {
       this.screenWidth = window.innerWidth;
     });
@@ -29,10 +31,32 @@ export class AppComponent {
         if(event.url === '/'){ this.isLogin = true; }
         else { this.isLogin = false; }
       }
-    })
+    });
+    // Refrescar el token cada 10 minutos si existe
+    this.refreshInterval = setInterval(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.apiService.refreshToken(token).subscribe({
+          next: (resp) => {
+            if(resp && resp.access_token){
+              localStorage.setItem('token', resp.access_token);
+            }
+          },
+          error: () => {
+            // Si falla, puedes cerrar sesión o mostrar aviso
+          }
+        });
+      }
+    }, 10 * 60 * 1000); // 10 minutos
   }
 
   onMenuStateChange(open: boolean) {
     this.isMenuOpen = open;
+  }
+
+  ngOnDestroy() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
   }
 }
