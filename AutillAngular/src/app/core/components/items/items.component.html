@@ -5,8 +5,8 @@
     @else {
         @if(items){ @if(items.count > 0){
             <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
-            <div class="min-h-screen w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <div class="min-h-screen w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-x-auto max-w-full">
+                <table class="min-w-[400px] w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-10 py-3">nombre</th>
