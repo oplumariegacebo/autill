@@ -17,4 +17,9 @@ export class ApiService {
     }
     return this.http.post(this.api+auth_action, user);
   }
+
+  refreshToken(token: string) {
+    // Envía el token actual y recibe el nuevo
+    return this.http.post<any>(this.api + 'refresh', { token });
+  }
 }

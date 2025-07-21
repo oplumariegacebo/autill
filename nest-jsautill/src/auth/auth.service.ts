@@ -24,7 +24,10 @@ export class AuthService {
         }
         const payload = { email: user.Email };
         return {
-            access_token: await this.jwtService.signAsync(payload, { secret: process.env.JWT_TOKEN_SECRET }),
+            access_token: await this.jwtService.signAsync(payload, {
+                secret: process.env.JWT_TOKEN_SECRET,
+                expiresIn: '1h',
+            }),
         };
     }
 
@@ -49,7 +52,24 @@ export class AuthService {
         try {
             return this.jwtService.verify(token, { secret: process.env.JWT_TOKEN_SECRET });
         } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new UnauthorizedException('Token expirado');
+            }
             throw new UnauthorizedException('Token inválido');
+        }
+    }
+
+    async refreshToken(token: string): Promise<{ access_token: string }> {
+        try {
+            const payload = this.jwtService.verify(token, { secret: process.env.JWT_TOKEN_SECRET, ignoreExpiration: true });
+            return {
+                access_token: await this.jwtService.signAsync({ email: payload.email }, {
+                    secret: process.env.JWT_TOKEN_SECRET,
+                    expiresIn: '1h',
+                }),
+            };
+        } catch (error) {
+            throw new UnauthorizedException('No se puede refrescar el token');
         }
     }
 }
