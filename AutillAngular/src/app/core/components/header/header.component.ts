@@ -1,22 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule,RouterLink,RouterLinkWithHref, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkWithHref, RouterLinkActive],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
   public href: string = "";
   isMenuOpen: boolean = false;
+  @Output() menuStateChange = new EventEmitter<boolean>()
 
-  constructor(private router : Router) {}
+  constructor(private router: Router) { }
 
-  logout(){
+  logout() {
     localStorage.clear();
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+    this.menuStateChange.emit(this.isMenuOpen);
   }
 
   ngOnInit() {
@@ -24,7 +30,7 @@ export class HeaderComponent {
     console.log(this.router.url);
   }
 
-  activeNav(element: string){
+  activeNav(element: string) {
     //document.getElementById(element)!.classList.add('selected');
   }
 }
