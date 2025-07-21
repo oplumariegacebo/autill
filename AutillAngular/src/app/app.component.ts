@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   isLogin: boolean = false;
   dataComplete = false;
-  isMenuOpen: boolean = false;
+    isMenuOpen: boolean = false; // Ensure the menu is closed by default
 
   constructor(private router: Router) {
   }
@@ -29,6 +29,6 @@ export class AppComponent {
   }
 
   onMenuStateChange(open: boolean) {
-    this.isMenuOpen = open;
+    this.isMenuOpen = open; // Update menu state based on header button click
   }
 }
