@@ -11,6 +11,7 @@ import { Router, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angul
 })
 export class HeaderComponent {
   public href: string = "";
+  isMenuOpen: boolean = false;
 
   constructor(private router : Router) {}
 
