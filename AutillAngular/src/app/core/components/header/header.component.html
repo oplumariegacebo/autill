@@ -24,31 +24,31 @@
       <div [ngClass]="{'block': isMenuOpen, 'hidden': !isMenuOpen, 'lg:flex': true}" class="w-full lg:w-auto lg:order-1" id="mobile-menu">
         <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
           <li>
-            <a routerLink="/home" routerLinkActive="router-link-active bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 rounded lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" (click)="toggleMenu()">Inicio</a>
+            <a routerLink="/home" routerLinkActive="bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 rounded lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" (click)="toggleMenu()">Inicio</a>
           </li>
           <li>
-            <a routerLink="/bills" routerLinkActive="router-link-active bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Facturas</a>
+            <a routerLink="/bills" routerLinkActive="bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Facturas</a>
           </li>
           <li>
-            <a routerLink="/budgets" routerLinkActive="router-link-active bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Presupuestos</a>
+            <a routerLink="/budgets" routerLinkActive="bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Presupuestos</a>
           </li>
           <li>
-            <a routerLink="/clients" routerLinkActive="router-link-active bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Clientes</a>
+            <a routerLink="/clients" routerLinkActive="bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Clientes</a>
           </li>
           <li>
-            <a routerLink="/items" routerLinkActive="router-link-active bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" (click)="toggleMenu()">Productos / Servicios</a>
+            <a routerLink="/items" routerLinkActive="bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" (click)="toggleMenu()">Productos / Servicios</a>
           </li>
           <!-- Opciones solo visibles en móviles/tablets -->
           <li class="lg:hidden">
-            <a routerLink="/user-info" routerLinkActive="router-link-active bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:text-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm" (click)="toggleMenu()">
+            <a routerLink="/user-info" routerLinkActive="bg-primary-700 text-white" class="block py-2 pr-4 pl-3 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:text-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm" (click)="toggleMenu()">
               Datos Personales
-              <img class="ml-2 w-7 h-7 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=AZazdsitsrgg&format=png&color=fefefe" style="filter: brightness(0.2);" [ngClass]="{'hover:filter-none dark:hover:brightness-0': true}" />
+              <img class="ml-2 w-7 h-7 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=AZazdsitsrgg&format=png&color=fefefe" style="filter: brightness(0.2);" />
             </a>
           </li>
           <li class="lg:hidden">
-            <a href="#" class="block py-2 pr-4 pl-3 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:text-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm" (click)="logout(); toggleMenu(); return false;">
+            <a href="#" class="block py-2 pr-4 pl-3 text-gray-800 dark:text-white hover:bg-gray-50 dark:hover:text-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm" (click)="logout(); toggleMenu();">
               Cerrar Sesión
-              <img class="ml-2 w-7 h-7 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=Wgd88M98QIxt&format=png&color=fefefe" style="filter: brightness(0.2);" [ngClass]="{'hover:filter-none dark:hover:brightness-0': true}" />
+              <img class="ml-2 w-7 h-7 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=Wgd88M98QIxt&format=png&color=fefefe" style="filter: brightness(0.2);" />
             </a>
           </li>
         </ul>
