@@ -23,9 +23,8 @@ export class AuthService {
             throw new UnauthorizedException();
         }
         const payload = { email: user.Email };
-        process.env.JWT_TOKEN_SECRET = await this.jwtService.signAsync(payload);
         return {
-            access_token: await this.jwtService.signAsync(payload),
+            access_token: await this.jwtService.signAsync(payload, { secret: process.env.JWT_TOKEN_SECRET }),
         };
     }
 
@@ -47,10 +46,10 @@ export class AuthService {
     }
 
     validateToken(token: string) {
-        if(token === process.env.JWT_TOKEN_SECRET){
-            return true;
-        }else{
-            return this.jwtService.verify(token, { secret: process.env.JWT_TOKEN_SECRET});
+        try {
+            return this.jwtService.verify(token, { secret: process.env.JWT_TOKEN_SECRET });
+        } catch (error) {
+            throw new UnauthorizedException('Token inválido');
         }
     }
 }
