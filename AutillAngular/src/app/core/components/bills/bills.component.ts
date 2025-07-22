@@ -1,4 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DeleteItemModalComponent } from '../../../shared/components/delete-item-modal/delete-item-modal.component';
@@ -12,7 +13,7 @@ import { SearchFiltersComponent } from '../../../shared/components/search-filter
 @Component({
   selector: 'app-bills',
   standalone: true,
-  imports: [PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, PaginatorComponent, SearchFiltersComponent],
   templateUrl: './bills.component.html',
   styleUrl: './bills.component.css'
 })
@@ -26,6 +27,7 @@ export class BillsComponent {
   errorMessage: string = "";
   dataBills: any = [];
   filtersActivated: any = null;
+  showFilters = false;
 
   constructor(private dialog: MatDialog, public commonService: CommonService) {}
 

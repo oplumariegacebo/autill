@@ -1,4 +1,5 @@
 import { Component, inject, Input, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { DeleteItemModalComponent } from '../../../shared/components/delete-item-modal/delete-item-modal.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +13,7 @@ import { CommonService, Messages } from '../../services/common-service.service';
 @Component({
   selector: 'app-items',
   standalone: true,
-  imports: [ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
   templateUrl: './items.component.html',
   styleUrl: './items.component.css'
 })
@@ -22,6 +23,7 @@ export class ItemsComponent {
   dataScreen: string = 'items'
   dataItems: any = [];
   showModal = false;
+  showFilters = false;
   itemService = inject(ItemService);
   commonService = inject(CommonService);
   errorMessage: string = '';

@@ -1,4 +1,5 @@
 import { Component, inject, Input, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BudgetModalComponent } from '../../../shared/components/budget-modal/budget-modal.component';
@@ -16,7 +17,7 @@ import { SendEmailComponent } from '../../../shared/components/send-email/send-e
 @Component({
   selector: 'app-budgets',
   standalone: true,
-  imports: [ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
   templateUrl: './budgets.component.html',
   styleUrl: './budgets.component.css'
 })
@@ -27,6 +28,7 @@ export class BudgetsComponent {
   allBudgets: any = [];
   dataBudgets: any = [];
   showModal = false;
+  showFilters = false;
   apiService = inject(ApiService);
   budgetService = inject(BudgetService);
   userService = inject(UserService);
