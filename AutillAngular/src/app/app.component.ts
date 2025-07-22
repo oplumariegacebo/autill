@@ -28,8 +28,13 @@ export class AppComponent {
   ngOnInit() {
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd){
-        if(event.url === '/'){ this.isLogin = true; }
-        else { this.isLogin = false; }
+        if(event.url === '/'){
+          this.isLogin = true;
+        } else {
+          this.isLogin = false;
+          // Forzar scroll al top al navegar a cualquier ruta distinta de login
+          window.scrollTo({ top: 0, behavior: 'auto' });
+        }
       }
     });
     // Refrescar el token cada 10 minutos si existe
