@@ -1,4 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DeleteItemModalComponent } from '../../../shared/components/delete-item-modal/delete-item-modal.component';
@@ -12,7 +13,7 @@ import { Messages } from '../../services/common-service.service';
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
@@ -22,6 +23,7 @@ export class ClientsComponent {
   dataScreen: string = 'clients'
   allClients:any = [];
   showModal = false;
+  showFilters = false;
   clientService = inject(ClientService);
   errorMessage: string = '';
   dataClients: any = [];
