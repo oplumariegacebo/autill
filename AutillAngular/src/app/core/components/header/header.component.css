@@ -1,3 +1,10 @@
+/* Estilo para el nav activo en cualquier modo */
+.active-header {
+  background-color: #2563eb !important; /* bg-primary-700 */
+  color: #fff !important;
+  border-radius: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
 .selected{
     color: white;
 }
