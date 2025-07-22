@@ -99,7 +99,7 @@
                     
                     <div class="relative z-0 w-full mb-5 group">
                       <label class="text-gray-800 text-sm mb-2">Código Postal</label>
-                      <input formControlName="PostalCode" name="postalCode" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" required class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter Postal Code" />
+                      <input formControlName="PostalCode" name="postalCode" type="text" pattern="\\d{5}" maxlength="5" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,5)" required class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter Postal Code" />
                     </div>
                     @if(formatZip){
                       <p class="text-xs text-red-500 flex items-center mt-2">
@@ -120,7 +120,7 @@
                 <div>
                     <label class="text-gray-800 text-sm mb-2 block">Teléfono</label>
                     <div class="relative flex items-center">
-                      <input formControlName="PhoneNumber" name="phoneNumber" type="text" required class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter Phone Number" />
+                      <input formControlName="PhoneNumber" name="phoneNumber" type="text" pattern="\\d{9}" maxlength="9" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,9)" required class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" placeholder="Enter Phone Number" />
                     </div>
                     @if(formatPhoneNumber){
                       <p class="text-xs text-red-500 flex items-center mt-2">
@@ -140,7 +140,7 @@
     
                 <div class="!mt-8">
                   <button (click)="updateUser()" type="button" class="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                    Update data
+                    Actualizar datos
                   </button>
                 </div>
               </form>
