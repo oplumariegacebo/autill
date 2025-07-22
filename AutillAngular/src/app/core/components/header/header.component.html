@@ -24,19 +24,19 @@
       <div [ngClass]="{'block': isMenuOpen, 'hidden': !isMenuOpen, 'lg:flex': true}" class="w-full lg:w-auto lg:order-1" id="mobile-menu">
         <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
           <li>
-            <a routerLink="/home" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-gray-700 rounded lg:text-primary-700 lg:p-0 dark:text-white" (click)="toggleMenu()">Inicio</a>
+            <a routerLink="/home" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-gray-700 rounded lg:text-primary-700 lg:p-0 dark:text-white" (click)="screenWidth < 1024 && toggleMenu()">Inicio</a>
           </li>
           <li>
-            <a routerLink="/bills" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Facturas</a>
+            <a routerLink="/bills" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="screenWidth < 1024 && toggleMenu()">Facturas</a>
           </li>
           <li>
-            <a routerLink="/budgets" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Presupuestos</a>
+            <a routerLink="/budgets" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="screenWidth < 1024 && toggleMenu()">Presupuestos</a>
           </li>
           <li>
-            <a routerLink="/clients" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="toggleMenu()">Clientes</a>
+            <a routerLink="/clients" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700" (click)="screenWidth < 1024 && toggleMenu()">Clientes</a>
           </li>
           <li>
-            <a routerLink="/items" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" class="block py-2 pr-4 pl-3 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" (click)="toggleMenu()">Productos / Servicios</a>
+            <a routerLink="/items" routerLinkActive="bg-primary-700 text-white lg:bg-transparent" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent" (click)="screenWidth < 1024 && toggleMenu()">Productos / Servicios</a>
           </li>
           <!-- Opciones solo visibles en móviles/tablets -->
           <li class="lg:hidden">

@@ -12,9 +12,14 @@ import { Router, RouterLink, RouterLinkActive, RouterLinkWithHref } from '@angul
 export class HeaderComponent {
   public href: string = "";
   isMenuOpen: boolean = false;
+  screenWidth: number = window.innerWidth;
   @Output() menuStateChange = new EventEmitter<boolean>()
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    window.addEventListener('resize', () => {
+      this.screenWidth = window.innerWidth;
+    });
+  }
 
   logout() {
     localStorage.clear();
