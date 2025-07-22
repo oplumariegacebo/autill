@@ -1,6 +1,8 @@
 /* El nav activo solo tendrá color de texto blanco en escritorio y fondo azul en móvil/tablet */
+
+/* Usa el color hexadecimal real de primary-700 de Tailwind (ajusta si tu tailwind.config.js tiene otro valor) */
 .active-header {
-  background-color: theme('colors.primary.700');
+  background-color: #0d35a3;
   color: #fff;
 }
 
