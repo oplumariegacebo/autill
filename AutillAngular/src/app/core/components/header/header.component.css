@@ -1,4 +1,12 @@
 /* El nav activo solo tendrá color de texto blanco en escritorio y fondo azul en móvil/tablet */
 .active-header {
-  @apply text-white bg-primary-700 lg:bg-transparent lg:text-white !important;
+  background-color: theme('colors.primary.700');
+  color: #fff;
+}
+
+@media (min-width: 1024px) {
+  .active-header {
+    background-color: transparent;
+    color: #fff;
+  }
 }
