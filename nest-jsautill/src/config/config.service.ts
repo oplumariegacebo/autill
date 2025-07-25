@@ -23,6 +23,8 @@ class ConfigService {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     const entitiesPath = path.join(__dirname, '..', '**', '*.entity{.js,.ts}'); // OJO: .ts también para desarrollo local
 
+        console.log('DEBUG DB_PASSWORD: ' + this.getValue('APP_PASSWORD')); // Muestra
+
     return {
       type: 'mysql',
 
@@ -43,6 +45,7 @@ class ConfigService {
       entities: [entitiesPath],
       synchronize: false,
     };
+    
   }
 }
 
