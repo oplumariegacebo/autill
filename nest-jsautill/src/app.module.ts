@@ -31,7 +31,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     ClientsModule,
     ItemsModule,
     BillsModule,
-    MailerModule.forRoot({
+    /*MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
         auth: {
@@ -39,7 +39,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
           pass: process.env.EMAIL_PASSWORD,
         },
       },
-    }),
+    }),*/
   ],
   controllers: [AppController],
   providers: [AppService],
