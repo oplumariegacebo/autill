@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import path from 'path';
+import * as fs from 'fs';
 
 require('dotenv').config();
 
@@ -25,7 +26,6 @@ class ConfigService {
 
     return {
       type: 'mysql',
-
       host: this.getValue('APP_HOST'),
       port: parseInt(this.getValue('APP_PORT')),
       username: this.getValue('APP_USER'),
@@ -38,12 +38,16 @@ class ConfigService {
           caching_sha2_password: () => () => Buffer.from(''),
         },
       },
+      ssl: {
+        ca: fs.readFileSync(process.env.DB_SSL_CA_PATH || './ca.pem'),
+        rejectUnauthorized: true,
+      },
 
       autoLoadEntities: true,
       entities: [entitiesPath],
       synchronize: false,
     };
-    
+
   }
 }
 
