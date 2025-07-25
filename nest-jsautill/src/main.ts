@@ -8,7 +8,7 @@ import serverlessExpress from '@vendia/serverless-express';
 let cachedServer: Handler;
 
 async function bootstrapServer(): Promise<Handler> {
-  console.log('--- VERCEL DEBUG: INSIDE bootstrapServer FUNCTION !!---');
+  console.log('--- VERCEL DEBUG: INSIDE bootstrapServer FUNCTION---');
   try {
     const app = await NestFactory.create(AppModule);
 
