@@ -11,7 +11,6 @@ async function bootstrap() {
     next();
   });*/
   app.enableCors({
-    allowedHeaders: '*',
     origin: 'https://autill-front.vercel.app',
     methods: '*',
     credentials: true,
