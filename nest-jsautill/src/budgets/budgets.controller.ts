@@ -39,8 +39,8 @@ export class BudgetsController {
     return this.budgetsService.updateBudget(budgetId, newBudget); 
   }
 
-  @Post('/mailInfo')
+  /*@Post('/mailInfo')
   sendEmail(@Body() options: any){
     return this.budgetsService.sendEmail(options);
-  }
+  }*/
 }
