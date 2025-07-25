@@ -3,14 +3,14 @@ import { BudgetDto } from './dto/budget.dto';
 import { Budgets } from './entities/budget.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { MailerService } from '@nestjs-modules/mailer';
+//import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class BudgetsService {
 
     constructor(
         @InjectRepository(Budgets) private budgetsRepository: Repository<Budgets>,
-        private readonly mailService: MailerService
+        //private readonly mailService: MailerService
     ) { }
 
     getPage(initialElement) {
@@ -120,7 +120,7 @@ export class BudgetsService {
         return this.budgetsRepository.save(updated);
     }
 
-    sendEmail(options) {
+    /*sendEmail(options) {
         this.mailService.sendMail({
             from: `${options.from.FullName} <${options.from.Email}>`,
             to: `"${options.to.Email}, ${options.from.Email}"`,
@@ -140,5 +140,5 @@ export class BudgetsService {
                 }
             ]
         });
-    }
+    }*/
 }
