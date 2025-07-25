@@ -1,3 +1,4 @@
+console.log('--- VERCEL: INICIO DE NESTJS HANDLER ---');
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Callback, Context, Handler } from 'aws-lambda';
