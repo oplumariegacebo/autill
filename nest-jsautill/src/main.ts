@@ -1,23 +1,16 @@
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import * as express from 'express';
 
-const server = express();
-
+bootstrap();
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    allowedHeaders: '*',
     origin: 'https://autill-front.vercel.app',
-    methods: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
-  await app.init();
+  await app.listen(process.env.PORT || 3000);
 }
-
 bootstrap();
-
-export default server;
