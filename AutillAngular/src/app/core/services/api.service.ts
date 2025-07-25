@@ -8,7 +8,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly api = 'https://autill-nestjs.vercel.app/Auth/';
+  private readonly api = 'https://autill-nestjs.vercel.app/auth/';
 
   auth(user: any, action: string){
     let auth_action = 'register';
