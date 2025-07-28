@@ -85,7 +85,12 @@ export class ItemsService {
   }
 
   async deleteItem(itemId: number): Promise<any> {
-    return await this.itemsRepository.delete({ Id: itemId });
+    const item = await this.itemsRepository.findOne({ where: { Id: itemId } });
+    if (!item) {
+      return { success: false, message: 'Item no encontrado' };
+    }
+    await this.itemsRepository.delete({ Id: itemId });
+    return { success: true, message: 'Item eliminado correctamente' };
   }
 
   async updateItem(itemId: number, newItem: UpdateItemDto) {
