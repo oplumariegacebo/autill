@@ -4,7 +4,7 @@
     }@else{
         @if(clients){ @if(clients.count > 0){
             <!-- Filtros desplegables en móvil/tablet, siempre visibles en escritorio -->
-            <div class="mb-4">
+            <div>
               <button class="lg:hidden w-full bg-primary-700 text-white py-2 rounded mb-2 flex items-center justify-center" (click)="showFilters = !showFilters">
                 <span>{{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
                 <svg [ngClass]="{'rotate-180': showFilters}" class="w-5 h-5 ml-2 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
