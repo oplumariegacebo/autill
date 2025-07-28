@@ -23,7 +23,7 @@ export class ItemService {
 
   deleteProduct(id: number){
     const headers = this.getHeaders();
-    return this.http.delete(this.api+'/Items/'+id, {headers});
+    return this.http.delete(this.api+'/Items/'+id, {headers, observe: 'response'});
   }
   getItems(id:string, filters: any, t: number, s:number): Observable<any>{
     const body = {userId: id, filters: filters, take: t, skip: s};

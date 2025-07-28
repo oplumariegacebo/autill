@@ -39,7 +39,7 @@ export class ClientService {
   }
   deleteClient(id: number){
     const headers = this.getHeaders();
-    return this.http.delete(this.api+'/Clients/'+id,{headers});
+    return this.http.delete(this.api + '/Clients/' + id, { headers, observe: 'response' });
   }
   addClient(client:Client){
     const headers = this.getHeaders();
