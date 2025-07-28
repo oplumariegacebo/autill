@@ -24,6 +24,15 @@ class ConfigService {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     const entitiesPath = path.join(__dirname, '..', '**', '*.entity{.js,.ts}');
 
+    // LOGS DE DIAGNÓSTICO
+    console.log('DB_USER:', this.getValue('APP_USER'));
+    const pwd = this.getValue('APP_PASSWORD');
+    console.log('DB_PASSWORD:', pwd ? '***' : '(vacío)');
+    console.log('DB_HOST:', this.getValue('APP_HOST'));
+    console.log('DB_PORT:', this.getValue('APP_PORT'));
+    console.log('DB_DATABASE:', this.getValue('APP_DATABASE'));
+    // FIN LOGS
+
     return {
       type: 'mysql',
       host: this.getValue('APP_HOST'),
