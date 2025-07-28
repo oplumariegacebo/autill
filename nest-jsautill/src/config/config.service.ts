@@ -31,17 +31,9 @@ class ConfigService {
       username: this.getValue('APP_USER'),
       password: this.getValue('APP_PASSWORD'),
       database: this.getValue('APP_DATABASE'),
-
-      extra: {
-        authPlugins: {
-          mysql_native_password: () => () => Buffer.from(''),
-          caching_sha2_password: () => () => Buffer.from(''),
-        },
-      },
       ssl: {
         rejectUnauthorized: false,
       },
-
       autoLoadEntities: true,
       entities: [entitiesPath],
       synchronize: false,
