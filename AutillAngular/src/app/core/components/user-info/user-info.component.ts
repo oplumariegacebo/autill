@@ -53,7 +53,7 @@ export class UserInfoComponent {
   ngOnInit() {
     this.userService.getUserById(localStorage.getItem('id') || "[]").subscribe((data: any) => {
       this.userInfo.setValue(data);
-      this.logoPath = data.logo;
+      this.logoPath = data.Logo;
     })
   }
 
