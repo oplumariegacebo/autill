@@ -12,32 +12,38 @@ export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemsService.createItem(createItemDto);
+  async create(@Body() createItemDto: CreateItemDto) {
+    const result = await this.itemsService.createItem(createItemDto);
+    return result;
   }
 
   @Post('getList')
-  findAllFilter(@Body() options: any): Promise<Items[]> {
-    return this.itemsService.findAllFilter(options);
+  async findAllFilter(@Body() options: any) {
+    const result = await this.itemsService.findAllFilter(options);
+    return result;
   }
 
   @Get('')
-  findAll(@Body() options: any): Promise<Items[]> {
-    return this.itemsService.findAll(options);
+  async findAll(@Body() options: any) {
+    const result = await this.itemsService.findAll(options);
+    return result;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.itemsService.findItem(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.itemsService.findItem(+id);
+    return result;
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
-    return this.itemsService.updateItem(+id, updateItemDto);
+  async update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
+    const result = await this.itemsService.updateItem(+id, updateItemDto);
+    return result;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemsService.deleteItem(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.itemsService.deleteItem(+id);
+    return result;
   }
 }

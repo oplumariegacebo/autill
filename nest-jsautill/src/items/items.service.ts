@@ -70,18 +70,43 @@ export class ItemsService {
     }
   }
 
+  async findItem(itemId: number): Promise<any> {
+    const item = await this.itemsRepository.findOne({ where: { Id: itemId } });
+    if (!item) {
+      return { success: false, message: 'Item no encontrado', data: null };
+    }
+    return { success: true, message: 'Item encontrado', data: item };
+  }
+
+  createItem(newItem: CreateItemDto): Promise<any> {
+    return this.itemsRepository.save(newItem)
+      .then(saved => ({ success: true, message: 'Item creado correctamente', data: saved }))
+      .catch(() => ({ success: false, message: 'Error al crear el item', data: null }));
+  }
+
   async findAll(options: any): Promise<any> {
-    return await this.itemsRepository.findAndCount({
-      where: { IdBusiness: options.userId }
-    });
+    try {
+      const [data, count] = await this.itemsRepository.findAndCount({
+        where: { IdBusiness: options.userId }
+      });
+      return { success: true, data, count };
+    } catch {
+      return { success: false, message: 'Error al obtener items', data: [], count: 0 };
+    }
   }
 
-  async findItem(itemId: number): Promise<Items> {
-    return await this.itemsRepository.findOne({ where: { Id: itemId } });
-  }
-
-  createItem(newItem: CreateItemDto) {
-    return this.itemsRepository.save(newItem);
+  async updateItem(itemId: number, newItem: UpdateItemDto): Promise<any> {
+    let toUpdate = await this.itemsRepository.findOne({ where: { Id: itemId } });
+    if (!toUpdate) {
+      return { success: false, message: 'Item no encontrado', data: null };
+    }
+    let updated = Object.assign(toUpdate, newItem);
+    try {
+      const saved = await this.itemsRepository.save(updated);
+      return { success: true, message: 'Item actualizado correctamente', data: saved };
+    } catch {
+      return { success: false, message: 'Error al actualizar el item', data: null };
+    }
   }
 
   async deleteItem(itemId: number): Promise<any> {
@@ -91,13 +116,5 @@ export class ItemsService {
     }
     await this.itemsRepository.delete({ Id: itemId });
     return { success: true, message: 'Item eliminado correctamente' };
-  }
-
-  async updateItem(itemId: number, newItem: UpdateItemDto) {
-    let toUpdate = await this.itemsRepository.findOne({ where: { Id: itemId } });
-
-    let updated = Object.assign(toUpdate, newItem);
-
-    return this.itemsRepository.save(updated);
   }
 }
