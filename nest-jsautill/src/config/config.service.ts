@@ -39,7 +39,7 @@ class ConfigService {
         },
       },
       ssl: {
-        ca: fs.readFileSync(process.env.DB_SSL_CA_PATH || './ca.pem'),
+        ca: process.env.DB_SSL_CA ? Buffer.from(process.env.DB_SSL_CA, 'utf-8') : undefined,
         rejectUnauthorized: true,
       },
 
