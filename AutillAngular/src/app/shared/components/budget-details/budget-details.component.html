@@ -16,48 +16,55 @@
             </div>
             <!-- Modal body -->
             <form [formGroup]="detailsForm" class="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-6 gap-6 px-2 sm:px-8 py-6">
-                @for (i of items; track i.Id) {
-                  @if(i.showDetails === undefined) { i.showDetails = false }
-                  <div class="w-full rounded-xl col-span-2 flex flex-col justify-center mb-2">
-                    <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
-                      <span class="font-semibold text-gray-800 dark:text-white">{{ detailsForm.get('Item'+i.Id)?.value || 'Producto' }}</span>
-                      <div class="flex gap-2">
-                        <button type="button" (click)="i.showDetails = !i.showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ i.showDetails ? 'Ocultar' : 'Editar' }}</button>
-                        <button type="button" (click)="removeItem(i.Id)" class="text-xs px-2 py-1 rounded bg-red-600 text-white">Eliminar</button>
+                @if(items.length === 0 || (items.length === 1 && !items[0].Name && items[0].Units === 0 && items[0].Price === 0)) {
+                  <!-- Solo mostrar el botón para añadir el primer producto -->
+                  <div class="w-full col-span-2 flex justify-center mt-2">
+                    <button type="button" (click)="addAnotherProduct()" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">Añadir producto</button>
+                  </div>
+                } @else {
+                  @for (i of items; track i.Id) {
+                    @if(i.showDetails === undefined) { i.showDetails = false }
+                    <div class="w-full rounded-xl col-span-2 flex flex-col justify-center mb-2">
+                      <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
+                        <span class="font-semibold text-gray-800 dark:text-white">{{ detailsForm.get('Item'+i.Id)?.value || 'Producto' }}</span>
+                        <div class="flex gap-2">
+                          <button type="button" (click)="i.showDetails = !i.showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ i.showDetails ? 'Ocultar' : 'Editar' }}</button>
+                          <button type="button" (click)="removeItem(i.Id)" class="text-xs px-2 py-1 rounded bg-red-600 text-white">Eliminar</button>
+                        </div>
+                      </div>
+                      <div *ngIf="i.showDetails" class="mt-2">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Producto</mat-label>
+                          <input type="text"
+                                 placeholder="Selecciona"
+                                 aria-label="Producto"
+                                 matInput
+                                 formControlName="Item{{i.Id}}"
+                                 id="detailInput{{i.Id}}"
+                                 [matAutocomplete]="auto">
+                          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option value=""></mat-option>
+                            @for (dbi of filteredItems | async; track dbi) {
+                              <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.Name,$event)" id="{{i.Id}}" [value]="dbi.Name">{{dbi.Name}}</mat-option>
+                            }
+                          </mat-autocomplete>
+                        </mat-form-field>
+                        <div class="w-full flex flex-col justify-center mt-2">
+                          <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Unidades/Horas</label>
+                          <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        </div>
+                        <div class="w-full flex flex-col justify-center mt-2">
+                          <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Precio/(Unidad-Hora)</label>
+                          <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        </div>
                       </div>
                     </div>
-                    <div *ngIf="i.showDetails" class="mt-2">
-                      <mat-form-field class="example-full-width">
-                        <mat-label>Producto</mat-label>
-                        <input type="text"
-                               placeholder="Selecciona"
-                               aria-label="Producto"
-                               matInput
-                               formControlName="Item{{i.Id}}"
-                               id="detailInput{{i.Id}}"
-                               [matAutocomplete]="auto">
-                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                          <mat-option value=""></mat-option>
-                          @for (dbi of filteredItems | async; track dbi) {
-                            <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.Name,$event)" id="{{i.Id}}" [value]="dbi.Name">{{dbi.Name}}</mat-option>
-                          }
-                        </mat-autocomplete>
-                      </mat-form-field>
-                      <div class="w-full flex flex-col justify-center mt-2">
-                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Unidades/Horas</label>
-                        <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      </div>
-                      <div class="w-full flex flex-col justify-center mt-2">
-                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Precio/(Unidad-Hora)</label>
-                        <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                      </div>
-                    </div>
+                  }
+                  <!-- Botón para añadir más productos -->
+                  <div class="w-full col-span-2 flex justify-center mt-2">
+                    <button type="button" (click)="addAnotherProduct()" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">Añadir otro producto</button>
                   </div>
                 }
-                <!-- Botón para añadir más productos -->
-                <div class="w-full col-span-2 flex justify-center mt-2">
-                  <button type="button" (click)="addAnotherProduct()" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">Añadir otro producto</button>
-                </div>
             </form>
             <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
