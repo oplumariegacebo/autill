@@ -171,6 +171,7 @@ export class BudgetDetailsComponent {
   }
 
   addItems() {
+    console.log(this.items);
     this.items.forEach(item => {
       if (item.Name && item.Name.trim() !== '' && item.Units > 0) {
         const price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
@@ -183,6 +184,7 @@ export class BudgetDetailsComponent {
     const itemsValidos = this.items.filter(item => {
       return item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0;
     });
+    console.log(itemsValidos);
     this.dialogRef.close({ data: itemsValidos });
   }
 

@@ -126,7 +126,6 @@ export class BudgetModalComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && Array.isArray(result.data)) {
-        // Filtrar productos válidos
         const validItems = result.data.filter((item: any) => item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0);
         if (validItems.length > 0) {
           let sumTotalPrice = 0;
