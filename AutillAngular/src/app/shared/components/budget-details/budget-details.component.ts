@@ -194,9 +194,9 @@ export class BudgetDetailsComponent {
     const newId = this.items.length > 0 ? Math.max(...this.items.map(i => i.Id)) + 1 : 0;
     // Siempre permite añadir el primer producto si el array está vacío
     if (this.items.length === 0) {
-      this.items = [{ Id: 0, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true }];
-      this.newFormControls(0);
-      this.detailsForm.get('Item0')?.setValue('');
+      this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
+      this.newFormControls(newId);
+      this.detailsForm.get(`Item${newId}`)?.setValue('');
       return;
     }
     // Si ya hay productos, verifica que no existe uno vacío antes de añadir
