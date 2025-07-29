@@ -192,9 +192,16 @@ export class BudgetDetailsComponent {
 
   addAnotherProduct() {
     const newId = this.items.length > 0 ? Math.max(...this.items.map(i => i.Id)) + 1 : 0;
-    // Verifica que no existe ya un producto vacío antes de añadir
+
+    if (this.items.length === 0) {
+      this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
+      this.newFormControls(newId);
+      this.detailsForm.get(`Item${newId}`)?.setValue('');
+      return;
+    }
+
     const existeVacio = this.items.some(item => !item.Name && item.Units === 0 && item.Price === 0);
-    if (!existeVacio || this.items.length === 0) {
+    if (!existeVacio) {
       this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
       this.newFormControls(newId);
       this.detailsForm.get(`Item${newId}`)?.setValue('');
