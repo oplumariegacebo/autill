@@ -147,6 +147,11 @@ export class BudgetDetailsComponent {
   changeSelection(id: number, name: string, event: any) {
     if (event.isUserInput) {
       this.lastOptionIdSelected = id;
+      const itemSelected = this.dbItems.find((item: any) => item.Name === name);
+      if (itemSelected) {
+        this.items[id].Price = itemSelected.Price;
+        this.detailsForm.get(`PriceTD${id}`)?.setValue(itemSelected.Price);
+      }
       this._filter(name);
     }
   }
@@ -154,25 +159,31 @@ export class BudgetDetailsComponent {
   private _filter(value: any): any[] {
     const filterValue = typeof value === 'string' ? value.toLowerCase() : value.Item.toLowerCase();
 
-    let itemSelected = this.dbItems.find((item: any) => item.Name === value)!;
-
+    let itemSelected = this.dbItems.find((item: any) => item.Name === value);
     if (itemSelected !== undefined) {
-      let priceElement = document.getElementById(`PriceTD${this.lastOptionIdSelected}`)! as HTMLInputElement;
-      priceElement.value = itemSelected.Price;
+      if (this.items[this.lastOptionIdSelected]) {
+        this.items[this.lastOptionIdSelected].Price = itemSelected.Price;
+        this.detailsForm.get(`PriceTD${this.lastOptionIdSelected}`)?.setValue(itemSelected.Price);
+      }
     }
-
     this.lasItemAdded = itemSelected;
-
     return this.dbItems.filter((option: any) => option.Name.toLowerCase().includes(filterValue));
   }
 
   addItems() {
-    this.addItem(this.items.length - 1, 'new');
-    // Filtrar solo los productos con nombre y unidades válidas
+    // Solo cerrar el modal y devolver los productos válidos
     const itemsValidos = this.items.filter(item => {
       return item.Name && item.Name.trim() !== '' && item.Units > 0;
     });
     this.dialogRef.close({ data: itemsValidos });
+  }
+
+  addAnotherProduct() {
+    // Añade un nuevo producto vacío al listado y al formulario
+    const newId = this.items.length > 0 ? Math.max(...this.items.map(i => i.Id)) + 1 : 0;
+    this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
+    this.newFormControls(newId);
+    // Opcional: abrir el detalle del nuevo producto automáticamente
   }
 
   unitsChange(idItem: number, event: any) {
