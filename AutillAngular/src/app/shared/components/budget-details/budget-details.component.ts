@@ -53,17 +53,18 @@ export class BudgetDetailsComponent {
   }
 
   ngOnInit() {
-    if (this.data.length > 0) {
-      // Añadir showDetails a cada item importado
+    // Solo inicializa el array si hay datos previos, si no, lo deja vacío
+    if (this.data && Array.isArray(this.data) && this.data.length > 0) {
       this.items = this.data.map((item: any) => ({ ...item, showDetails: false }));
       for (let i = 0; i < this.items.length; i++) {
         this.newFormControls(i);
       }
+    } else {
+      this.items = [];
     }
 
     this.itemService.getAllItems(localStorage.getItem('id') || "[]").subscribe((data: any) => {
       this.dbItems = data.data;
-
       this.filteredItems = this.detailsForm.controls['Item0'].valueChanges.pipe(
         startWith(''),
         map(value => {
@@ -171,8 +172,9 @@ export class BudgetDetailsComponent {
   }
 
   addItems() {
-    console.log(this.items);
     this.items.forEach(item => {
+      const name = this.detailsForm.get(`Item${item.Id}`)?.value ?? item.Name;
+      item.Name = name;
       if (item.Name && item.Name.trim() !== '' && item.Units > 0) {
         const price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
         const units = this.detailsForm.get(`Units${item.Id}`)?.value ?? item.Units;
@@ -190,8 +192,13 @@ export class BudgetDetailsComponent {
 
   addAnotherProduct() {
     const newId = this.items.length > 0 ? Math.max(...this.items.map(i => i.Id)) + 1 : 0;
-    this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
-    this.newFormControls(newId);
+
+    const existeVacio = this.items.some(item => !item.Name && item.Units === 0 && item.Price === 0);
+    if (!existeVacio) {
+      this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
+      this.newFormControls(newId);
+      this.detailsForm.get(`Item${newId}`)?.setValue('');
+    }
   }
 
   unitsChange(idItem: number, event: any) {
