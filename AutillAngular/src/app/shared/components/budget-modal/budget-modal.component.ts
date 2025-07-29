@@ -125,17 +125,20 @@ export class BudgetModalComponent {
     dialogRef.componentInstance.dbItems = this.dbItems;
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && Array.isArray(result.data) && result.data.length > 0) {
         let sumTotalPrice = 0;
-
         for (let i = 0; i < result.data.length; i++) {
           sumTotalPrice = sumTotalPrice + result.data[i].TotalConcept;
         }
-
         this.budgetForm.controls['Price'].setValue(Number(sumTotalPrice.toFixed(2)));
         this.modalItemsArray = result.data;
-
         this.budgetForm.controls['DescriptionItems'].setValue(JSON.stringify(result.data));
+      } else {
+        // Si no hay productos válidos, no actualizar el precio y mostrar advertencia
+        this.budgetForm.controls['Price'].setValue(0);
+        this.modalItemsArray = [];
+        this.budgetForm.controls['DescriptionItems'].setValue('');
+        alert('No se han añadido productos válidos al presupuesto.');
       }
     });
   }

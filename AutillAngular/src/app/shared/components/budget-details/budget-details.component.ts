@@ -171,10 +171,8 @@ export class BudgetDetailsComponent {
   }
 
   addItems() {
-    // Recalcular el importe total usando los valores actuales del formulario
     this.items.forEach(item => {
       if (item.Name && item.Name.trim() !== '' && item.Units > 0) {
-        // Tomar el precio y unidades del formulario si existen
         const price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
         const units = this.detailsForm.get(`Units${item.Id}`)?.value ?? item.Units;
         item.Price = parseFloat(price) || 0;
@@ -189,11 +187,9 @@ export class BudgetDetailsComponent {
   }
 
   addAnotherProduct() {
-    // Añade un nuevo producto vacío al listado y al formulario
     const newId = this.items.length > 0 ? Math.max(...this.items.map(i => i.Id)) + 1 : 0;
     this.items.push({ Id: newId, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true });
     this.newFormControls(newId);
-    // Opcional: abrir el detalle del nuevo producto automáticamente
   }
 
   unitsChange(idItem: number, event: any) {
