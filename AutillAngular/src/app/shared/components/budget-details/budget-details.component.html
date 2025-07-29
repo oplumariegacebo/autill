@@ -21,7 +21,10 @@
                   <div class="w-full rounded-xl col-span-2 flex flex-col justify-center mb-2">
                     <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
                       <span class="font-semibold text-gray-800 dark:text-white">{{ detailsForm.get('Item'+i.Id)?.value || 'Producto' }}</span>
-                      <button type="button" (click)="i.showDetails = !i.showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ i.showDetails ? 'Ocultar' : 'Editar' }}</button>
+                      <div class="flex gap-2">
+                        <button type="button" (click)="i.showDetails = !i.showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ i.showDetails ? 'Ocultar' : 'Editar' }}</button>
+                        <button type="button" (click)="removeItem(i.Id)" class="text-xs px-2 py-1 rounded bg-red-600 text-white">Eliminar</button>
+                      </div>
                     </div>
                     <div *ngIf="i.showDetails" class="mt-2">
                       <mat-form-field class="example-full-width">
@@ -51,6 +54,10 @@
                     </div>
                   </div>
                 }
+                <!-- Botón para añadir más productos -->
+                <div class="w-full col-span-2 flex justify-center mt-2">
+                  <button type="button" (click)="addItems()" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">Añadir otro producto</button>
+                </div>
             </form>
             <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">

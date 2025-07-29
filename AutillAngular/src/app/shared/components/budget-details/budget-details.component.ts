@@ -20,6 +20,14 @@ import { ItemService } from '../../../core/services/item.service';
   styleUrl: './budget-details.component.css'
 })
 export class BudgetDetailsComponent {
+  removeItem(id: number) {
+    // Elimina el producto del array items
+    this.items = this.items.filter(item => item.Id !== id);
+    // Elimina los controles del formulario asociados
+    this.detailsForm.removeControl(`Item${id}`);
+    this.detailsForm.removeControl(`PriceTD${id}`);
+    this.detailsForm.removeControl(`Units${id}`);
+  }
   items = [{ Id: 0, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false }];
   data = [];
   dbItems: any = [];
