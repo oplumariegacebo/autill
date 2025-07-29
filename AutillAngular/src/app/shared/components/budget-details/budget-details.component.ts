@@ -1,6 +1,6 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../core/services/api.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -15,12 +15,12 @@ import { ItemService } from '../../../core/services/item.service';
 @Component({
   selector: 'app-budget-details',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, ReactiveFormsModule, AsyncPipe],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, CommonModule],
   templateUrl: './budget-details.component.html',
   styleUrl: './budget-details.component.css'
 })
 export class BudgetDetailsComponent {
-  items = [{ Id: 0, Name: '', Units: 0, Price: 0, TotalConcept: 0 }];
+  items = [{ Id: 0, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false }];
   data = [];
   dbItems: any = [];
   apiService = inject(ApiService);
@@ -46,8 +46,8 @@ export class BudgetDetailsComponent {
 
   ngOnInit() {
     if (this.data.length > 0) {
-      this.items = this.data;
-
+      // Añadir showDetails a cada item importado
+      this.items = this.data.map((item: any) => ({ ...item, showDetails: false }));
       for (let i = 0; i < this.items.length; i++) {
         this.newFormControls(i);
       }
@@ -104,7 +104,7 @@ export class BudgetDetailsComponent {
 
       this.newFormControls(id);
 
-      this.items.push({ Id: id, Name: '', Units: 0, Price: 0, TotalConcept: 0 });
+      this.items.push({ Id: id, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false });
     }else{
       const itemName = this.detailsForm.controls['Item' + id].value;
       if (!itemName || itemName.trim() === '') {
@@ -118,7 +118,7 @@ export class BudgetDetailsComponent {
       this.items[id].Price = parseFloat(this.lasItemAdded.Price);
       this.items[id].TotalConcept = Number((units * this.items[id].Price).toFixed(2));
   
-      this.items.push({ Id: id + 1, Name: '', Units: 0, Price: 0, TotalConcept: 0 });
+      this.items.push({ Id: id + 1, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false });
 
       this.filteredItems = this.detailsForm.controls[`Item${id}`].valueChanges.pipe(
         startWith(''),

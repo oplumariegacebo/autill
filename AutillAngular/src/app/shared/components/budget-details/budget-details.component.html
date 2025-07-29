@@ -17,35 +17,39 @@
             <!-- Modal body -->
             <form [formGroup]="detailsForm" class="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-6 gap-6 px-2 sm:px-8 py-6">
                 @for (i of items; track i.Id) {
-                    <div class="w-full h-24 rounded-xl col-span-2 flex flex-col justify-center">
-                        <mat-form-field class="example-full-width">
-                            <mat-label>Producto</mat-label>
-                            <input type="text"
-                                   placeholder="Selecciona"
-                                   aria-label="Producto"
-                                   matInput
-                                   formControlName="Item{{i.Id}}"
-                                   id="detailInput{{i.Id}}"
-                                   [matAutocomplete]="auto">
-                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                                <mat-option value=""></mat-option>
-                              @for (dbi of filteredItems | async; track dbi) {
-                                <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.Name,$event)" id="{{i.Id}}" [value]="dbi.Name">{{dbi.Name}}</mat-option>
-                              }
-                            </mat-autocomplete>
-                          </mat-form-field>
+                  @if(i.showDetails === undefined) { i.showDetails = false }
+                  <div class="w-full rounded-xl col-span-2 flex flex-col justify-center mb-2">
+                    <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
+                      <span class="font-semibold text-gray-800 dark:text-white">{{ detailsForm.get('Item'+i.Id)?.value || 'Producto' }}</span>
+                      <button type="button" (click)="i.showDetails = !i.showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ i.showDetails ? 'Ocultar' : 'Editar' }}</button>
                     </div>
-                    <div class="w-full h-24 rounded-xl flex flex-col justify-center">
-                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Unidades/Horas</label>
+                    <div *ngIf="i.showDetails" class="mt-2">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Producto</mat-label>
+                        <input type="text"
+                               placeholder="Selecciona"
+                               aria-label="Producto"
+                               matInput
+                               formControlName="Item{{i.Id}}"
+                               id="detailInput{{i.Id}}"
+                               [matAutocomplete]="auto">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                          <mat-option value=""></mat-option>
+                          @for (dbi of filteredItems | async; track dbi) {
+                            <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.Name,$event)" id="{{i.Id}}" [value]="dbi.Name">{{dbi.Name}}</mat-option>
+                          }
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <div class="w-full flex flex-col justify-center mt-2">
+                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Unidades/Horas</label>
                         <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                    </div>
-                    <div class="w-full h-24 rounded-xl col-span-2 flex flex-col justify-center">
-                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Precio/(Unidad-Hora)</label>
+                      </div>
+                      <div class="w-full flex flex-col justify-center mt-2">
+                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Precio/(Unidad-Hora)</label>
                         <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      </div>
                     </div>
-                    <div class="w-full h-24 rounded-xl flex flex-col justify-center">
-                        <button (click)="addItem(i.Id+1,'form')" type="button" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
-                    </div>
+                  </div>
                 }
             </form>
             <!-- Modal footer -->
