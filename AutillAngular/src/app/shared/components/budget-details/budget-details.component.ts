@@ -171,7 +171,12 @@ export class BudgetDetailsComponent {
   }
 
   addItems() {
-    // Solo cerrar el modal y devolver los productos válidos
+    // Recalcular el importe total antes de cerrar el modal
+    this.items.forEach(item => {
+      if (item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0) {
+        item.TotalConcept = Number((item.Units * item.Price).toFixed(2));
+      }
+    });
     const itemsValidos = this.items.filter(item => {
       return item.Name && item.Name.trim() !== '' && item.Units > 0;
     });
