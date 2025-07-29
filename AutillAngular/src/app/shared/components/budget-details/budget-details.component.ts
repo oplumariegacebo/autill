@@ -171,9 +171,14 @@ export class BudgetDetailsComponent {
   }
 
   addItems() {
-    // Recalcular el importe total antes de cerrar el modal
+    // Recalcular el importe total usando los valores actuales del formulario
     this.items.forEach(item => {
-      if (item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0) {
+      if (item.Name && item.Name.trim() !== '' && item.Units > 0) {
+        // Tomar el precio y unidades del formulario si existen
+        const price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
+        const units = this.detailsForm.get(`Units${item.Id}`)?.value ?? item.Units;
+        item.Price = parseFloat(price) || 0;
+        item.Units = parseFloat(units) || 0;
         item.TotalConcept = Number((item.Units * item.Price).toFixed(2));
       }
     });
