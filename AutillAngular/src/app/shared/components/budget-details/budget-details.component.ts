@@ -183,7 +183,7 @@ export class BudgetDetailsComponent {
       }
     });
     const itemsValidos = this.items.filter(item => {
-      return item.Name && item.Name.trim() !== '' && item.Units > 0;
+      return item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0;
     });
     this.dialogRef.close({ data: itemsValidos });
   }
