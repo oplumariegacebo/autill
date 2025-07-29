@@ -1,5 +1,5 @@
 <div tabindex="-1" aria-hidden="true" class="overflow-x-hidden overflow-y-auto fixed p-4 inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
-    <div class="relative p-4 w-full max-w-3xl max-h-full">
+    <div class="relative p-4 w-full max-w-3xl max-h-full px-2 sm:px-6">
         <!-- Modal content -->
         <div class="relative p-6 bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
@@ -15,9 +15,9 @@
                 </button>
             </div>
             <!-- Modal body -->
-                <form [formGroup]="detailsForm" class="grid grid-cols-6 xl:grid-cols-6 gap-4 px-4 py-4">
+            <form [formGroup]="detailsForm" class="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-6 gap-6 px-2 sm:px-8 py-6">
                 @for (i of items; track i.Id) {
-                    <div class="w-full h-20 rounded-xl col-span-2">
+                    <div class="w-full h-24 rounded-xl col-span-2 flex flex-col justify-center">
                         <mat-form-field class="example-full-width">
                             <mat-label>Producto</mat-label>
                             <input type="text"
@@ -35,15 +35,15 @@
                             </mat-autocomplete>
                           </mat-form-field>
                     </div>
-                    <div class="w-full h-20 rounded-xl">
+                    <div class="w-full h-24 rounded-xl flex flex-col justify-center">
                         <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Unidades/Horas</label>
                         <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                     </div>
-                    <div class="w-full h-20 rounded-xl col-span-2">
+                    <div class="w-full h-24 rounded-xl col-span-2 flex flex-col justify-center">
                         <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Precio/(Unidad-Hora)</label>
                         <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                     </div>
-                    <div class="w-full h-20 rounded-xl">
+                    <div class="w-full h-24 rounded-xl flex flex-col justify-center">
                         <button (click)="addItem(i.Id+1,'form')" type="button" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
                     </div>
                 }
