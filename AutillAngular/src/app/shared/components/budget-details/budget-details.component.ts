@@ -28,7 +28,7 @@ export class BudgetDetailsComponent {
     this.detailsForm.removeControl(`PriceTD${id}`);
     this.detailsForm.removeControl(`Units${id}`);
   }
-  items = [{ Id: 0, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false }];
+  items: any[] = [];
   data = [];
   dbItems: any = [];
   apiService = inject(ApiService);
