@@ -81,19 +81,34 @@ export class ClientsService {
     });
   }
 
-  async findClient(clientId: number): Promise<Clients> {
-    return await this.clientsRepository.findOne({ where: { Id: clientId } });
+  async findClient(clientId: number): Promise<any> {
+    const client = await this.clientsRepository.findOne({ where: { Id: clientId } });
+    if (!client) {
+      return { success: false, message: 'Cliente no encontrado', data: null };
+    }
+    return { success: true, message: 'Cliente encontrado', data: client };
   }
 
   async deleteClient(clientId: number): Promise<any> {
-    return await this.clientsRepository.delete({ Id: clientId });
+    const client = await this.clientsRepository.findOne({ where: { Id: clientId } });
+    if (!client) {
+      return { success: false, message: 'Cliente no encontrado' };
+    }
+    await this.clientsRepository.delete({ Id: clientId });
+    return { success: true, message: 'Cliente eliminado correctamente' };
   }
 
-  async updateClient(clientId: number, newClient: UpdateClientDto) {
+  async updateClient(clientId: number, newClient: UpdateClientDto): Promise<any> {
     let toUpdate = await this.clientsRepository.findOne({ where: { Id: clientId } });
-
+    if (!toUpdate) {
+      return { success: false, message: 'Cliente no encontrado', data: null };
+    }
     let updated = Object.assign(toUpdate, newClient);
-
-    return this.clientsRepository.save(updated);
+    try {
+      const saved = await this.clientsRepository.save(updated);
+      return { success: true, message: 'Cliente actualizado correctamente', data: saved };
+    } catch {
+      return { success: false, message: 'Error al actualizar el cliente', data: null };
+    }
   }
 }

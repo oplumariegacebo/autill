@@ -68,18 +68,31 @@ export class BillsService {
   }
 
   async create(body: any) {
-    let budgetToClone;
     let budget = await this.budgetService.findBudget(body.id);
+    if (!budget) {
+      return { success: false, message: 'Presupuesto no encontrado' };
+    }
 
-    budgetToClone = budget;
+    // Clonar y preparar la factura
+    const billToCreate = {
+      IdBusiness: budget.IdBusiness,
+      Name: 'Factura-' + (budget.Name.substring(budget.Name.length - 4)),
+      ClientId: budget.ClientId,
+      ClientName: budget.ClientName,
+      Date: budget.Date,
+      DescriptionItems: budget.DescriptionItems,
+      Price: budget.Price,
+      IdBudget: budget.Id,
+      Cashed: false
+    };
 
+    // Marcar el presupuesto como cerrado
     budget.CloseIt = true;
     await this.budgetService.updateBudget(body.id, budget);
 
-    budgetToClone.IdBudget = budget.Id;
-    budgetToClone.Name = 'Factura-' + (budget.Name.substring(budget.Name.length - 4));
-
-    return this.billsRepository.save(budgetToClone);
+    // Guardar la factura
+    const savedBill = await this.billsRepository.save(billToCreate);
+    return { success: true, message: 'Factura generada correctamente', data: savedBill };
   }
 
   async remove(billId: number): Promise<any> {
