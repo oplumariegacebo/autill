@@ -214,6 +214,10 @@ export class BudgetDetailsComponent {
     this.items[idItem].Units = parseFloat(refreshUnits);
     this.items[idItem].TotalConcept = this.items[idItem].Units * this.items[idItem].Price;
   }
+
+  hasEmptyItem(): boolean {
+    return this.items.some(item => !item.Name && item.Units === 0 && item.Price === 0);
+  }
 }
 
 export class ItemInit {
