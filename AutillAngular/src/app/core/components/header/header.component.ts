@@ -31,8 +31,7 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-    //this.href = this.router;
-    console.log(this.router.url);
+
   }
 
   activeNav(element: string) {

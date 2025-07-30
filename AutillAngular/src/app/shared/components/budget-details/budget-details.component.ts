@@ -186,7 +186,6 @@ export class BudgetDetailsComponent {
     const itemsValidos = this.items.filter(item => {
       return item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0;
     });
-    console.log(itemsValidos);
     this.dialogRef.close({ data: itemsValidos });
   }
 

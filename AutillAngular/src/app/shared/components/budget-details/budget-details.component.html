@@ -14,19 +14,10 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <form [formGroup]="detailsForm" class="grid grid-cols-1 md:grid-cols-6 xl:grid-cols-6 gap-6 px-2 sm:px-8 py-6">
-              <!-- Botón único para añadir producto -->
-              <div class="w-full col-span-2 flex justify-center mt-2">
-                <button type="button"
-                        [disabled]="hasEmptyItem()"
-                        (click)="addAnotherProduct()"
-                        class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">
-                  Añadir producto
-                </button>
-              </div>
-              <!-- Renderiza todas las fichas de producto -->
+            <form [formGroup]="detailsForm" class="flex flex-col gap-6 px-2 sm:px-8 py-6">
+              <!-- Renderiza todas las fichas de producto en columna -->
               @for (i of items; track i.Id) {
-                <div class="w-full rounded-xl col-span-2 flex flex-col justify-center mb-2">
+                <div class="w-full rounded-xl flex flex-col justify-center mb-2">
                   <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
                     <span class="font-semibold text-gray-800 dark:text-white">{{ detailsForm.get('Item'+i.Id)?.value || 'Producto' }}</span>
                     <div class="flex gap-2">
@@ -62,6 +53,15 @@
                   </div>
                 </div>
               }
+              <!-- Botón único para añadir producto debajo del listado -->
+              <div class="w-full flex justify-center mt-2">
+                <button type="button"
+                        [disabled]="hasEmptyItem()"
+                        (click)="addAnotherProduct()"
+                        class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">
+                  Añadir producto
+                </button>
+              </div>
             </form>
             <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
