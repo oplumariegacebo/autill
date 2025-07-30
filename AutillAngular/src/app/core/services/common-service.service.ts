@@ -57,7 +57,7 @@ export class CommonService {
             file.text(String(title) + ' - ' + budgetName, 100, 20);
 
             if(user.Logo != null){
-              file.addImage(user.Logo, 'JPEG', 0, 0, 30, 30);
+              file.addImage(user.Logo, 'PNG', 0, 0, 30, 30);
             }
     
             file.setFontSize(14);

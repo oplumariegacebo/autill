@@ -15,7 +15,7 @@ export class ApiService {
     if(action === 'login'){
       auth_action = 'login';
     } else {
-      user.Logo = 'https://www.kindpng.com/picc/m/485-4852562_searching-logo-hd-png-download.png';
+      user.Logo = '<img src="https://www.kindpng.com/picc/m/19-196374_logo-banda-diseo-devorado-plstico-curso-azul-logo.png">';
     }
     return this.http.post(this.api+auth_action, user);
   }
