@@ -50,7 +50,7 @@ export class CommonService {
     this.budgetService.getBudgetById(id).subscribe((budget: any) => {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
-            this.getBase64ImageFromUrl(user.Logo)
+          this.getBase64ImageFromUrl(user.Logo)
             .then((base64Logo: any) => {
               file.addImage(base64Logo, 'PNG', 0, 0, 30, 30);
               file.setFontSize(14);
@@ -88,6 +88,47 @@ export class CommonService {
               } else {
                 file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
               }
+            })
+            .catch(() => {
+              this.getBase64ImageFromUrl('/assets/images/autill_logo.png')
+                .then((base64LogoDefault: any) => {
+                  file.addImage(base64LogoDefault, 'PNG', 0, 0, 30, 30);
+                  file.setFontSize(14);
+                  file.text(String(user.FullName || ''), 10, 40);
+                  file.text(String(user.Email || ''), 10, 50);
+                  file.text(String(user.Nif || ''), 10, 60);
+                  file.text(String(user.Address || ''), 10, 70);
+                  file.text(String((user.Region || '') + ' ' + (user.Country || '')), 10, 80);
+                  file.text(String(user.PhoneNumber || ''), 10, 90);
+                  file.text(String(client.Name || ''), 120, 40);
+                  file.text(String(client.Email || ''), 120, 50);
+                  file.text(String(client.Nif || ''), 120, 60);
+                  file.text(String(client.Address || ''), 120, 70);
+                  file.text(String((client.Region || '') + ' ' + (client.Country || '')), 120, 80);
+                  file.text(String(client.PhoneNumber || ''), 120, 90);
+                  let bodyFormatItems = [];
+                  const items = JSON.parse(budget.DescriptionItems);
+                  for (let i = 0; i < items.length; i++) {
+                    bodyFormatItems.push([items[i].Name, items[i].Units, items[i].Price, items[i].TotalConcept]);
+                  }
+                  autoTable(file, {
+                    margin: { top: 100 },
+                    head: [["Concepto", "Unidades", "Precio/Unidad", "Total"]],
+                    body: bodyFormatItems,
+                  })
+                  file.text("Subtotal   " + String(budget.Price || ''), 150, 260);
+                  file.text("IVA 21%   " + String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + "€", 150, 270);
+                  file.setFont('courier', 'bold');
+                  file.text("TOTAL   " + String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + "€", 150, 290);
+                  if (action === 'email') {
+                    this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
+                      const dialogRef = this.dialog.open(InfoModalComponent);
+                      dialogRef.componentInstance.message = Messages.EMAIL_OK;
+                    });
+                  } else {
+                    file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
+                  }
+                });
             });
 
           file.setFontSize(14);
