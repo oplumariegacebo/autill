@@ -53,27 +53,30 @@ export class CommonService {
             file.setFontSize(28);
             file.setFont('courier');
             
-            file.text(title + ' - ' + budget.Name.split('-').pop(), 100, 20);
+            const budgetName = budget.Name ? String(budget.Name.split('-').pop()) : '';
+            file.text(String(title) + ' - ' + budgetName, 100, 20);
 
             if(user.logo != null){
               file.addImage(user.Logo, 'JPEG', 0, 0, 30, 30);
             }
     
             file.setFontSize(14);
+
+            console.log(user, client);
             
-            file.text(user.FullName, 10, 40);
-            file.text(user.Email, 10, 50);
-            file.text(user.Nif, 10, 60);
-            file.text(user.Address, 10, 70);
-            file.text(user.Region + ' ' + user.Country, 10, 80);
-            file.text(user.PhoneNumber.toString(), 10, 90);
-    
-            file.text(client.Name, 120, 40);
-            file.text(client.Email, 120, 50);
-            file.text(client.Nif, 120, 60);
-            file.text(client.Address, 120, 70);
-            file.text(client.Region + ' ' + client.Country, 120, 80);
-            file.text(client.PhoneNumber.toString(), 120, 90);
+            file.text(String(user.FullName || ''), 10, 40);
+            file.text(String(user.Email || ''), 10, 50);
+            file.text(String(user.Nif || ''), 10, 60);
+            file.text(String(user.Address || ''), 10, 70);
+            file.text(String((user.Region || '') + ' ' + (user.Country || '')), 10, 80);
+            file.text(String(user.PhoneNumber || ''), 10, 90);
+
+            file.text(String(client.Name || ''), 120, 40);
+            file.text(String(client.Email || ''), 120, 50);
+            file.text(String(client.Nif || ''), 120, 60);
+            file.text(String(client.Address || ''), 120, 70);
+            file.text(String((client.Region || '') + ' ' + (client.Country || '')), 120, 80);
+            file.text(String(client.PhoneNumber || ''), 120, 90);
 
             let bodyFormatItems = [];
 
@@ -88,11 +91,11 @@ export class CommonService {
               body: bodyFormatItems,
             })
 
-            file.text("Subtotal   " + budget.Price, 150, 260);
-            file.text("IVA 21%   " + Number((budget.Price*0.21).toFixed(2)) + "€", 150, 270);
+            file.text("Subtotal   " + String(budget.Price || ''), 150, 260);
+            file.text("IVA 21%   " + String(Number((budget.Price ? budget.Price*0.21 : 0).toFixed(2))) + "€", 150, 270);
 
             file.setFont('courier','bold');
-            file.text("TOTAL   " + Number((budget.Price*1.21).toFixed(2)) + "€", 150, 290);
+            file.text("TOTAL   " + String(Number((budget.Price ? budget.Price*1.21 : 0).toFixed(2))) + "€", 150, 290);
 
             if(action === 'email'){
               this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
