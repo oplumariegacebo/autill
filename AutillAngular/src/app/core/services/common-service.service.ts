@@ -56,7 +56,7 @@ export class CommonService {
             const budgetName = budget.Name ? String(budget.Name.split('-').pop()) : '';
             file.text(String(title) + ' - ' + budgetName, 100, 20);
 
-            if(user.logo != null){
+            if(user.Logo != null){
               file.addImage(user.Logo, 'JPEG', 0, 0, 30, 30);
             }
     

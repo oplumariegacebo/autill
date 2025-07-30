@@ -14,12 +14,13 @@ export class ApiService {
     let auth_action = 'register';
     if(action === 'login'){
       auth_action = 'login';
+    } else {
+      user.Logo = 'https://www.kindpng.com/picc/m/485-4852562_searching-logo-hd-png-download.png';
     }
     return this.http.post(this.api+auth_action, user);
   }
 
   refreshToken(token: string) {
-    // Envía el token actual y recibe el nuevo
     return this.http.post<any>(this.api + 'refresh', { token });
   }
 }

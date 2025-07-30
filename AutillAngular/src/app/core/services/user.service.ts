@@ -51,7 +51,17 @@ export class UserService {
   }
   editUser(user: any){
     const headers = this.getHeaders();
-    
+    const requiredFields = [
+      'FullName', 'Email', 'Address', 'PhoneNumber', 'Nif', 'Id', 'PostalCode', 'Region', 'Country', 'Password'
+    ];
+    let dataComplete = true;
+    for (const field of requiredFields) {
+      if (!user[field] && user[field] !== 0) {
+        dataComplete = false;
+        break;
+      }
+    }
+    user.DataComplete = dataComplete ? true : null;
     return this.http.put<UserEdit>(this.api+'/Users', user,{headers});
   }
 }
