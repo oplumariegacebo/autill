@@ -26,29 +26,31 @@
                     </div>
                   </div>
                   <div *ngIf="i.showDetails" class="mt-2">
-                    <mat-form-field class="example-full-width">
-                      <mat-label>Producto</mat-label>
-                      <input type="text"
-                             placeholder="Selecciona"
-                             aria-label="Producto"
-                             matInput
-                             formControlName="Item{{i.Id}}"
-                             id="detailInput{{i.Id}}"
-                             [matAutocomplete]="auto">
-                      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                        <mat-option value=""></mat-option>
-                        @for (dbi of filteredItems | async; track dbi) {
-                          <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.Name,$event)" id="{{i.Id}}" [value]="dbi.Name">{{dbi.Name}}</mat-option>
-                        }
-                      </mat-autocomplete>
-                    </mat-form-field>
-                    <div class="w-full flex flex-col justify-center mt-2">
-                      <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Unidades/Horas</label>
-                      <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                    </div>
-                    <div class="w-full flex flex-col justify-center mt-2">
-                      <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Precio/(Unidad-Hora)</label>
-                      <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                    <div class="flex flex-col md:flex-row gap-4">
+                      <mat-form-field class="flex-1 min-w-[180px]">
+                        <mat-label>Producto</mat-label>
+                        <input type="text"
+                               placeholder="Selecciona"
+                               aria-label="Producto"
+                               matInput
+                               formControlName="Item{{i.Id}}"
+                               id="detailInput{{i.Id}}"
+                               [matAutocomplete]="auto">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                          <mat-option value=""></mat-option>
+                          @for (dbi of filteredItems | async; track dbi) {
+                            <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.Name,$event)" id="{{i.Id}}" [value]="dbi.Name">{{dbi.Name}}</mat-option>
+                          }
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <div class="flex-1 flex flex-col justify-center">
+                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Unidades/Horas</label>
+                        <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      </div>
+                      <div class="flex-1 flex flex-col justify-center">
+                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Precio/(Unidad-Hora)</label>
+                        <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      </div>
                     </div>
                   </div>
                 </div>
