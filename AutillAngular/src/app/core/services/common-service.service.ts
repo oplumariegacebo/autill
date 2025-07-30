@@ -56,13 +56,21 @@ export class CommonService {
             const budgetName = budget.Name ? String(budget.Name.split('-').pop()) : '';
             file.text(String(title) + ' - ' + budgetName, 100, 20);
 
-            if(user.Logo != null){
-              file.addImage(user.Logo, 'PNG', 0, 0, 30, 30);
+            // Añadir logo solo si la URL permite CORS, si no usar logo por defecto
+            const defaultLogo = 'https://www.kindpng.com/picc/m/485-4852562_searching-logo-hd-png-download.png';
+            let logoUrl = user.Logo || defaultLogo;
+            // Si la URL contiene 'freepik', 'img.freepik.com' o no es CORS-friendly, usar el logo por defecto
+            if (!logoUrl.startsWith('https://') || logoUrl.includes('freepik') || logoUrl.includes('img.freepik.com')) {
+              logoUrl = defaultLogo;
+            }
+            try {
+              file.addImage(logoUrl, 'PNG', 0, 0, 30, 30);
+            } catch (e) {
+              // Si hay error, usar el logo por defecto
+              file.addImage(defaultLogo, 'PNG', 0, 0, 30, 30);
             }
     
             file.setFontSize(14);
-
-            console.log(user, client);
             
             file.text(String(user.FullName || ''), 10, 40);
             file.text(String(user.Email || ''), 10, 50);
