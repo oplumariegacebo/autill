@@ -68,19 +68,19 @@ export class BudgetsComponent {
   }
 
   updateSearching(formControlValue: any) {
-    if(formControlValue === ""){
+    if (formControlValue === "") {
       this.filtersActivated = null;
-      this.budgetService.getBudgets(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((budgets:any) => {
+      this.budgetService.getBudgets(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((budgets: any) => {
         this.allBudgets = budgets;
         this.dataBudgets = budgets;
         this.budgets = budgets;
       })
-    }else{
+    } else {
       if (formControlValue.Date != null) {
         formControlValue.Date = this.commonService.transformDate(formControlValue.Date);
       }
-  
-      this.filtersActivated  = formControlValue;
+
+      this.filtersActivated = formControlValue;
       this.budgetService.getBudgets(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBudgets: any) => {
         this.budgets = filterBudgets;
         this.allBudgets = this.budgets;
@@ -110,7 +110,13 @@ export class BudgetsComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'confirm') {
         this.budgetService.deleteBudget(id).subscribe({
-        })
+          next: () => {
+            window.location.reload();
+          },
+          error: (err) => {
+            alert('Error al eliminar el presupuesto');
+          }
+        });
       }
     })
   }

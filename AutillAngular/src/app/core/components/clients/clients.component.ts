@@ -21,7 +21,7 @@ export class ClientsComponent {
   @Input() clients: any;
 
   dataScreen: string = 'clients'
-  allClients:any = [];
+  allClients: any = [];
   showModal = false;
   showFilters = false;
   clientService = inject(ClientService);
@@ -29,22 +29,22 @@ export class ClientsComponent {
   dataClients: any = [];
   filtersActivated: any = null;
 
-  constructor(private dialog: MatDialog){}
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
     this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
-      next: (data:any) => {
+      next: (data: any) => {
         this.allClients = data;
         this.dataClients = data;
         this.clients = data;
-      }, 
+      },
       error: (err: HttpErrorResponse) => {
         let error = '';
-        if(err.status === 500){
+        if (err.status === 500) {
           error = 'Internal server error.'
-        }else if(err.status === 401){
+        } else if (err.status === 401) {
           error = 'No autorizado.'
-        }else{
+        } else {
           error = 'Ha ocurrido un error, contacta con el administrador.'
         }
         this.errorMessage = error;
@@ -52,24 +52,24 @@ export class ClientsComponent {
     })
   }
 
-  updateItems(pagination: any){
-    this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, pagination.skip).subscribe((clients:any) => {
+  updateItems(pagination: any) {
+    this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, pagination.skip).subscribe((clients: any) => {
       this.allClients = clients;
       this.dataClients = clients;
       this.clients = clients;
     })
   }
 
-  updateSearching(formControlValue: any){
-    if(formControlValue === ""){
+  updateSearching(formControlValue: any) {
+    if (formControlValue === "") {
       this.filtersActivated = null;
-      this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((clients:any) => {
+      this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((clients: any) => {
         this.allClients = clients;
         this.dataClients = clients;
         this.clients = clients;
       })
-    }else{
-      this.filtersActivated  = formControlValue;
+    } else {
+      this.filtersActivated = formControlValue;
       this.clientService.getClients(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBudgets: any) => {
         this.clients = filterBudgets;
         this.allClients = this.clients;
@@ -77,7 +77,7 @@ export class ClientsComponent {
     }
   }
 
-  deleteClient(id: number){
+  deleteClient(id: number) {
     const dialogRef = this.dialog.open(DeleteItemModalComponent);
     dialogRef.componentInstance.type = 'cliente';
     dialogRef.componentInstance.title = Messages.DELETE_CLIENT_TITLE;
@@ -85,9 +85,15 @@ export class ClientsComponent {
     dialogRef.componentInstance.id = id;
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result == 'confirm'){
+      if (result == 'confirm') {
         this.clientService.deleteClient(id).subscribe({
-        })
+          next: () => {
+            window.location.reload();
+          },
+          error: (err) => {
+            alert('Error al eliminar el cliente');
+          }
+        });
       }
     })
   }
