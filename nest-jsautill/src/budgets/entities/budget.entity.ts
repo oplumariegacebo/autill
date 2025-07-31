@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Budgets {
-  @PrimaryGeneratedColumn() 
+  @PrimaryGeneratedColumn()
   Id: number;
 
   @Column('text')
@@ -11,7 +11,7 @@ export class Budgets {
   @Column()
   Name: string;
 
-  @Column() 
+  @Column()
   ClientId: number;
 
   @Column()
@@ -23,7 +23,7 @@ export class Budgets {
   @Column('text')
   DescriptionItems: string;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   Price: number;
 
   @Column()
