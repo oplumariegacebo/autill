@@ -65,6 +65,7 @@ export class BudgetModalComponent {
   dbItems = [];
   filteredClients!: Observable<Client[]>;
   clientSelected: any;
+  isDisabled = true;
 
   initializeForm() {
     this.budgetForm = new FormGroup({
