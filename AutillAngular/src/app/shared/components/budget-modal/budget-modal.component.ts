@@ -156,12 +156,16 @@ export class BudgetModalComponent {
 
     this.budgetForm.controls['Date'].setValue(formatDate);
 
+    // Usar getRawValue para incluir los deshabilitados
+    let formData = this.budgetForm.getRawValue();
+    // Forzar Price a string con dos decimales
+    formData.Price = Number(formData.Price).toFixed(2);
+
     if (this.id == 0) {
       this.budgetForm.removeControl('Id');
-
-      this.budgetForm.controls['ClientId'].setValue(this.clientSelected.Id);
-      this.budgetForm.controls['ClientName'].setValue(this.clientSelected.Name);
-      this.budgetService.addBudget(this.budgetForm.value).subscribe({
+      formData.ClientId = this.clientSelected.Id;
+      formData.ClientName = this.clientSelected.Name;
+      this.budgetService.addBudget(formData).subscribe({
         next: () => {
           this.budgetForm.addControl('Id', new FormControl());
         },
@@ -173,10 +177,9 @@ export class BudgetModalComponent {
       if (this.clientSelected == undefined) {
         this.clientSelected = this.clients.find((item: any) => item.Name === this.budgetForm.controls['ClientId'].value)!;
       }
-      this.budgetForm.controls['ClientId'].setValue(this.clientSelected.Id);
-      this.budgetForm.controls['ClientName'].setValue(this.clientSelected.Name);
-
-      this.budgetService.editBudget(this.id, this.budgetForm.value).subscribe({
+      formData.ClientId = this.clientSelected.Id;
+      formData.ClientName = this.clientSelected.Name;
+      this.budgetService.editBudget(this.id, formData).subscribe({
         complete: () => {
           setTimeout(() => {
             window.location.reload();
