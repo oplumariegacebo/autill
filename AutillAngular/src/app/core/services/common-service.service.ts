@@ -61,7 +61,7 @@ export class CommonService {
 
           file.setFontSize(22);
           // Título alineado verticalmente con el logo y a la derecha
-          file.text(title, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
+          file.text(budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
 
           // Línea separadora justo debajo del logo/título
           const headerBottomY = logoY + logoHeight + 5;
