@@ -52,7 +52,7 @@ export class CommonService {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
 
-          file.addImage(user.Logo, 'PNG', 10, 10, 30, 30);
+          file.addImage('/assets/images/autill_logo.png', 'PNG', 10, 10, 30, 30);
 
           file.setFontSize(22);
           file.text(title, file.internal.pageSize.getWidth() - 20, 20, { align: 'right' });
