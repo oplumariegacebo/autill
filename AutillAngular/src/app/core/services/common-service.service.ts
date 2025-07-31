@@ -92,16 +92,16 @@ export class CommonService {
           const labelWidth = 30;
           const rightBlockX = file.internal.pageSize.getWidth() - 60;
           file.text('Cliente:', rightBlockX, firstRowY, { align: 'right' });
-          file.text(String(client.data.Name || ''), rightBlockX + labelWidth - 80, firstRowY, { align: 'left' });
+          file.text(String(client.data.Name || ''), rightBlockX + labelWidth - 20, firstRowY, { align: 'left' });
           file.text('Email:', rightBlockX, firstRowY + rowHeight, { align: 'right' });
-          file.text(String(client.data.Email || ''), rightBlockX + labelWidth - 80, firstRowY + rowHeight, { align: 'left' });
+          file.text(String(client.data.Email || ''), rightBlockX + labelWidth - 20, firstRowY + rowHeight, { align: 'left' });
           file.text('NIF:', rightBlockX, firstRowY + rowHeight * 2, { align: 'right' });
-          file.text(String(client.data.Nif || ''), rightBlockX + labelWidth - 80, firstRowY + rowHeight * 2, { align: 'left' });
+          file.text(String(client.data.Nif || ''), rightBlockX + labelWidth - 20, firstRowY + rowHeight * 2, { align: 'left' });
           file.text('Dirección:', rightBlockX, firstRowY + rowHeight * 3, { align: 'right' });
-          file.text(String(client.data.Address || ''), rightBlockX + labelWidth - 80, firstRowY + rowHeight * 3, { align: 'left' });
-          file.text(String((client.data.Region || '') + ' ' + (client.data.Country || '')), rightBlockX + labelWidth - 80, firstRowY + rowHeight * 4, { align: 'left' });
+          file.text(String(client.data.Address || ''), rightBlockX + labelWidth - 20, firstRowY + rowHeight * 3, { align: 'left' });
+          file.text(String((client.data.Region || '') + ' ' + (client.data.Country || '')), rightBlockX + labelWidth - 20, firstRowY + rowHeight * 4, { align: 'left' });
           file.text('Teléfono:', rightBlockX, firstRowY + rowHeight * 5, { align: 'right' });
-          file.text(String(client.data.PhoneNumber || ''), rightBlockX + labelWidth - 80, firstRowY + rowHeight * 5, { align: 'left' });
+          file.text(String(client.data.PhoneNumber || ''), rightBlockX + labelWidth - 20, firstRowY + rowHeight * 5, { align: 'left' });
 
           let tableMargin = { left: logoX, right: logoX, top: firstRowY + rowHeight * 6 + 10 };
           let tableWidth = file.internal.pageSize.getWidth() - logoX * 2;
