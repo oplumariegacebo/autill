@@ -117,7 +117,7 @@ export class CommonService {
             startY: tableMargin.top,
             margin: { left: tableMargin.left, right: tableMargin.right },
             tableWidth: tableWidth,
-            head: [["Concepto", "Unidades", "Precio/Unidad (€)", "Total (€)"]],
+            head: [["Concepto", "Unidades", "Precio/Unidad €", "Total €"]],
             body: bodyFormatItems,
             headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
             styles: { fontSize: 12, cellPadding: 3 },
