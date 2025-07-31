@@ -64,7 +64,7 @@ export class CommonService {
           file.text(budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
 
           // Línea separadora justo debajo del logo/título
-          const headerBottomY = logoY + logoHeight + 5;
+          const headerBottomY = logoY + logoHeight + 2;
           file.setDrawColor(200);
           file.setLineWidth(0.5);
           file.line(logoX, headerBottomY, file.internal.pageSize.getWidth() - logoX, headerBottomY);
@@ -84,23 +84,25 @@ export class CommonService {
           file.text(String(user.Nif || ''), leftColX + 25, firstRowY + rowHeight * 2);
           file.text('Dirección:', leftColX, firstRowY + rowHeight * 3);
           file.text(String(user.Address || ''), leftColX + 25, firstRowY + rowHeight * 3);
-          file.text('Región/Pais:', leftColX, firstRowY + rowHeight * 4);
+
           file.text(String((user.Region || '') + ' ' + (user.Country || '')), leftColX + 25, firstRowY + rowHeight * 4);
           file.text('Teléfono:', leftColX, firstRowY + rowHeight * 5);
           file.text(String(user.PhoneNumber || ''), leftColX + 25, firstRowY + rowHeight * 5);
 
-          file.text('Cliente:', rightColX, firstRowY);
-          file.text(String(client.Name || ''), rightColX + 25, firstRowY);
-          file.text('Email:', rightColX, firstRowY + rowHeight);
-          file.text(String(client.Email || ''), rightColX + 25, firstRowY + rowHeight);
-          file.text('NIF:', rightColX, firstRowY + rowHeight * 2);
-          file.text(String(client.Nif || ''), rightColX + 25, firstRowY + rowHeight * 2);
-          file.text('Dirección:', rightColX, firstRowY + rowHeight * 3);
-          file.text(String(client.Address || ''), rightColX + 25, firstRowY + rowHeight * 3);
-          file.text('Región/Pais:', rightColX, firstRowY + rowHeight * 4);
-          file.text(String((client.Region || '') + ' ' + (client.Country || '')), rightColX + 25, firstRowY + rowHeight * 4);
-          file.text('Teléfono:', rightColX, firstRowY + rowHeight * 5);
-          file.text(String(client.PhoneNumber || ''), rightColX + 25, firstRowY + rowHeight * 5);
+          console.log(client);          const labelWidth = 30;
+          const valueWidth = 60;
+          const rightBlockX = file.internal.pageSize.getWidth() - logoX - valueWidth;
+          file.text('Cliente:', rightBlockX, firstRowY, { align: 'right' });
+          file.text(String(client.Name || ''), rightBlockX + labelWidth, firstRowY, { align: 'left' });
+          file.text('Email:', rightBlockX, firstRowY + rowHeight, { align: 'right' });
+          file.text(String(client.Email || ''), rightBlockX + labelWidth, firstRowY + rowHeight, { align: 'left' });
+          file.text('NIF:', rightBlockX, firstRowY + rowHeight * 2, { align: 'right' });
+          file.text(String(client.Nif || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 2, { align: 'left' });
+          file.text('Dirección:', rightBlockX, firstRowY + rowHeight * 3, { align: 'right' });
+          file.text(String(client.Address || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 3, { align: 'left' });
+          file.text(String((client.Region || '') + ' ' + (client.Country || '')), rightBlockX + labelWidth, firstRowY + rowHeight * 4, { align: 'left' });
+          file.text('Teléfono:', rightBlockX, firstRowY + rowHeight * 5, { align: 'right' });
+          file.text(String(client.PhoneNumber || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 5, { align: 'left' });
 
           let tableMargin = { left: logoX, right: logoX, top: firstRowY + rowHeight * 6 + 10 };
           let tableWidth = file.internal.pageSize.getWidth() - logoX * 2;
