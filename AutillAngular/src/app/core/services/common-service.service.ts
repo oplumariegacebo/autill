@@ -7,6 +7,7 @@ import { ClientService } from './client.service';
 import { UserService } from './user.service';
 import { InfoModalComponent } from '../../shared/components/info-modal/info-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SpinnerLoadingComponent } from '../../shared/components/spinner-loading/spinner-loading.component';
 
 export let Messages = {
   "EMAIL_MSG": "El email debe de tener un formato válido.",
@@ -35,54 +36,87 @@ export class CommonService {
   budgetService = inject(BudgetService);
   clientService = inject(ClientService);
   userService = inject(UserService);
+  spinner = inject(SpinnerLoadingComponent);
 
-  constructor(private dialog: MatDialog,) { }
+    loading: boolean = false;
+
+  constructor(private dialog: MatDialog) { }
 
   generatePDF(action: string, type: string, id: number) {
     const file = new jsPDF();
-    let title = '';
-    if (type === 'bill') {
-      title = 'Factura'
-    } else {
-      title = 'Presupuesto'
-    }
+    const title = type === 'bill' ? 'Factura' : 'Presupuesto';
 
+    this.loading = true;
     this.budgetService.getBudgetById(id).subscribe((budget: any) => {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
-          const drawPDF = (base64Logo: string) => {
-            // Logo a la izquierda
-            file.addImage(base64Logo, 'PNG', 10, 10, 30, 30);
-            // Título esquinado a la derecha
-            file.setFontSize(22);
-            file.text(title, 160, 20, { align: 'right' });
-            file.setFontSize(14);
-            file.text(String(user.FullName || ''), 10, 40);
-            file.text(String(user.Email || ''), 10, 50);
-            file.text(String(user.Nif || ''), 10, 60);
-            file.text(String(user.Address || ''), 10, 70);
-            file.text(String((user.Region || '') + ' ' + (user.Country || '')), 10, 80);
-            file.text(String(user.PhoneNumber || ''), 10, 90);
-            file.text(String(client.Name || ''), 120, 40);
-            file.text(String(client.Email || ''), 120, 50);
-            file.text(String(client.Nif || ''), 120, 60);
-            file.text(String(client.Address || ''), 120, 70);
-            file.text(String((client.Region || '') + ' ' + (client.Country || '')), 120, 80);
-            file.text(String(client.PhoneNumber || ''), 120, 90);
+
+          file.addImage(user.Logo, 'PNG', 10, 10, 30, 30);
+
+          file.setFontSize(22);
+          file.text(title, file.internal.pageSize.getWidth() - 20, 20, { align: 'right' });
+
+          file.setDrawColor(200);
+          file.setLineWidth(0.5);
+          file.line(10, 35, file.internal.pageSize.getWidth() - 10, 35);
+
+          file.setFontSize(14);
+          file.setTextColor(40);
+          file.text('Empresa:', 10, 45);
+          file.text(String(user.FullName || ''), 35, 45);
+          file.text('Email:', 10, 53);
+          file.text(String(user.Email || ''), 35, 53);
+          file.text('NIF:', 10, 61);
+          file.text(String(user.Nif || ''), 35, 61);
+          file.text('Dirección:', 10, 69);
+          file.text(String(user.Address || ''), 35, 69);
+          file.text('Región/Pais:', 10, 77);
+          file.text(String((user.Region || '') + ' ' + (user.Country || '')), 35, 77);
+          file.text('Teléfono:', 10, 85);
+          file.text(String(user.PhoneNumber || ''), 35, 85);
+          file.text('Cliente:', 120, 45);
+          file.text(String(client.Name || ''), 150, 45);
+          file.text('Email:', 120, 53);
+          file.text(String(client.Email || ''), 150, 53);
+          file.text('NIF:', 120, 61);
+          file.text(String(client.Nif || ''), 150, 61);
+          file.text('Dirección:', 120, 69);
+          file.text(String(client.Address || ''), 150, 69);
+
+          this.budgetService.getBudgetById(id).subscribe((budget: any) => {
+            file.text(String((client.Region || '') + ' ' + (client.Country || '')), 150, 77);
+            file.text('Teléfono:', 120, 85);
+            file.text(String(client.PhoneNumber || ''), 150, 85);
+
             let bodyFormatItems = [];
             const items = JSON.parse(budget.DescriptionItems);
             for (let i = 0; i < items.length; i++) {
-              bodyFormatItems.push([items[i].Name, items[i].Units, items[i].Price, items[i].TotalConcept]);
+              bodyFormatItems.push([
+                items[i].Name,
+                items[i].Units,
+                String(items[i].Price) + ' €',
+                String(items[i].TotalConcept) + ' €'
+              ]);
             }
             autoTable(file, {
               margin: { top: 100 },
-              head: [["Concepto", "Unidades", "Precio/Unidad", "Total"]],
+              head: [["Concepto", "Unidades", "Precio/Unidad (€)", "Total (€)"]],
               body: bodyFormatItems,
+              headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+              styles: { fontSize: 12, cellPadding: 3 },
+              alternateRowStyles: { fillColor: [245, 245, 245] },
             })
-            file.text("Subtotal   " + String(budget.Price || ''), 150, 260);
-            file.text("IVA 21%   " + String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + "€", 150, 270);
+            // Subtotal, IVA y Total con € y alineados a la derecha
+            file.setFontSize(14);
+            file.setTextColor(40);
+            file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
+            file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
+            file.text('IVA 21%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+            file.text(String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
             file.setFont('courier', 'bold');
-            file.text("TOTAL   " + String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + "€", 150, 290);
+            file.setFontSize(16);
+            file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
+            file.text(String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
             if (action === 'email') {
               this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
                 const dialogRef = this.dialog.open(InfoModalComponent);
@@ -90,89 +124,18 @@ export class CommonService {
               });
             } else {
               file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
+              this.loading = false;
             }
-          };
-
-          this.getBase64ImageFromUrl(user.Logo)
-            .then((base64Logo: any) => {
-              drawPDF(base64Logo);
-            })
-            .catch(() => {
-              this.getBase64ImageFromUrl('/assets/images/autill_logo.png')
-                .then((base64LogoDefault: any) => {
-                  drawPDF(base64LogoDefault);
-                });
-            });
-
-          file.setFontSize(14);
-
-          file.text(String(user.FullName || ''), 10, 40);
-          file.text(String(user.Email || ''), 10, 50);
-          file.text(String(user.Nif || ''), 10, 60);
-          file.text(String(user.Address || ''), 10, 70);
-          file.text(String((user.Region || '') + ' ' + (user.Country || '')), 10, 80);
-          file.text(String(user.PhoneNumber || ''), 10, 90);
-
-          file.text(String(client.Name || ''), 120, 40);
-          file.text(String(client.Email || ''), 120, 50);
-          file.text(String(client.Nif || ''), 120, 60);
-          file.text(String(client.Address || ''), 120, 70);
-          file.text(String((client.Region || '') + ' ' + (client.Country || '')), 120, 80);
-          file.text(String(client.PhoneNumber || ''), 120, 90);
-
-          let bodyFormatItems = [];
-
-          const items = JSON.parse(budget.DescriptionItems);
-          for (let i = 0; i < items.length; i++) {
-            bodyFormatItems.push([items[i].Name, items[i].Units, items[i].Price, items[i].TotalConcept]);
-          }
-
-          autoTable(file, {
-            margin: { top: 100 },
-            head: [["Concepto", "Unidades", "Precio/Unidad", "Total"]],
-            body: bodyFormatItems,
-          })
-
-          file.text("Subtotal   " + String(budget.Price || ''), 150, 260);
-          file.text("IVA 21%   " + String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + "€", 150, 270);
-
-          file.setFont('courier', 'bold');
-          file.text("TOTAL   " + String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + "€", 150, 290);
-
-          if (action === 'email') {
-            this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
-              const dialogRef = this.dialog.open(InfoModalComponent);
-              dialogRef.componentInstance.message = Messages.EMAIL_OK;
-            });
-          } else {
-            file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
-          }
-        })
+          });
+        });
       });
-    })
+    }
+
+
+    )
   }
 
-  transformDate(date: any) {
+  transformDate(date: any): string {
     return date._i.date + "/" + (date._i.month + 1) + "/" + date._i.year;
-  }
-
-  getBase64ImageFromUrl(imageUrl: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.onload = function () {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(img, 0, 0);
-        const dataURL = canvas.toDataURL('image/png');
-        resolve(dataURL);
-      };
-      img.onerror = function () {
-        reject(new Error('No se pudo cargar la imagen'));
-      };
-      img.src = imageUrl;
-    });
   }
 }
