@@ -95,7 +95,7 @@ export class CommonService {
           file.setFont('helvetica', 'normal');
           file.text(String(user.Address || ''), leftColX + 25, firstRowY + rowHeight * 3);
 
-          file.text(String((user.Region || '') + ' ' + (user.Country || '')), leftColX + 25, firstRowY + rowHeight * 4);
+          file.text(String((user.Region || '') + ', ' + (user.Country || '')), leftColX + 25, firstRowY + rowHeight * 4);
 
           file.setFont('helvetica', 'bold');
           file.text('Teléfono:', leftColX, firstRowY + rowHeight * 5);
@@ -120,7 +120,7 @@ export class CommonService {
           file.text('Dirección:', rightBlockX, firstRowY + rowHeight * 3, { align: 'right' });
           file.setFont('helvetica', 'normal');
           file.text(String(client.data.Address || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 3, { align: 'left' });
-          file.text(String((client.data.Region || '') + ' ' + (client.data.Country || '')), rightBlockX + labelWidth, firstRowY + rowHeight * 4, { align: 'left' });
+          file.text(String((client.data.Region || '') + ', ' + (client.data.Country || '')), rightBlockX + labelWidth, firstRowY + rowHeight * 4, { align: 'left' });
           file.setFont('helvetica', 'bold');
           file.text('Teléfono:', rightBlockX, firstRowY + rowHeight * 5, { align: 'right' });
           file.setFont('helvetica', 'normal');
