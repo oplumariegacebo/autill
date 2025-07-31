@@ -36,17 +36,18 @@ export class CommonService {
   budgetService = inject(BudgetService);
   clientService = inject(ClientService);
   userService = inject(UserService);
-  spinner = inject(SpinnerLoadingComponent);
-
-    loading: boolean = false;
 
   constructor(private dialog: MatDialog) { }
 
   generatePDF(action: string, type: string, id: number) {
+    const spinnerRef = this.dialog.open(SpinnerLoadingComponent, {
+      disableClose: true,
+      panelClass: 'transparent-modal'
+    });
+
     const file = new jsPDF();
     const title = type === 'bill' ? 'Factura' : 'Presupuesto';
 
-    this.loading = true;
     this.budgetService.getBudgetById(id).subscribe((budget: any) => {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
@@ -124,7 +125,7 @@ export class CommonService {
               });
             } else {
               file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
-              this.loading = false;
+              spinnerRef.close();
             }
           });
         });
