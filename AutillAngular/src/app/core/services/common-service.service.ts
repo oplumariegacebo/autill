@@ -52,82 +52,99 @@ export class CommonService {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
 
-          file.addImage('/assets/images/autill_logo.png', 'PNG', 10, 10, 30, 30);
+          // Logo y título alineados
+          const logoY = 15;
+          const logoX = 10;
+          const logoWidth = 30;
+          const logoHeight = 15;
+          file.addImage('/assets/images/autill_logo.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
 
           file.setFontSize(22);
-          file.text(title, file.internal.pageSize.getWidth() - 20, 20, { align: 'right' });
+          // Título alineado verticalmente con el logo y a la derecha
+          file.text(title, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
 
+          // Línea separadora justo debajo del logo/título
+          const headerBottomY = logoY + logoHeight + 5;
           file.setDrawColor(200);
           file.setLineWidth(0.5);
-          file.line(10, 35, file.internal.pageSize.getWidth() - 10, 35);
+          file.line(logoX, headerBottomY, file.internal.pageSize.getWidth() - logoX, headerBottomY);
+
+          // Datos usuario y cliente
+          file.setFontSize(14);
+          file.setTextColor(40);
+          let leftColX = logoX;
+          let rightColX = file.internal.pageSize.getWidth() / 2 + 10;
+          let firstRowY = headerBottomY + 10;
+          let rowHeight = 8;
+          file.text('Empresa:', leftColX, firstRowY);
+          file.text(String(user.FullName || ''), leftColX + 25, firstRowY);
+          file.text('Email:', leftColX, firstRowY + rowHeight);
+          file.text(String(user.Email || ''), leftColX + 25, firstRowY + rowHeight);
+          file.text('NIF:', leftColX, firstRowY + rowHeight * 2);
+          file.text(String(user.Nif || ''), leftColX + 25, firstRowY + rowHeight * 2);
+          file.text('Dirección:', leftColX, firstRowY + rowHeight * 3);
+          file.text(String(user.Address || ''), leftColX + 25, firstRowY + rowHeight * 3);
+          file.text('Región/Pais:', leftColX, firstRowY + rowHeight * 4);
+          file.text(String((user.Region || '') + ' ' + (user.Country || '')), leftColX + 25, firstRowY + rowHeight * 4);
+          file.text('Teléfono:', leftColX, firstRowY + rowHeight * 5);
+          file.text(String(user.PhoneNumber || ''), leftColX + 25, firstRowY + rowHeight * 5);
+
+          file.text('Cliente:', rightColX, firstRowY);
+          file.text(String(client.Name || ''), rightColX + 25, firstRowY);
+          file.text('Email:', rightColX, firstRowY + rowHeight);
+          file.text(String(client.Email || ''), rightColX + 25, firstRowY + rowHeight);
+          file.text('NIF:', rightColX, firstRowY + rowHeight * 2);
+          file.text(String(client.Nif || ''), rightColX + 25, firstRowY + rowHeight * 2);
+          file.text('Dirección:', rightColX, firstRowY + rowHeight * 3);
+          file.text(String(client.Address || ''), rightColX + 25, firstRowY + rowHeight * 3);
+          file.text('Región/Pais:', rightColX, firstRowY + rowHeight * 4);
+          file.text(String((client.Region || '') + ' ' + (client.Country || '')), rightColX + 25, firstRowY + rowHeight * 4);
+          file.text('Teléfono:', rightColX, firstRowY + rowHeight * 5);
+          file.text(String(client.PhoneNumber || ''), rightColX + 25, firstRowY + rowHeight * 5);
+
+          let tableMargin = { left: logoX, right: logoX, top: firstRowY + rowHeight * 6 + 10 };
+          let tableWidth = file.internal.pageSize.getWidth() - logoX * 2;
+          let bodyFormatItems = [];
+          const items = JSON.parse(budget.DescriptionItems);
+          for (let i = 0; i < items.length; i++) {
+            bodyFormatItems.push([
+              items[i].Name,
+              items[i].Units,
+              String(items[i].Price) + ' €',
+              String(items[i].TotalConcept) + ' €'
+            ]);
+          }
+          autoTable(file, {
+            startY: tableMargin.top,
+            margin: { left: tableMargin.left, right: tableMargin.right },
+            tableWidth: tableWidth,
+            head: [["Concepto", "Unidades", "Precio/Unidad (€)", "Total (€)"]],
+            body: bodyFormatItems,
+            headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+            styles: { fontSize: 12, cellPadding: 3 },
+            alternateRowStyles: { fillColor: [245, 245, 245] },
+          })
 
           file.setFontSize(14);
           file.setTextColor(40);
-          file.text('Empresa:', 10, 45);
-          file.text(String(user.FullName || ''), 35, 45);
-          file.text('Email:', 10, 53);
-          file.text(String(user.Email || ''), 35, 53);
-          file.text('NIF:', 10, 61);
-          file.text(String(user.Nif || ''), 35, 61);
-          file.text('Dirección:', 10, 69);
-          file.text(String(user.Address || ''), 35, 69);
-          file.text('Región/Pais:', 10, 77);
-          file.text(String((user.Region || '') + ' ' + (user.Country || '')), 35, 77);
-          file.text('Teléfono:', 10, 85);
-          file.text(String(user.PhoneNumber || ''), 35, 85);
-          file.text('Cliente:', 120, 45);
-          file.text(String(client.Name || ''), 150, 45);
-          file.text('Email:', 120, 53);
-          file.text(String(client.Email || ''), 150, 53);
-          file.text('NIF:', 120, 61);
-          file.text(String(client.Nif || ''), 150, 61);
-          file.text('Dirección:', 120, 69);
-          file.text(String(client.Address || ''), 150, 69);
+          file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
+          file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
+          file.text('IVA 21%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+          file.text(String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
+          file.setFont('courier', 'bold');
+          file.setFontSize(16);
+          file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
+          file.text(String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
+          if (action === 'email') {
+            this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
+              const dialogRef = this.dialog.open(InfoModalComponent);
+              dialogRef.componentInstance.message = Messages.EMAIL_OK;
+            });
+          } else {
+            file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
+            spinnerRef.close();
+          }
 
-          this.budgetService.getBudgetById(id).subscribe((budget: any) => {
-            file.text(String((client.Region || '') + ' ' + (client.Country || '')), 150, 77);
-            file.text('Teléfono:', 120, 85);
-            file.text(String(client.PhoneNumber || ''), 150, 85);
-
-            let bodyFormatItems = [];
-            const items = JSON.parse(budget.DescriptionItems);
-            for (let i = 0; i < items.length; i++) {
-              bodyFormatItems.push([
-                items[i].Name,
-                items[i].Units,
-                String(items[i].Price) + ' €',
-                String(items[i].TotalConcept) + ' €'
-              ]);
-            }
-            autoTable(file, {
-              margin: { top: 100 },
-              head: [["Concepto", "Unidades", "Precio/Unidad (€)", "Total (€)"]],
-              body: bodyFormatItems,
-              headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
-              styles: { fontSize: 12, cellPadding: 3 },
-              alternateRowStyles: { fillColor: [245, 245, 245] },
-            })
-            // Subtotal, IVA y Total con € y alineados a la derecha
-            file.setFontSize(14);
-            file.setTextColor(40);
-            file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
-            file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
-            file.text('IVA 21%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
-            file.text(String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
-            file.setFont('courier', 'bold');
-            file.setFontSize(16);
-            file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
-            file.text(String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
-            if (action === 'email') {
-              this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
-                const dialogRef = this.dialog.open(InfoModalComponent);
-                dialogRef.componentInstance.message = Messages.EMAIL_OK;
-              });
-            } else {
-              file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
-              spinnerRef.close();
-            }
-          });
         });
       });
     }
