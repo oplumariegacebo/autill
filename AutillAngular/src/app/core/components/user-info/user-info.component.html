@@ -113,18 +113,18 @@
                 placeholder="Enter Address"
               />
             </div>
+          </div>
 
-            <div class="relative z-0 w-full mb-5 group">
-              <label class="text-gray-800 text-sm mb-2">Ciudad</label>
-              <input
-                formControlName="City"
-                name="city"
-                type="text"
-                required
-                class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
-                placeholder="Enter City"
-              />
-            </div>
+          <div class="relative z-0 w-full mb-5 group">
+            <label class="text-gray-800 text-sm mb-2">Ciudad</label>
+            <input
+              formControlName="City"
+              name="city"
+              type="text"
+              required
+              class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
+              placeholder="Enter City"
+            />
           </div>
 
           <div class="grid md:grid-cols-2 md:gap-6">
@@ -194,7 +194,7 @@
                 formControlName="PostalCode"
                 name="postalCode"
                 type="text"
-                pattern="\\d{5}"
+                pattern="[0-9]{5}"
                 maxlength="5"
                 inputmode="numeric"
                 oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,5)"
@@ -234,7 +234,7 @@
                 formControlName="PhoneNumber"
                 name="phoneNumber"
                 type="text"
-                pattern="\\d{9}"
+                pattern="[0-9]{9}"
                 maxlength="9"
                 inputmode="numeric"
                 oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,9)"
