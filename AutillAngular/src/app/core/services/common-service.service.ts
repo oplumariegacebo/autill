@@ -56,7 +56,7 @@ export class CommonService {
           const logoY = 15;
           const logoX = 10;
           const logoWidth = 30;
-          const logoHeight = 15;
+          const logoHeight = 30; // Mantener proporción cuadrada
           file.addImage('/assets/images/autill_logo.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
 
           file.setFontSize(22);
