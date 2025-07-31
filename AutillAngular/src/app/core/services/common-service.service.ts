@@ -120,7 +120,6 @@ export class CommonService {
           file.text('Dirección:', rightBlockX, firstRowY + rowHeight * 3, { align: 'right' });
           file.setFont('helvetica', 'normal');
           file.text(String(client.data.Address || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 3, { align: 'left' });
-          file.setFont('helvetica', 'bold');
           file.text(String((client.data.Region || '') + ' ' + (client.data.Country || '')), rightBlockX + labelWidth, firstRowY + rowHeight * 4, { align: 'left' });
           file.setFont('helvetica', 'bold');
           file.text('Teléfono:', rightBlockX, firstRowY + rowHeight * 5, { align: 'right' });
