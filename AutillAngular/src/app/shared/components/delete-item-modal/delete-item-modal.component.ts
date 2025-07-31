@@ -31,24 +31,33 @@ export class DeleteItemModalComponent {
   onClose(): void {
     this.dialogRef.close();
   }
-  confirm(){
-    this.loading = true;
+confirm() {
+  this.loading = true;
 
-    setTimeout(() => {
-      if(this.type.includes('factura')){
-        this.billService.deleteBill(this.id).subscribe();
-      }else if(this.type.includes('presupuesto')){
-        this.budgetService.deleteBudget(this.id).subscribe();
-      }else if(this.type.includes('producto')){
-        this.itemService.deleteProduct(this.id).subscribe();
-      }else if(this.type.includes('cliente')){
-        this.clientService.deleteClient(this.id).subscribe(); 
-      }
+  let deleteObservable;
 
-      window.location.reload();
-    }, 2000)
-
-    //this.dialogRef.close('confirm');
+  if (this.type.includes('factura')) {
+    deleteObservable = this.billService.deleteBill(this.id);
+  } else if (this.type.includes('presupuesto')) {
+    deleteObservable = this.budgetService.deleteBudget(this.id);
+  } else if (this.type.includes('producto')) {
+    deleteObservable = this.itemService.deleteProduct(this.id);
+  } else if (this.type.includes('cliente')) {
+    deleteObservable = this.clientService.deleteClient(this.id);
   }
+
+  if (deleteObservable) {
+    deleteObservable.subscribe({
+      next: () => {
+        this.loading = false;
+        this.dialogRef.close('confirm'); // Cierra el modal y notifica al componente padre
+      },
+      error: () => {
+        this.loading = false;
+        alert('Error al eliminar');
+      }
+    });
+  }
+}
 
 }
