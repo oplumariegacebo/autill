@@ -41,6 +41,7 @@ export class UserInfoComponent {
       PostalCode: new FormControl(),
       Region: new FormControl(),
       Country: new FormControl(),
+      City: new FormControl(),
       Password: new FormControl(),
       DataComplete: new FormControl()
     })

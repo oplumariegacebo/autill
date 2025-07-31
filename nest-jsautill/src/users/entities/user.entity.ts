@@ -21,6 +21,9 @@ export class Users {
   Region: string;
 
   @Column()
+  City: string;
+
+  @Column()
   Country: string;
 
   @Column()

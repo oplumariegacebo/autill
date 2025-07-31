@@ -68,7 +68,7 @@ export class CommonService {
           file.setLineWidth(0.5);
           file.line(logoX, headerBottomY, file.internal.pageSize.getWidth() - logoX, headerBottomY);
 
-          file.setFontSize(14);
+          file.setFontSize(12);
           file.setTextColor(40);
           let leftColX = logoX;
           let rightColX = file.internal.pageSize.getWidth() / 2 + 10;
