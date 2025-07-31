@@ -85,13 +85,17 @@ export class ItemsComponent {
     dialogRef.componentInstance.message = Messages.DELETE_ITEM_MSG;
     dialogRef.componentInstance.id = id;
 
-    this.itemService.deleteProduct(id).subscribe({
-      next: () => {
-        window.location.reload();
-      },
-      error: (err) => {
-        alert('Error al eliminar el producto');
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == 'confirm') {
+        this.itemService.deleteProduct(id).subscribe({
+          next: () => {
+            window.location.reload();
+          },
+          error: (err) => {
+            alert('Error al eliminar el producto');
+          }
+        });
       }
-    });
+    })
   }
 }
