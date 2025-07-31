@@ -74,31 +74,57 @@ export class CommonService {
           let rightColX = file.internal.pageSize.getWidth() / 2 + 10;
           let firstRowY = headerBottomY + 10;
           let rowHeight = 8;
+
+          file.setFont('helvetica', 'bold');
           file.text('Empresa:', leftColX, firstRowY);
+          file.setFont('helvetica', 'normal');
           file.text(String(user.FullName || ''), leftColX + 25, firstRowY);
+
+          file.setFont('helvetica', 'bold');
           file.text('Email:', leftColX, firstRowY + rowHeight);
+          file.setFont('helvetica', 'normal');
           file.text(String(user.Email || ''), leftColX + 25, firstRowY + rowHeight);
+
+          file.setFont('helvetica', 'bold');
           file.text('NIF:', leftColX, firstRowY + rowHeight * 2);
+          file.setFont('helvetica', 'normal');
           file.text(String(user.Nif || ''), leftColX + 25, firstRowY + rowHeight * 2);
+
+          file.setFont('helvetica', 'bold');
           file.text('Dirección:', leftColX, firstRowY + rowHeight * 3);
+          file.setFont('helvetica', 'normal');
           file.text(String(user.Address || ''), leftColX + 25, firstRowY + rowHeight * 3);
 
           file.text(String((user.Region || '') + ' ' + (user.Country || '')), leftColX + 25, firstRowY + rowHeight * 4);
+
+          file.setFont('helvetica', 'bold');
           file.text('Teléfono:', leftColX, firstRowY + rowHeight * 5);
+          file.setFont('helvetica', 'normal');
           file.text(String(user.PhoneNumber || ''), leftColX + 25, firstRowY + rowHeight * 5);
         
           const labelWidth = 5;
           const rightBlockX = file.internal.pageSize.getWidth() - 80;
+          file.setFont('helvetica', 'bold');
           file.text('Cliente:', rightBlockX, firstRowY, { align: 'right' });
+          file.setFont('helvetica', 'normal');
           file.text(String(client.data.Name || ''), rightBlockX + labelWidth, firstRowY, { align: 'left' });
+          file.setFont('helvetica', 'bold');
           file.text('Email:', rightBlockX, firstRowY + rowHeight, { align: 'right' });
+          file.setFont('helvetica', 'normal');
           file.text(String(client.data.Email || ''), rightBlockX + labelWidth, firstRowY + rowHeight, { align: 'left' });
+          file.setFont('helvetica', 'bold');
           file.text('NIF:', rightBlockX, firstRowY + rowHeight * 2, { align: 'right' });
+          file.setFont('helvetica', 'normal');
           file.text(String(client.data.Nif || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 2, { align: 'left' });
+          file.setFont('helvetica', 'bold');
           file.text('Dirección:', rightBlockX, firstRowY + rowHeight * 3, { align: 'right' });
+          file.setFont('helvetica', 'normal');
           file.text(String(client.data.Address || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 3, { align: 'left' });
+          file.setFont('helvetica', 'bold');
           file.text(String((client.data.Region || '') + ' ' + (client.data.Country || '')), rightBlockX + labelWidth, firstRowY + rowHeight * 4, { align: 'left' });
+          file.setFont('helvetica', 'bold');
           file.text('Teléfono:', rightBlockX, firstRowY + rowHeight * 5, { align: 'right' });
+          file.setFont('helvetica', 'normal');
           file.text(String(client.data.PhoneNumber || ''), rightBlockX + labelWidth, firstRowY + rowHeight * 5, { align: 'left' });
 
           let tableMargin = { left: logoX, right: logoX, top: firstRowY + rowHeight * 6 + 10 };
