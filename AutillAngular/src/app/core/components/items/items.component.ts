@@ -81,15 +81,15 @@ export class ItemsComponent {
   deleteItem(id: number) {
     const dialogRef = this.dialog.open(DeleteItemModalComponent);
     dialogRef.componentInstance.type = 'producto';
-    dialogRef.componentInstance.title = Messages.DELETE_ITEM_TITLE;
-    dialogRef.componentInstance.message = Messages.DELETE_ITEM_MSG;
+    dialogRef.componentInstance.title = 'Eliminar producto';
+    dialogRef.componentInstance.message = '¿Seguro que quieres eliminar este producto?';
     dialogRef.componentInstance.id = id;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result == 'confirm') {
         this.itemService.deleteProduct(id).subscribe({
           next: () => {
-            window.location.reload();
+            this.items = this.items.filter((i: any) => i.Id !== id);
           },
           error: (err) => {
             alert('Error al eliminar el producto');
