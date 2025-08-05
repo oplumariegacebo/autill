@@ -26,6 +26,12 @@ export class Budgets {
   @Column('decimal', { precision: 10, scale: 2 })
   Price: number;
 
+    @Column('decimal', { precision: 10, scale: 2 })
+  Iva: number;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+  Irpf: number;
+
   @Column()
   CloseIt: boolean;
 }
