@@ -73,6 +73,7 @@ export class LoginComponent {
       Id: new FormControl(),
       PostalCode: new FormControl(),
       Region: new FormControl(),
+      City: new FormControl(),
       Country: new FormControl(),
       Password: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')]),
       DataComplete: new FormControl()
