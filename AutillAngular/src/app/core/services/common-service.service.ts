@@ -101,7 +101,7 @@ export class CommonService {
           file.text('Teléfono:', leftColX, firstRowY + rowHeight * 5);
           file.setFont('helvetica', 'normal');
           file.text(String(user.PhoneNumber || ''), leftColX + 25, firstRowY + rowHeight * 5);
-        
+
           const labelWidth = 5;
           const rightBlockX = file.internal.pageSize.getWidth() - 80;
           file.setFont('helvetica', 'bold');
@@ -149,17 +149,26 @@ export class CommonService {
             alternateRowStyles: { fillColor: [245, 245, 245] },
           })
 
+          const price = Number(budget.Price) || 0;
+          const iva = Number(budget.Iva) || 0;
+          const irpf = Number(budget.Irpf) || 0;
+
+          const ivaAmount = price * (iva / 100);
+          const irpfAmount = price * (irpf / 100);
+          const total = price + ivaAmount + irpfAmount;
+
           file.setFontSize(14);
           file.setTextColor(40);
           file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
           file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
-          file.text('IVA ' + budget.Iva + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
-          file.text('IRPF ' + budget.Irpf + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
-          file.text(String(Number((budget.Price + (budget.Price * (budget.Iva / 100) + (budget.Price * (budget.Irpf / 100)))).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
+          file.text('IVA ' + iva + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+          file.text(String(Number(ivaAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
+          file.text('IRPF ' + irpf + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+          file.text(String(Number(irpfAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
           file.setFont('courier', 'bold');
           file.setFontSize(16);
           file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
-          file.text(String(Number((budget.Price ? budget.Price * 1.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
+          file.text(String(Number(total.toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
           if (action === 'email') {
             this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
               const dialogRef = this.dialog.open(InfoModalComponent);

@@ -7,4 +7,6 @@ export class BudgetDto {
     readonly DescriptionItems: string;
     readonly Price: number;
     readonly CloseIt: boolean;
+    readonly Iva?: number;
+    readonly Irpf?: number;
   }
