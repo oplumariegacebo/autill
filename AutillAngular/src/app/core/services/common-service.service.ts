@@ -153,8 +153,9 @@ export class CommonService {
           file.setTextColor(40);
           file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
           file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
-          file.text('IVA 21%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
-          file.text(String(Number((budget.Price ? budget.Price * 0.21 : 0).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
+          file.text('IVA ' + budget.Iva + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+          file.text('IRPF ' + budget.Irpf + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+          file.text(String(Number((budget.Price + (budget.Price * (budget.Iva / 100) + (budget.Price * (budget.Irpf / 100)))).toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
           file.setFont('courier', 'bold');
           file.setFontSize(16);
           file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });

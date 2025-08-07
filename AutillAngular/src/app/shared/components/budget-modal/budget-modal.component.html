@@ -177,6 +177,56 @@
             AÑADIR / EDITAR DETALLES
           </button>
         </div>
+
+        <div class="w-full mb-5">
+          <div
+            class="flex flex-col md:flex-row md:gap-8 justify-center items-center"
+          >
+            <div
+              class="flex flex-col items-center w-full md:w-1/2 mb-4 md:mb-0"
+            >
+              <label
+                class="block text-sm text-gray-900 dark:text-white mb-2 text-center"
+                >IVA (%)</label
+              >
+              <div class="flex gap-2 items-center justify-center">
+                <input
+                  formControlName="Iva"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  name="iva"
+                  id="iva"
+                  class="block py-2.5 px-0 w-24 text-sm text-center text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600"
+                  placeholder="IVA"
+                />
+                <span class="text-gray-500 dark:text-gray-400 text-sm">%</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-center w-full md:w-1/2">
+              <label
+                class="block text-sm text-gray-900 dark:text-white mb-2 text-center"
+                >IRPF (%)</label
+              >
+              <div class="flex gap-2 items-center justify-center">
+                <input
+                  formControlName="Irpf"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  name="irpf"
+                  id="irpf"
+                  class="block py-2.5 px-0 w-24 text-sm text-center text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600"
+                  placeholder="IRPF"
+                />
+                <span class="text-gray-500 dark:text-gray-400 text-sm">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="relative z-0 w-full mb-5 group">
           <input
             formControlName="Price"
@@ -193,46 +243,6 @@
           >
         </div>
       </form>
-
-      <div class="relative z-0 w-full mb-5 group">
-        <label class="block text-sm text-gray-900 dark:text-white mb-2"
-          >IVA (%)</label
-        >
-        <div class="flex gap-2 items-center">
-          <input
-            formControlName="Iva"
-            type="number"
-            min="0"
-            max="100"
-            step="0.01"
-            name="iva"
-            id="iva"
-            class="block py-2.5 px-0 w-24 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600"
-            placeholder="IVA"
-          />
-          <span class="text-gray-500 dark:text-gray-400 text-sm">%</span>
-        </div>
-      </div>
-
-      <div class="relative z-0 w-full mb-5 group">
-        <label class="block text-sm text-gray-900 dark:text-white mb-2"
-          >IRPF (%)</label
-        >
-        <div class="flex gap-2 items-center">
-          <input
-            formControlName="Irpf"
-            type="number"
-            min="0"
-            max="100"
-            step="0.01"
-            name="irpf"
-            id="irpf"
-            class="block py-2.5 px-0 w-24 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600"
-            placeholder="IRPF"
-          />
-          <span class="text-gray-500 dark:text-gray-400 text-sm">%</span>
-        </div>
-      </div>
 
       <div
         class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"

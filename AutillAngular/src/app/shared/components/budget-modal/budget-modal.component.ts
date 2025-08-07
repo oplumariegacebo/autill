@@ -156,9 +156,7 @@ export class BudgetModalComponent {
 
     this.budgetForm.controls['Date'].setValue(formatDate);
 
-    // Usar getRawValue para incluir los deshabilitados
     let formData = this.budgetForm.getRawValue();
-    // Forzar Price a string con dos decimales
     formData.Price = Number(formData.Price).toFixed(2);
 
     if (this.id == 0) {
