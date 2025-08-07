@@ -97,24 +97,24 @@ export class BudgetDetailsComponent {
     this.dialogRef.close({ data: itemsValidos });
   }
 
-  addItem(id: number, type:string) {
-    if(type === 'form'){
-      const itemName = this.detailsForm.controls['Item' + (id-1)].value;
+  addItem(id: number, type: string) {
+    if (type === 'form') {
+      const itemName = this.detailsForm.controls['Item' + (id - 1)].value;
       if (!itemName || itemName.trim() === '') {
         // No añadir si el producto está vacío
         return;
       }
-      let units = parseFloat(this.detailsForm.controls['Units' + (id-1)].value);
+      let units = parseFloat(this.detailsForm.controls['Units' + (id - 1)].value);
 
-      this.items[(id-1)].Name = itemName;
-      this.items[(id-1)].Units = units;
-      this.items[(id-1)].Price = parseFloat(this.lasItemAdded.Price);
-      this.items[(id-1)].TotalConcept = Number((units * this.items[(id-1)].Price).toFixed(2));
+      this.items[(id - 1)].Name = itemName;
+      this.items[(id - 1)].Units = units;
+      this.items[(id - 1)].Price = parseFloat(this.lasItemAdded.Price);
+      this.items[(id - 1)].TotalConcept = Number((units * this.items[(id - 1)].Price).toFixed(2));
 
       this.newFormControls(id);
 
       this.items.push({ Id: id, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false });
-    }else{
+    } else {
       const itemName = this.detailsForm.controls['Item' + id].value;
       if (!itemName || itemName.trim() === '') {
         // No añadir si el producto está vacío
@@ -126,7 +126,7 @@ export class BudgetDetailsComponent {
       this.items[id].Units = units;
       this.items[id].Price = parseFloat(this.lasItemAdded.Price);
       this.items[id].TotalConcept = Number((units * this.items[id].Price).toFixed(2));
-  
+
       this.items.push({ Id: id + 1, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false });
 
       this.filteredItems = this.detailsForm.controls[`Item${id}`].valueChanges.pipe(
@@ -176,8 +176,16 @@ export class BudgetDetailsComponent {
       const name = this.detailsForm.get(`Item${item.Id}`)?.value ?? item.Name;
       item.Name = name;
       if (item.Name && item.Name.trim() !== '' && item.Units > 0) {
-        const price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
-        const units = this.detailsForm.get(`Units${item.Id}`)?.value ?? item.Units;
+        let price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
+        let units = this.detailsForm.get(`Units${item.Id}`)?.value ?? item.Units;
+
+        if (typeof price === 'string') {
+          price = price.replace(/\./g, '').replace(',', '.');
+        }
+        if (typeof units === 'string') {
+          units = units.replace(/\./g, '').replace(',', '.');
+        }
+
         item.Price = parseFloat(price) || 0;
         item.Units = parseFloat(units) || 0;
         item.TotalConcept = Number((item.Units * item.Price).toFixed(2));
