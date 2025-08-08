@@ -62,6 +62,12 @@ export class CommonService {
 
           file.text(budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
 
+          file.setFontSize(14);
+          file.setFont('helvetica', 'normal');
+          const fecha = budget.Date ? (typeof budget.Date === 'string' ? budget.Date : this.transformDate(budget.Date)) : '';
+          file.text(fecha, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 13, { align: 'right' });
+          file.setFont('helvetica', 'normal');
+
           const headerBottomY = logoY + logoHeight - 4;
           file.setDrawColor(200);
           file.setLineWidth(0.5);
