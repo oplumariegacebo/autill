@@ -179,13 +179,6 @@ export class BudgetDetailsComponent {
         let price = this.detailsForm.get(`PriceTD${item.Id}`)?.value ?? item.Price;
         let units = this.detailsForm.get(`Units${item.Id}`)?.value ?? item.Units;
 
-        if (typeof price === 'string') {
-          price = price.replace(/\./g, '').replace(',', '.');
-        }
-        if (typeof units === 'string') {
-          units = units.replace(/\./g, '').replace(',', '.');
-        }
-
         item.Price = parseFloat(price) || 0;
         item.Units = parseFloat(units) || 0;
         item.TotalConcept = Number((item.Units * item.Price).toFixed(2));
@@ -216,7 +209,7 @@ export class BudgetDetailsComponent {
   }
 
   unitsChange(idItem: number, event: any) {
-    let refreshUnits = (event.target as HTMLInputElement).value
+    let refreshUnits = (event.target as HTMLInputElement).value;
 
     this.items[idItem].Units = parseFloat(refreshUnits);
     this.items[idItem].TotalConcept = this.items[idItem].Units * this.items[idItem].Price;

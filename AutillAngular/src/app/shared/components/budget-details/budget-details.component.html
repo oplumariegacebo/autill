@@ -15,7 +15,7 @@
                 </button>
             </div>
             <form [formGroup]="detailsForm" class="flex flex-col gap-6 px-2 sm:px-8 py-6">
-              <!-- Renderiza todas las fichas de producto en columna -->
+
               @for (i of items; track i.Id) {
                 <div class="w-full rounded-xl flex flex-col justify-center mb-2">
                   <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
@@ -55,7 +55,6 @@
                   </div>
                 </div>
               }
-              <!-- Botón único para añadir producto debajo del listado -->
               <div class="w-full flex justify-center mt-2">
                 <button type="button"
                         [disabled]="hasEmptyItem()"
