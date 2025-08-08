@@ -73,6 +73,7 @@ export class BudgetModalComponent {
       IdBusiness: new FormControl(localStorage.getItem('id') || "[]"),
       Name: new FormControl(),
       Price: new FormControl({ disabled: true }),
+      PriceImp: new FormControl({ disabled: true }),
       DescriptionItems: new FormControl(),
       ClientId: new FormControl(),
       ClientName: new FormControl(),
@@ -118,6 +119,20 @@ export class BudgetModalComponent {
     this.itemService.getAllItems(localStorage.getItem('id') || "[]").subscribe((data: any) => {
       this.dbItems = data;
     })
+
+    this.budgetForm.get('Price')?.valueChanges.subscribe(() => this.updatePriceImp());
+    this.budgetForm.get('Iva')?.valueChanges.subscribe(() => this.updatePriceImp());
+    this.budgetForm.get('Irpf')?.valueChanges.subscribe(() => this.updatePriceImp());
+  }
+
+  updatePriceImp() {
+    const price = Number(this.budgetForm.get('Price')?.value) || 0;
+    const iva = Number(this.budgetForm.get('Iva')?.value) || 0;
+    const irpf = Number(this.budgetForm.get('Irpf')?.value) || 0;
+
+    const priceImp = price + (price * iva / 100) - (price * irpf / 100);
+
+    this.budgetForm.get('PriceImp')?.setValue(priceImp.toFixed(2), { emitEvent: false });
   }
 
   openTaskDialog() {

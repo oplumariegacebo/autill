@@ -155,7 +155,6 @@ export class CommonService {
 
           const ivaAmount = price * (iva / 100);
           const irpfAmount = price * (irpf / 100);
-          const total = price + ivaAmount + irpfAmount;
 
           file.setFontSize(14);
           file.setTextColor(40);
@@ -168,7 +167,7 @@ export class CommonService {
           file.setFont('courier', 'bold');
           file.setFontSize(16);
           file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
-          file.text(String(Number(total.toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
+          file.text(String(Number(budget.PriceImp.toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
           if (action === 'email') {
             this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
               const dialogRef = this.dialog.open(InfoModalComponent);

@@ -27,6 +27,9 @@ export class Budgets {
   Price: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
+  PriceImp: number;
+
+  @Column('decimal', { precision: 10, scale: 2 })
   Iva: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
