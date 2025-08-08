@@ -52,11 +52,10 @@ export class CommonService {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
 
-          // Logo y título alineados
           const logoY = 15;
           const logoX = 10;
           const logoWidth = 30;
-          const logoHeight = 30; // Mantener proporción cuadrada
+          const logoHeight = 30;
           file.addImage('/assets/images/autill_logo.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
 
           file.setFontSize(22);
@@ -167,7 +166,7 @@ export class CommonService {
           file.setFont('courier', 'bold');
           file.setFontSize(16);
           file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
-          file.text(String(Number(budget.PriceImp.toFixed(2))) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
+          file.text(String(budget.PriceImp.toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
           if (action === 'email') {
             this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
               const dialogRef = this.dialog.open(InfoModalComponent);
