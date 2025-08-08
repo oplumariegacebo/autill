@@ -136,10 +136,7 @@ export class BudgetModalComponent {
             sumTotalPrice = sumTotalPrice + validItems[i].TotalConcept;
           }
 
-          let ivaCalculator = (sumTotalPrice * (this.budgetForm.controls['Iva'].value / 100));
-          let irpfCalculator = (sumTotalPrice * (this.budgetForm.controls['Irpf'].value / 100));
-
-          this.budgetForm.controls['Price'].setValue((sumTotalPrice+ ivaCalculator + irpfCalculator).toFixed(2));
+          this.budgetForm.controls['Price'].setValue(sumTotalPrice.toFixed(2));
           this.modalItemsArray = validItems;
           this.budgetForm.controls['DescriptionItems'].setValue(JSON.stringify(validItems));
         } else {
