@@ -161,12 +161,12 @@ export class CommonService {
           file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
           file.text('IVA ' + iva + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
           file.text(String(Number(ivaAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
-          file.text('IRPF ' + irpf + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
-          file.text(String(Number(irpfAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
+          file.text('IRPF ' + irpf + '%:', file.internal.pageSize.getWidth() - 60, 280, { align: 'right' });
+          file.text(String(Number(irpfAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 280, { align: 'right' });
           file.setFont('courier', 'bold');
           file.setFontSize(16);
           file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
-          file.text(String(budget.PriceImp.toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
+          file.text(String(budget.PriceImp || '') + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
           if (action === 'email') {
             this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
               const dialogRef = this.dialog.open(InfoModalComponent);
