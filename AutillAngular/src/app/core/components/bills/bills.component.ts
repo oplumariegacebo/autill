@@ -75,26 +75,24 @@ export class BillsComponent {
     window.location.reload();
   }
 
-  updateSearching(formControlValue: any){
-    this.bills = this.dataBills;
-
-    if (formControlValue.Name) {
-      this.bills = this.bills.filter((item: any) => item.Name?.toLowerCase().includes(formControlValue.Name.toLowerCase()));
+  updateSearching(formControlValue: any) {
+    if (formControlValue === "") {
+      this.filtersActivated = null;
+      this.billService.getBills(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((bills: any) => {
+        this.allBills = bills;
+        this.dataBills = bills;
+        this.bills = bills;
+      })
+    } else {
+      if (formControlValue.Date != null) {
+        formControlValue.Date = this.commonService.transformDate(formControlValue.Date);
+      }
+      this.filtersActivated = formControlValue;
+      this.billService.getBills(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBills: any) => {
+        this.bills = filterBills;
+        this.allBills = this.bills;
+      });
     }
-    if (formControlValue.ClientId) {
-      this.bills = this.bills.filter((item: any) => item.ClientName === formControlValue.ClientId);
-    }
-    if (formControlValue.Date) {
-      this.bills = this.bills.filter((item: any) => item.Date === this.commonService.transformDate(formControlValue.Date));
-    }
-    if (formControlValue.CloseIt !== null && formControlValue.CloseIt !== undefined && formControlValue.CloseIt !== "") {
-      this.bills = this.bills.filter((item: any) => String(item.CloseIt) === String(formControlValue.CloseIt));
-    }
-    if (formControlValue.Price) {
-      this.bills = this.bills.filter((item: any) => Number(item.Price) === Number(formControlValue.Price));
-    }
-
-    this.allBills = this.bills;
   }
 
   openTaskDialog(n:string, id:number){
