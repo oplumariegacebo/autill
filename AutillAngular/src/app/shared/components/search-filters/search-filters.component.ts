@@ -47,7 +47,7 @@ export class SearchFiltersComponent {
       Name: new FormControl(),
       ClientId: new FormControl(),
       Date: new FormControl(),
-      CloseIt: new FormControl(),
+      Cashed: new FormControl(),
       Price: new FormControl(),
       Nif: new FormControl(),
       PhoneNumber: new FormControl()

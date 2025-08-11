@@ -35,8 +35,8 @@ export class BillsService {
 }
 
   async findAll(options: any): Promise<any> {
-    const take = options.take || 10
-    const skip = options.skip || 0
+    const take = options.take
+    const skip = options.skip
 
     const filterObject = {};
     if (options.filters != null) {
@@ -86,7 +86,6 @@ export class BillsService {
       Cashed: false
     };
 
-    // Marcar el presupuesto como cerrado
     budget.CloseIt = true;
     await this.budgetService.updateBudget(body.id, budget);
 
