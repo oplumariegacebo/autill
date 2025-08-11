@@ -1,13 +1,14 @@
-@if(bills){ @if(bills.count > 0){
-    <div>
-      <button class="lg:hidden w-full bg-primary-700 text-white py-2 rounded mb-2 flex items-center justify-center" (click)="showFilters = !showFilters">
-        <span>{{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
-        <svg [ngClass]="{'rotate-180': showFilters}" class="w-5 h-5 ml-2 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-      </button>
-      <div [ngClass]="{'block': showFilters, 'hidden': !showFilters, 'lg:block': true}">
-        <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
-      </div>
+@if(bills){
+  <div>
+    <button class="lg:hidden w-full bg-primary-700 text-white py-2 rounded mb-2 flex items-center justify-center" (click)="showFilters = !showFilters">
+      <span>{{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
+      <svg [ngClass]="{'rotate-180': showFilters}" class="w-5 h-5 ml-2 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+    </button>
+    <div [ngClass]="{'block': showFilters, 'hidden': !showFilters, 'lg:block': true}">
+      <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
     </div>
+  </div>
+  @if(bills.data && bills.data.length > 0){
     <div class="min-h-screen w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-x-auto max-w-full px-2 md:px-4 lg:px-0 py-6">
       <div class="flex flex-col gap-4">
         <button (click)="openTaskDialog('', 0)"
@@ -52,8 +53,11 @@
         <app-paginator [allItems]="allBills" (updateItems)="updateItems($event)"></app-paginator>
       </div>
     </div>
-    }@else {
-    <div class="flex items-center justify-center h-screen text-white">
-        <p class="text-center">No hay facturas.</p>
+  }@else{
+    <div class="flex flex-col items-center justify-center h-screen gap-6">
+      <p class="text-center text-white dark:text-white">
+        No hay facturas que coincidan con la búsqueda.
+      </p>
     </div>
-    } }
+  }
+}
