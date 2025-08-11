@@ -4,17 +4,15 @@
 </ng-container>
 <ng-template #budgetsBlock>
   <ng-container *ngIf="budgets">
-    <ng-container *ngIf="budgets.data && budgets.data.length > 0">
-      <div>
-        <button class="lg:hidden w-full bg-primary-700 text-white py-2 rounded mb-2 flex items-center justify-center" (click)="showFilters = !showFilters">
-          <span>{{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
-          <svg [ngClass]="{'rotate-180': showFilters}" class="w-5 h-5 ml-2 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-        </button>
-        <div [ngClass]="{'block': showFilters, 'hidden': !showFilters, 'lg:block': true}">
-          <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
-        </div>
+    <div>
+      <button class="lg:hidden w-full bg-primary-700 text-white py-2 rounded mb-2 flex items-center justify-center" (click)="showFilters = !showFilters">
+        <span>{{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
+        <svg [ngClass]="{'rotate-180': showFilters}" class="w-5 h-5 ml-2 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      <div [ngClass]="{'block': showFilters, 'hidden': !showFilters, 'lg:block': true}">
+        <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
       </div>
-    </ng-container>
+    </div>
     <ng-container *ngIf="budgets.data && budgets.data.length > 0; else noBudgets">
       <div class="min-h-screen w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-x-auto max-w-full px-2 md:px-8 py-6">
         <div class="flex flex-col gap-4">
@@ -66,31 +64,11 @@
       </div>
     </ng-container>
     <ng-template #noBudgets>
-      <ng-container *ngIf="allBudgets && allBudgets.length > 0; else onlyButton">
-        <div class="flex flex-col items-center justify-center h-screen gap-6">
-          <div class="w-full max-w-md">
-            <div class="mb-4 lg:block">
-              <app-search-filters [dataScreen]="dataScreen" (updateSearching)="updateSearching($event)"></app-search-filters>
-            </div>
-          </div>
-          <p class="text-center text-white dark:text-white">
-            No hay presupuestos que coincidan con la búsqueda.
-          </p>
-        </div>
-      </ng-container>
-      <ng-template #onlyButton>
-        <div class="flex flex-col items-center justify-center h-screen">
-          <button (click)="openTaskDialog('', 0)"
-            class="bg-primary-700 hover:bg-primary-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">
-            <svg class="svg-icon" viewBox="0 0 20 20">
-              <path
-                d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10">
-              </path>
-            </svg>
-            <span class="pl-1">Nuevo Presupuesto</span>
-          </button>
-        </div>
-      </ng-template>
+      <div class="flex flex-col items-center justify-center h-screen gap-6">
+        <p class="text-center text-white dark:text-white">
+          No hay presupuestos que coincidan con la búsqueda.
+        </p>
+      </div>
     </ng-template>
   </ng-container>
 </ng-template>

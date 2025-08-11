@@ -78,18 +78,20 @@ export class BillsComponent {
   updateSearching(formControlValue: any){
     this.bills = this.dataBills;
 
-    for(let k in formControlValue){
-      if(formControlValue[k] !== null && formControlValue[k] !== ''){
-        if(k === 'name'){
-          this.bills = this.bills.filter((item:any) => item.name.includes(formControlValue[k]));
-        }else if(k === 'clientId'){
-          this.bills = this.bills.filter((item:any) => item.clientName === formControlValue[k]);
-        }else if(k === 'date'){
-          this.bills = this.bills.filter((item:any) => item.date === this.commonService.transformDate(formControlValue[k]));
-        }else if(k === 'status'){
-          this.bills = this.bills.filter((item:any) => item.closeIt === formControlValue[k]);
-        }
-      }
+    if (formControlValue.Name) {
+      this.bills = this.bills.filter((item: any) => item.Name?.toLowerCase().includes(formControlValue.Name.toLowerCase()));
+    }
+    if (formControlValue.ClientId) {
+      this.bills = this.bills.filter((item: any) => item.ClientName === formControlValue.ClientId);
+    }
+    if (formControlValue.Date) {
+      this.bills = this.bills.filter((item: any) => item.Date === this.commonService.transformDate(formControlValue.Date));
+    }
+    if (formControlValue.CloseIt !== null && formControlValue.CloseIt !== undefined && formControlValue.CloseIt !== "") {
+      this.bills = this.bills.filter((item: any) => String(item.CloseIt) === String(formControlValue.CloseIt));
+    }
+    if (formControlValue.Price) {
+      this.bills = this.bills.filter((item: any) => Number(item.Price) === Number(formControlValue.Price));
     }
 
     this.allBills = this.bills;
