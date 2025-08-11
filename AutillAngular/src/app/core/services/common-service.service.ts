@@ -71,7 +71,7 @@ export class CommonService {
           const headerBottomY = logoY + logoHeight - 4;
           file.setDrawColor(200);
           file.setLineWidth(0.5);
-          file.line(logoX, headerBottomY, file.internal.pageSize.getWidth() - logoX - 60, headerBottomY);
+          file.line(logoX, headerBottomY, file.internal.pageSize.getWidth() - logoX - 50, headerBottomY);
 
           file.setFontSize(12);
           file.setTextColor(40);
