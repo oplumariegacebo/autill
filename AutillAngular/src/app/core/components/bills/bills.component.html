@@ -1,5 +1,5 @@
 @if(bills){
-  @if(allBills && allBills.data && allBills.data.length === 0){
+  @if(allBills && allBills.data && allBills.data.length > 0){
   <div>
     <button class="lg:hidden w-full bg-primary-700 text-white py-2 rounded mb-2 flex items-center justify-center" (click)="showFilters = !showFilters">
       <span>{{ showFilters ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
@@ -28,7 +28,7 @@
               <span class="font-semibold text-lg text-primary-700 dark:text-primary-400 truncate">Factura: {{ b.Name }}</span>
               <span class="text-sm text-gray-600 dark:text-gray-300 truncate">Cliente: {{ b.ClientName }}</span>
               <span class="text-sm text-gray-600 dark:text-gray-300">Fecha: {{ b.Date }}</span>
-              <span class="text-sm text-gray-600 dark:text-gray-300">Precio: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.Price }} €</span> <span class="font-bold text-primary-700 dark:text-primary-400">{{b.PriceImp}} € impto incl.</span></span>
+              <span class="text-sm text-gray-600 dark:text-gray-300">Precio: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.Price }} €</span> <span class="font-bold text-primary-700 dark:text-primary-400">{{b.PriceImp}} €</span> impto incl</span>
               <span class="text-sm text-gray-600 dark:text-gray-300">Estado:
                 @if(b.Cashed){
                   <span class="font-bold text-green-600 dark:text-green-400">Cobrado</span>
