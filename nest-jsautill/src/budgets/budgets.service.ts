@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BudgetDto } from './dto/budget.dto';
 import { Budgets } from './entities/budget.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, Repository } from 'typeorm';
+import { ILike, Repository, Between } from 'typeorm';
 //import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
@@ -47,6 +47,14 @@ export class BudgetsService {
         }
 
         filterObject['IdBusiness'] = options.userId;
+
+        if (options.filters?.PriceMin != null && options.filters?.PriceMax != null) {
+            filterObject['PriceImp'] = Between(options.filters.PriceMin, options.filters.PriceMax);
+        } else if (options.filters?.PriceMin != null) {
+            filterObject['PriceImp'] = Between(options.filters.PriceMin, Number.MAX_SAFE_INTEGER);
+        } else if (options.filters?.PriceMax != null) {
+            filterObject['PriceImp'] = Between(0, options.filters.PriceMax);
+        }
 
         if (filterObject['Name']) {
             filterObject['Name'] = ILike('%' + filterObject['Name'] + '%');
