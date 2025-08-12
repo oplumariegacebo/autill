@@ -42,7 +42,7 @@ export class BudgetsService {
         const filterObject = {};
         if (options.filters != null) {
             Object.entries(options.filters)
-                .filter(([, value]) => value !== null)
+                .filter(([key, value]) => value !== null && key !== 'PriceMin' && key !== 'PriceMax')
                 .forEach(([key, value]) => (filterObject[key] = value));
         }
 

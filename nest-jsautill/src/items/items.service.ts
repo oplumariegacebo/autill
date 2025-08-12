@@ -47,11 +47,11 @@ export class ItemsService {
     filterObject['IdBusiness'] = options.userId;
 
     if (options.filters?.PriceMin != null && options.filters?.PriceMax != null) {
-      filterObject['PriceImp'] = Between(options.filters.PriceMin, options.filters.PriceMax);
+      filterObject['Price'] = Between(options.filters.PriceMin, options.filters.PriceMax);
     } else if (options.filters?.PriceMin != null) {
-      filterObject['PriceImp'] = Between(options.filters.PriceMin, Number.MAX_SAFE_INTEGER);
+      filterObject['Price'] = Between(options.filters.PriceMin, Number.MAX_SAFE_INTEGER);
     } else if (options.filters?.PriceMax != null) {
-      filterObject['PriceImp'] = Between(0, options.filters.PriceMax);
+      filterObject['Price'] = Between(0, options.filters.PriceMax);
     }
 
     if (filterObject['Name']) {
