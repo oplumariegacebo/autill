@@ -100,10 +100,6 @@ export class BudgetModalComponent {
 
         this.modalItemsArray = JSON.parse(budget.DescriptionItems);
       })
-    } else {
-      this.budgetService.nextBudgetName(localStorage.getItem('id') || "[]").subscribe((name: any) => {
-        this.budgetForm.controls['Name'].setValue(name.name);
-      })
     }
     this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
       this.clients = clients.data;

@@ -73,15 +73,15 @@ export class BillsService {
       return { success: false, message: 'Presupuesto no encontrado' };
     }
 
-    // Clonar y preparar la factura
     const billToCreate = {
       IdBusiness: budget.IdBusiness,
-      Name: 'Factura-' + (budget.Name.substring(budget.Name.length - 4)),
+      Name: 'Factura-' + budget.Name,
       ClientId: budget.ClientId,
       ClientName: budget.ClientName,
       Date: budget.Date,
       DescriptionItems: budget.DescriptionItems,
       Price: budget.Price,
+      PriceImp: budget.PriceImp,
       IdBudget: budget.Id,
       Cashed: false
     };
@@ -89,7 +89,6 @@ export class BillsService {
     budget.CloseIt = true;
     await this.budgetService.updateBudget(body.id, budget);
 
-    // Guardar la factura
     const savedBill = await this.billsRepository.save(billToCreate);
     return { success: true, message: 'Factura generada correctamente', data: savedBill };
   }
