@@ -60,7 +60,7 @@ export class CommonService {
 
           file.setFontSize(22);
 
-          file.text(budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
+          file.text(title + ' ' + budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
 
           file.setFontSize(14);
           file.setFont('helvetica', 'normal');
