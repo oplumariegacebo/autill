@@ -101,34 +101,31 @@ export class BudgetDetailsComponent {
     if (type === 'form') {
       const itemName = this.detailsForm.controls['Item' + (id - 1)].value;
       if (!itemName || itemName.trim() === '') {
-        // No añadir si el producto está vacío
         return;
       }
       let units = parseFloat(this.detailsForm.controls['Units' + (id - 1)].value);
-
+      let price = parseFloat(this.detailsForm.controls['PriceTD' + (id - 1)].value);
+      // Buscar si el producto existe en dbItems
+      const dbItem = this.dbItems.find((item: any) => item.Name === itemName);
       this.items[(id - 1)].Name = itemName;
       this.items[(id - 1)].Units = units;
-      this.items[(id - 1)].Price = parseFloat(this.lasItemAdded.Price);
+      this.items[(id - 1)].Price = dbItem ? parseFloat(dbItem.Price) : price;
       this.items[(id - 1)].TotalConcept = Number((units * this.items[(id - 1)].Price).toFixed(2));
-
       this.newFormControls(id);
-
       this.items.push({ Id: id, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false });
     } else {
       const itemName = this.detailsForm.controls['Item' + id].value;
       if (!itemName || itemName.trim() === '') {
-        // No añadir si el producto está vacío
         return;
       }
       let units = parseFloat(this.detailsForm.controls['Units' + id].value);
-
+      let price = parseFloat(this.detailsForm.controls['PriceTD' + id].value);
+      const dbItem = this.dbItems.find((item: any) => item.Name === itemName);
       this.items[id].Name = itemName;
       this.items[id].Units = units;
-      this.items[id].Price = parseFloat(this.lasItemAdded.Price);
+      this.items[id].Price = dbItem ? parseFloat(dbItem.Price) : price;
       this.items[id].TotalConcept = Number((units * this.items[id].Price).toFixed(2));
-
       this.items.push({ Id: id + 1, Name: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: false });
-
       this.filteredItems = this.detailsForm.controls[`Item${id}`].valueChanges.pipe(
         startWith(''),
         map(value => {
