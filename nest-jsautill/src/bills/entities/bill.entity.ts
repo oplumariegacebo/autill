@@ -27,6 +27,9 @@ export class Bills {
   Price: number;
 
   @Column()
+  PriceImp: number;
+
+  @Column()
   IdBudget: number;
 
   @Column()
