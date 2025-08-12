@@ -109,9 +109,10 @@
         <label for="Price" class="text-white text-sm font-medium">Precio</label>
         <input
           type="number"
-          formControlName="Price"
+          formControlName="PriceImp"
           id="price"
-          onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"
+          step="any"
+          onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight','.','Comma'].includes(event.key) ? true : !isNaN(Number(event.key)) && event.key!=='Space'"
           placeholder=""
           class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
         />
