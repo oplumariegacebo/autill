@@ -75,7 +75,7 @@ export class BillsService {
 
     const billToCreate = {
       IdBusiness: budget.IdBusiness,
-      Name: 'Factura-' + budget.Name,
+      Name: budget.Name,
       ClientId: budget.ClientId,
       ClientName: budget.ClientName,
       Date: budget.Date,
