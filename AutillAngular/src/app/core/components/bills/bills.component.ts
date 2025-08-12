@@ -19,7 +19,7 @@ import { SearchFiltersComponent } from '../../../shared/components/search-filter
 })
 export class BillsComponent {
   @Input() bills: any;
-  
+
   dataScreen: string = 'bills';
   allBills: any = [];
   billService = inject(BillService);
@@ -29,15 +29,15 @@ export class BillsComponent {
   filtersActivated: any = null;
   showFilters = false;
 
-  constructor(private dialog: MatDialog, public commonService: CommonService) {}
+  constructor(private dialog: MatDialog, public commonService: CommonService) { }
 
   ngOnInit() {
     this.billService.getBills(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
-      next: (data:any) => {
+      next: (data: any) => {
         for (let i = 0; i < data.data.length; i++) {
-          this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients:any) =>{
+          this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
             for (let x = 0; x < clients.data.length; x++) {
-              if(clients.data[x].Id === data.data[i].ClientId) {
+              if (clients.data[x].Id === data.data[i].ClientId) {
                 data.data[i].ClientName = clients.data[x].Name;
               }
             }
@@ -47,14 +47,14 @@ export class BillsComponent {
         this.allBills = data;
         this.dataBills = data;
         this.bills = data;
-      }, 
+      },
       error: (err: HttpErrorResponse) => {
         let error = '';
-        if(err.status === 500){
+        if (err.status === 500) {
           error = 'Internal server error.'
-        }else if(err.status === 401){
+        } else if (err.status === 401) {
           error = 'No autorizado.'
-        }else{
+        } else {
           error = 'Ha ocurrido un error, contacta con el administrador.'
         }
         this.errorMessage = error;
@@ -62,7 +62,7 @@ export class BillsComponent {
     })
   }
 
-  updateItems(pagination: any){
+  updateItems(pagination: any) {
     this.billService.getBills(localStorage.getItem('id') || "[]", this.filtersActivated, 10, pagination.skip).subscribe((bills: any) => {
       this.allBills = bills;
       this.dataBills = bills;
@@ -70,7 +70,7 @@ export class BillsComponent {
     })
   }
 
-  cashed(id: number){
+  cashed(id: number) {
     this.billService.cashed(id).subscribe();
     window.location.reload();
   }
@@ -95,7 +95,7 @@ export class BillsComponent {
     }
   }
 
-  openTaskDialog(n:string, id:number){
+  openTaskDialog(n: string, id: number) {
 
   }
 
@@ -107,7 +107,11 @@ export class BillsComponent {
     dialogRef.componentInstance.id = id;
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.bills.data = this.bills.data.filter((i: any) => i.Id !== id);
+        this.allBills.data = this.allBills.data.filter((i: any) => i.Id !== id);
+        this.dataBills.data = this.dataBills.data.filter((i: any) => i.Id !== id);
+      }
     })
   }
-
 }
