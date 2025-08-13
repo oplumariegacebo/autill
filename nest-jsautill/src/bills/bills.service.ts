@@ -88,8 +88,8 @@ export class BillsService {
       ClientName: budget.ClientName,
       Date: budget.Date,
       DescriptionItems: budget.DescriptionItems,
-      Price: budget.Price,
-      PriceImp: budget.PriceImp,
+      Price: parseFloat(budget.Price),
+      PriceImp: parseFloat(budget.PriceImp),
       IdBudget: budget.Id,
       Cashed: false
     };
