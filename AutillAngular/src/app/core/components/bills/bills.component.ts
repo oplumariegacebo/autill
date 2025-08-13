@@ -71,8 +71,14 @@ export class BillsComponent {
   }
 
   cashed(id: number) {
-    this.billService.cashed(id).subscribe();
-    window.location.reload();
+    this.billService.cashed(id).subscribe({
+      next: () => {
+        window.location.reload();
+      },
+      error: (err) => {
+        this.errorMessage = 'Error al marcar como cobrada.';
+      }
+    });
   }
 
   updateSearching(formControlValue: any) {
