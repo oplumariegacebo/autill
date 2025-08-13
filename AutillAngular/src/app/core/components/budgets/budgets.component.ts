@@ -47,6 +47,7 @@ export class BudgetsComponent {
         this.allBudgets = data;
         this.dataBudgets = data;
         this.budgets = data;
+        this.loading = false;
       },
       error: (err: HttpErrorResponse) => {
         let error = '';
@@ -58,6 +59,7 @@ export class BudgetsComponent {
           error = 'Ha ocurrido un error, contacta con el administrador.'
         }
         this.errorMessage = error;
+        this.loading = false;
       }
     })
   }
