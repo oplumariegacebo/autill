@@ -29,7 +29,7 @@ export class BillsComponent {
   filtersActivated: any = null;
   showFilters = false;
 
-  constructor(private dialog: MatDialog, public commonService: CommonService) { }
+  constructor(public dialog: MatDialog, public commonService: CommonService) { }
 
   ngOnInit() {
     this.billService.getBills(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({

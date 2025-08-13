@@ -12,28 +12,77 @@
   }
   @if(bills.data && bills.data.length > 0){
     <div class="min-h-screen w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white overflow-x-auto max-w-full px-2 md:px-8 py-6">
-      <div class="flex flex-col gap-4">
+      <!-- Tabla en PC -->
+      <div class="hidden lg:block">
+        <table class="min-w-full rounded-xl overflow-hidden shadow-lg">
+          <thead class="bg-gray-100 dark:bg-gray-900">
+            <tr>
+              <th class="px-4 py-2 text-left">#</th>
+              <th class="px-4 py-2 text-left">Nombre</th>
+              <th class="px-4 py-2 text-left">Cliente</th>
+              <th class="px-4 py-2 text-left">Fecha</th>
+              <th class="px-4 py-2 text-left">Precio</th>
+              <th class="px-4 py-2 text-left">Precio Imp.</th>
+              <th class="px-4 py-2 text-left">Estado</th>
+              <th class="px-4 py-2 text-left">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of bills.data; track b.Id) {
+              <tr class="border-b last:border-none hover:bg-gray-50 dark:hover:bg-gray-800">
+                <td class="px-4 py-2">{{ b.Id }}</td>
+                <td class="px-4 py-2 font-semibold">{{ b.Name }}</td>
+                <td class="px-4 py-2">{{ b.ClientName }}</td>
+                <td class="px-4 py-2">{{ b.Date }}</td>
+                <td class="px-4 py-2">{{ b.Price }} €</td>
+                <td class="px-4 py-2">{{ b.PriceImp }} €</td>
+                <td class="px-4 py-2">
+                  <span [ngClass]="{
+                    'bg-green-100 text-green-700': b.Cashed === true,
+                    'bg-red-100 text-red-700': b.Cashed === false
+                  }" class="px-3 py-1 rounded-full text-xs font-semibold">
+                    {{ b.Cashed ? 'Cobrado' : 'Pendiente' }}
+                  </span>
+                </td>
+                <td class="px-4 py-2">
+                  <div class="flex gap-2">
+                    <button *ngIf="!b.Cashed" (click)="cashed(b.Id)" class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 flex items-center" title="Cobrar">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
+                    </button>
+                    <button (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 flex items-center" title="Descargar PDF">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>
+                    </button>
+                    <button (click)="deleteBill(b.Id)" class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2 flex items-center" title="Eliminar">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" /><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <!-- Cards en móvil -->
+      <div class="block lg:hidden">
         @for (b of bills.data; track b.Id) {
-          <div class="rounded-2xl shadow-xl bg-gray-50 dark:bg-gray-900 p-4 lg:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 transition hover:shadow-2xl border-2 border-primary-200 dark:border-primary-700 mb-4 w-full">
-            <div class="flex-1 flex flex-col gap-1 min-w-0">
-              <span class="font-semibold text-lg text-primary-700 dark:text-primary-400 truncate">Factura: {{ b.Name }}</span>
-              <span class="text-sm text-gray-600 dark:text-gray-300 truncate">Cliente: {{ b.ClientName }}</span>
-              <span class="text-sm text-gray-600 dark:text-gray-300">Fecha: {{ b.Date }}</span>
-              <span class="text-sm text-gray-600 dark:text-gray-300">Precio: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.Price }} €</span> - <span class="font-bold text-primary-700 dark:text-primary-400">{{b.PriceImp}} €</span> impto incl</span>
-              <span class="text-sm text-gray-600 dark:text-gray-300">Estado:
-                @if(b.Cashed){
-                  <span class="font-bold text-green-600 dark:text-green-400">Cobrado</span>
-                }@else{
-                  <span class="font-bold text-red-600 dark:text-red-400">Pendiente</span>
-                }
+          <div class="rounded-xl shadow-lg bg-gray-50 dark:bg-gray-900 p-4 mb-4 flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+              <span class="font-semibold text-lg text-primary-700 dark:text-primary-400">{{ b.Name }}</span>
+              <span [ngClass]="{
+                'bg-green-100 text-green-700': b.Cashed === true,
+                'bg-red-100 text-red-700': b.Cashed === false
+              }" class="px-3 py-1 rounded-full text-xs font-semibold">
+                {{ b.Cashed ? 'Cobrado' : 'Pendiente' }}
               </span>
             </div>
-            <div class="flex flex-wrap gap-2 justify-end items-center lg:ml-4 mt-2 lg:mt-0">
-              @if(!b.Cashed){
-                <button (click)="cashed(b.Id)" class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 flex items-center" title="Cobrar">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
-                </button>
-              }
+            <div class="text-sm text-gray-600 dark:text-gray-300">Cliente: {{ b.ClientName }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Fecha: {{ b.Date }}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Precio: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.Price }} €</span></div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Precio con impuestos: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.PriceImp }} €</span></div>
+            <div class="flex flex-wrap gap-2 justify-end mt-2">
+              <button *ngIf="!b.Cashed" (click)="cashed(b.Id)" class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 flex items-center" title="Cobrar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
+              </button>
               <button (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 flex items-center" title="Descargar PDF">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>
               </button>
@@ -43,8 +92,8 @@
             </div>
           </div>
         }
-        <app-paginator [allItems]="allBills" (updateItems)="updateItems($event)"></app-paginator>
       </div>
+      <app-paginator [allItems]="allBills" (updateItems)="updateItems($event)"></app-paginator>
     </div>
   }@else{
     <div class="flex flex-col items-center justify-center h-screen gap-6">

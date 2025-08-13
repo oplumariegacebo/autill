@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import path from 'path';
+import * as path from 'path';
 import * as fs from 'fs';
 
 require('dotenv').config();

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Budget, BudgetResults } from '../models/Budget';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class BudgetService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly api = 'https://autill-nestjs.vercel.app';
+  private readonly api = environment.apiUrl;
 
   private getHeaders(): HttpHeaders {
     const authToken = localStorage.getItem('token');

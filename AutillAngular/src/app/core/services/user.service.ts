@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 interface UserEdit {
   email: string;
@@ -28,7 +29,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  private readonly api = 'https://autill-nestjs.vercel.app';
+  private readonly api = environment.apiUrl;
 
   private getHeaders(): HttpHeaders {
     const authToken = localStorage.getItem('token');
