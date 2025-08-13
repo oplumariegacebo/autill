@@ -24,10 +24,10 @@ export class Budgets {
   DescriptionItems: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  Price: string;
+  Price: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  PriceImp: string;
+  PriceImp: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
   Iva: number;

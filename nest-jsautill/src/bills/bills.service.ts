@@ -88,8 +88,8 @@ export class BillsService {
       ClientName: budget.ClientName,
       Date: budget.Date,
       DescriptionItems: budget.DescriptionItems,
-      Price: Number(parseFloat(budget.Price).toFixed(2)),
-      PriceImp: Number(parseFloat(budget.PriceImp).toFixed(2)),
+      Price: budget.Price,
+      PriceImp: budget.PriceImp,
       IdBudget: budget.Id,
       Cashed: false
     };
@@ -98,7 +98,11 @@ export class BillsService {
     await this.budgetService.updateBudget(body.id, budget);
 
     const savedBill = await this.billsRepository.save(billToCreate);
-    return { success: true, message: 'Factura generada correctamente', data: savedBill };
+    return {
+      success: true,
+      message: 'Factura generada correctamente',
+      data: savedBill
+    };
   }
 
   async remove(billId: number): Promise<any> {

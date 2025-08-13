@@ -23,10 +23,10 @@ export class Bills {
   @Column('text')
   DescriptionItems: string;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   Price: number;
 
-  @Column()
+  @Column('decimal', { precision: 10, scale: 2 })
   PriceImp: number;
 
   @Column()
