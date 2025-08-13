@@ -1,3 +1,4 @@
+<app-spinner-loading *ngIf="loading"></app-spinner-loading>
 <div class="relative overflow-x-auto">
   <ng-container *ngIf="errorMessage; else budgetsBlock">
     <app-errors [errorMessage]="errorMessage"></app-errors>

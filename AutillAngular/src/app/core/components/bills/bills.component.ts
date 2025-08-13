@@ -9,11 +9,12 @@ import { BillService } from '../../services/bill.service';
 import { ClientService } from '../../services/client.service';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 import { SearchFiltersComponent } from '../../../shared/components/search-filters/search-filters.component';
+import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
 
 @Component({
   selector: 'app-bills',
   standalone: true,
-  imports: [CommonModule, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, PaginatorComponent, SearchFiltersComponent, SpinnerLoadingComponent],
   templateUrl: './bills.component.html',
   styleUrl: './bills.component.css'
 })
@@ -28,10 +29,12 @@ export class BillsComponent {
   dataBills: any = [];
   filtersActivated: any = null;
   showFilters = false;
+  loading: boolean = false;
 
   constructor(public dialog: MatDialog, public commonService: CommonService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.billService.getBills(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
       next: (data: any) => {
         for (let i = 0; i < data.data.length; i++) {
@@ -43,10 +46,10 @@ export class BillsComponent {
             }
           })
         }
-
         this.allBills = data;
         this.dataBills = data;
         this.bills = data;
+        this.loading = false;
       },
       error: (err: HttpErrorResponse) => {
         let error = '';
@@ -58,45 +61,68 @@ export class BillsComponent {
           error = 'Ha ocurrido un error, contacta con el administrador.'
         }
         this.errorMessage = error;
+        this.loading = false;
       }
     })
   }
 
   updateItems(pagination: any) {
-    this.billService.getBills(localStorage.getItem('id') || "[]", this.filtersActivated, 10, pagination.skip).subscribe((bills: any) => {
-      this.allBills = bills;
-      this.dataBills = bills;
-      this.bills = bills;
-    })
+    this.loading = true;
+    this.billService.getBills(localStorage.getItem('id') || "[]", this.filtersActivated, 10, pagination.skip).subscribe({
+      next: (bills: any) => {
+        this.allBills = bills;
+        this.dataBills = bills;
+        this.bills = bills;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
   }
 
   cashed(id: number) {
+    this.loading = true;
     this.billService.cashed(id).subscribe({
       next: () => {
-        window.location.reload();
+        this.loading = false;
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'Error al marcar como cobrada.';
+        this.loading = false;
       }
     });
   }
 
   updateSearching(formControlValue: any) {
+    this.loading = true;
     if (formControlValue === "") {
       this.filtersActivated = null;
-      this.billService.getBills(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((bills: any) => {
-        this.allBills = bills;
-        this.dataBills = bills;
-        this.bills = bills;
-      })
+      this.billService.getBills(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
+        next: (bills: any) => {
+          this.allBills = bills;
+          this.dataBills = bills;
+          this.bills = bills;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        }
+      });
     } else {
       if (formControlValue.Date != null) {
         formControlValue.Date = this.commonService.transformDate(formControlValue.Date);
       }
       this.filtersActivated = formControlValue;
-      this.billService.getBills(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBills: any) => {
-        this.bills = filterBills;
-        this.allBills = this.bills;
+      this.billService.getBills(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe({
+        next: (filterBills: any) => {
+          this.bills = filterBills;
+          this.allBills = this.bills;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        }
       });
     }
   }

@@ -13,11 +13,12 @@ import { SearchFiltersComponent } from "../../../shared/components/search-filter
 import { UserService } from '../../services/user.service';
 import { ClientService } from '../../services/client.service';
 import { SendEmailComponent } from '../../../shared/components/send-email/send-email.component';
+import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
 
 @Component({
   selector: 'app-budgets',
   standalone: true,
-  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent, SpinnerLoadingComponent],
   templateUrl: './budgets.component.html',
   styleUrl: './budgets.component.css'
 })
@@ -35,10 +36,12 @@ export class BudgetsComponent {
   clientService = inject(ClientService);
   errorMessage: string = '';
   filtersActivated: any = null;
+    loading: boolean = false;
 
   constructor(private dialog: MatDialog, public commonService: CommonService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.budgetService.getBudgets(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
       next: (data: any) => {
         this.allBudgets = data;
@@ -60,22 +63,27 @@ export class BudgetsComponent {
   }
 
   updateItems(pagination: any) {
+    this.loading = true;
     this.budgetService.getBudgets(localStorage.getItem('id') || "[]", this.filtersActivated, 10, pagination.skip).subscribe((budgets: any) => {
       this.allBudgets = budgets;
       this.dataBudgets = budgets;
       this.budgets = budgets;
+      this.loading = false;
     })
   }
 
   updateSearching(formControlValue: any) {
     if (formControlValue === "") {
+      this.loading = true;
       this.filtersActivated = null;
       this.budgetService.getBudgets(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((budgets: any) => {
         this.allBudgets = budgets;
         this.dataBudgets = budgets;
         this.budgets = budgets;
+        this.loading = false;
       })
     } else {
+      this.loading = true;
       if (formControlValue.Date != null) {
         formControlValue.Date = this.commonService.transformDate(formControlValue.Date);
       }
@@ -84,6 +92,7 @@ export class BudgetsComponent {
       this.budgetService.getBudgets(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBudgets: any) => {
         this.budgets = filterBudgets;
         this.allBudgets = this.budgets;
+        this.loading = false;
       });
     }
   }
@@ -101,6 +110,7 @@ export class BudgetsComponent {
   }
 
   deleteBudget(id: number) {
+    this.loading = true;
     const dialogRef = this.dialog.open(DeleteItemModalComponent);
     dialogRef.componentInstance.type = 'presupuesto';
     dialogRef.componentInstance.title = Messages.DELETE_BUDGET_TITLE;
@@ -111,10 +121,12 @@ export class BudgetsComponent {
       if (result == 'confirm') {
         this.budgetService.deleteBudget(id).subscribe({
           next: () => {
+            this.loading = false;
             window.location.reload();
           },
           error: (err) => {
             alert('Error al eliminar el presupuesto');
+            this.loading = false;
           }
         });
       }
