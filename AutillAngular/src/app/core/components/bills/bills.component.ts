@@ -86,6 +86,7 @@ export class BillsComponent {
     this.billService.cashed(id).subscribe({
       next: () => {
         this.loading = false;
+        window.location.reload();
       },
       error: () => {
         this.errorMessage = 'Error al marcar como cobrada.';
