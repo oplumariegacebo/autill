@@ -17,26 +17,31 @@ export class ItemModalComponent {
   itemForm!: FormGroup
   item!: any;
   client: Object = {};
-  loading:boolean = false;
+  loading: boolean = false;
   apiService = inject(ApiService);
   clientService = inject(ClientService);
   itemService = inject(ItemService);
 
-  initializeForm(){
+  initializeForm() {
     this.itemForm = new FormGroup({
       Id: new FormControl(),
       Name: new FormControl(),
       Price: new FormControl(),
+      PriceImp: new FormControl({ value: '', disabled: true }),
+      Iva: new FormControl(),
+      Irpf: new FormControl(),
+      Ref: new FormControl(),
+      Stock: new FormControl(),
       IdBusiness: new FormControl(localStorage.getItem('id') || "[]")
     })
   }
 
-  constructor(public dialogRef: MatDialogRef<ItemModalComponent>, private formBuilder: FormBuilder){
+  constructor(public dialogRef: MatDialogRef<ItemModalComponent>, private formBuilder: FormBuilder) {
     this.initializeForm();
   }
 
-  ngOnInit(){
-    if(this.item.Id > 0){
+  ngOnInit() {
+    if (this.item.Id > 0) {
       this.itemForm.setValue(this.item);
     }
   }
@@ -45,26 +50,49 @@ export class ItemModalComponent {
     this.dialogRef.close();
   }
 
-  actionClient(){
+  updateLivePriceImp($event: Event) {
+    const input = $event.target as HTMLInputElement;
+    const value = Number(input.value) || 0;
+
+    this.updatePriceImp();
+}
+
+  updatePriceImp() {
+    const price = Number(this.itemForm.get('Price')?.value) || 0;
+    const iva = Number(this.itemForm.get('Iva')?.value) || 0;
+    const irpf = Number(this.itemForm.get('Irpf')?.value) || 0;
+
+    const priceImp = price + (price * iva / 100) - (price * irpf / 100);
+
+    this.itemForm.controls['PriceImp'].setValue(priceImp.toFixed(2), { emitEvent: false });
+  }
+
+  actionClient() {
     this.loading = true;
-    if(this.item == 0){
+    if (this.item == 0) {
       this.itemForm.removeControl('Id');
-      this.itemService.addItem(this.itemForm.value).subscribe({
-        next: () => {
-          this.itemForm.addControl('Id', new FormControl());
+      const itemData = this.itemForm.getRawValue();
+      this.itemService.addItem(itemData).subscribe({
+        next: (newItem) => {
+          //this.dialogRef.close(newItem);
         },
         complete: () => {
           window.location.reload();
+        },
+        error: () => {
+          this.loading = false;
         }
-      })
-    }else{
-      this.itemService.editItem(this.item.Id, this.itemForm.value).subscribe({
-        complete: () => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000)
+      });
+    } else {
+      const itemData = this.itemForm.getRawValue();
+      this.itemService.editItem(this.item.Id, itemData).subscribe({
+        next: (updatedItem) => {
+          this.dialogRef.close(updatedItem);
+        },
+        error: () => {
+          this.loading = false;
         }
-      })
+      });
     }
   }
 }

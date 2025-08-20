@@ -1,5 +1,8 @@
 export interface Item {
     Id: number;
     Name: string;
-    PriceU: number;
+    Price: number;
+    PriceImp: number;
+    Stock: number;
+    Ref: string;
 }

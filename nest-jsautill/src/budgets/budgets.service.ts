@@ -3,13 +3,14 @@ import { BudgetDto } from './dto/budget.dto';
 import { Budgets } from './entities/budget.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository, Between } from 'typeorm';
+import { ItemsService } from 'src/items/items.service';
 //import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class BudgetsService {
-
     constructor(
         @InjectRepository(Budgets) private budgetsRepository: Repository<Budgets>,
+        private itemsService: ItemsService
         //private readonly mailService: MailerService
     ) { }
 
@@ -112,15 +113,58 @@ export class BudgetsService {
         return { name: "Presupuesto" + nextName };
     }
 
-    createBudget(newBudget: BudgetDto) {
+    async createBudget(newBudget: BudgetDto) {
+        const items = JSON.parse(newBudget.DescriptionItems);
+        for (let item of items) {
+            let dbItem = await this.itemsService.findItem(item.Id);
+            if (dbItem.success && dbItem.data.Stock > 0 && item.Units > 0) {
+                dbItem.data.Stock = dbItem.data.Stock - item.Units;
+                await this.itemsService.updateItem(dbItem.data.Id, dbItem.data);
+            }
+        }
+
         return this.budgetsRepository.save(newBudget);
     }
 
     async deleteBudget(budgetId: number): Promise<any> {
+        const budget = await this.budgetsRepository.findOne({ where: { Id: budgetId } });
+
+        if (budget) {
+            const items = JSON.parse(budget.DescriptionItems);
+            for (let item of items) {
+                let dbItem = await this.itemsService.findItem(item.Id);
+                if (dbItem.success && dbItem.data.Stock != null && item.Units > 0) {
+                    dbItem.data.Stock += item.Units;
+                    await this.itemsService.updateItem(dbItem.data.Id, dbItem.data);
+                }
+            }
+        }
+
         return await this.budgetsRepository.delete({ Id: budgetId });
     }
 
     async updateBudget(budgetId: number, newBudget: BudgetDto) {
+        const oldBudget = await this.budgetsRepository.findOne({ where: { Id: budgetId } });
+
+        if (oldBudget) {
+            const oldItems = JSON.parse(oldBudget.DescriptionItems);
+            for (let item of oldItems) {
+                let dbItem = await this.itemsService.findItem(item.Id);
+                if (dbItem.success && dbItem.data.Stock != null && item.Units > 0) {
+                    dbItem.data.Stock += item.Units;
+                    await this.itemsService.updateItem(dbItem.data.Id, dbItem.data);
+                }
+            }
+        }
+
+        const newItems = JSON.parse(newBudget.DescriptionItems);
+        for (let item of newItems) {
+            let dbItem = await this.itemsService.findItem(item.Id);
+            if (dbItem.success && dbItem.data.Stock != null && item.Units > 0) {
+                dbItem.data.Stock -= item.Units;
+                await this.itemsService.updateItem(dbItem.data.Id, dbItem.data);
+            }
+        }
         let toUpdate = await this.budgetsRepository.findOne({ where: { Id: budgetId } });
 
         let updated = Object.assign(toUpdate, newBudget);

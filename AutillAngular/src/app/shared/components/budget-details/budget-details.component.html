@@ -44,12 +44,15 @@
                         </mat-autocomplete>
                       </mat-form-field>
                       <div class="flex-1 flex flex-col justify-center">
-                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Unidades/Horas</label>
-                        <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="units{{i.Id}}" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Unidades/Horas</label>
+                        <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
+                        <ng-container *ngIf="i.Stock && i.Units > i.Stock">
+                          <span class="text-xs text-red-500 mt-1">Cantidad solicitada supera el stock disponible ({{i.Stock}})</span>
+                        </ng-container>
                       </div>
                       <div class="flex-1 flex flex-col justify-center">
-                        <label class="peer-focus:font-medium text-sm text-gray-500 dark:text-gray-400">Precio/(Unidad-Hora)</label>
-                        <input value="{{i.Price}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="PriceTD{{i.Id}}" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Precio/(Unidad-Hora)</label>
+                        <input value="{{i.PriceImp}}" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
                       </div>
                     </div>
                   </div>
@@ -64,7 +67,6 @@
                 </button>
               </div>
             </form>
-            <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <button (click)="addItems()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Añadir Conceptos</button>
                 <button (click)="onClose()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cerrar</button>

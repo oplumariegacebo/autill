@@ -105,6 +105,7 @@ export class ItemsService {
 
   async updateItem(itemId: number, newItem: UpdateItemDto): Promise<any> {
     let toUpdate = await this.itemsRepository.findOne({ where: { Id: itemId } });
+
     if (!toUpdate) {
       return { success: false, message: 'Item no encontrado', data: null };
     }

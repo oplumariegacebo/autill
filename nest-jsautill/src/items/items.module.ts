@@ -16,5 +16,6 @@ import { Users } from '../users/entities/user.entity';
   ], 
   controllers: [ItemsController],
   providers: [ItemsService, AuthService, JwtService, UsersService],
+  exports: [ItemsService]
 })
 export class ItemsModule {}

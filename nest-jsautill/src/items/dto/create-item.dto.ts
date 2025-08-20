@@ -3,4 +3,9 @@ export class CreateItemDto {
     readonly IdBusiness: string;
     readonly Name: string;
     readonly Price: number;
+    readonly Iva: number;
+    readonly Irpf: number;
+    readonly PriceImp: number;
+    readonly Stock: number;
+    readonly Ref: string;
 }
