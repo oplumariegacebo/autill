@@ -3,7 +3,7 @@ import { BudgetDto } from './dto/budget.dto';
 import { Budgets } from './entities/budget.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository, Between } from 'typeorm';
-import { ItemsService } from 'src/items/items.service';
+import { ItemsService } from '../items/items.service';
 //import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
