@@ -8,7 +8,7 @@ import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service'; 
 import { Users } from '../users/entities/user.entity';
-import { ItemsModule } from 'src/items/items.module';
+import { ItemsModule } from '../items/items.module';
 
 @Module({
   imports: [
