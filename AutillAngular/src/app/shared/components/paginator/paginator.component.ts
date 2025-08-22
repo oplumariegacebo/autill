@@ -45,6 +45,16 @@ export class PaginatorComponent {
   ngOnInit() {
     this.nPage = true;
     this.pPage = false;
+    //this.updatePagination();
+  }
+
+  ngOnChanges(){
+    this.updatePagination();
+  }
+
+  private updatePagination() {
+    if (!this.allItems) return;
+    console.log(this.allItems);
     if(this.allItems.page.finalElement >= this.allItems.count) {
       this.allItems.page.finalElement = this.allItems.count;
       this.nPage = false;
@@ -53,10 +63,6 @@ export class PaginatorComponent {
         this.pPage = false;
       }
     }
-  }
-
-  ngOnChanges(){
-    this.ngOnInit();
   }
 
   nextPage(actualPage: number){

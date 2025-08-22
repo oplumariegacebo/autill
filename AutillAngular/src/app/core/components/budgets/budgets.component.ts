@@ -36,7 +36,7 @@ export class BudgetsComponent {
   clientService = inject(ClientService);
   errorMessage: string = '';
   filtersActivated: any = null;
-    loading: boolean = false;
+  loading: boolean = false;
 
   constructor(private dialog: MatDialog, public commonService: CommonService) { }
 
@@ -112,7 +112,6 @@ export class BudgetsComponent {
   }
 
   deleteBudget(id: number) {
-    this.loading = true;
     const dialogRef = this.dialog.open(DeleteItemModalComponent);
     dialogRef.componentInstance.type = 'presupuesto';
     dialogRef.componentInstance.title = Messages.DELETE_BUDGET_TITLE;

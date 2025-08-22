@@ -97,7 +97,7 @@ export class LoginComponent {
           localStorage.setItem('email', this.loginForm.controls['Email'].value);
           this.userService.getUserByEmail(localStorage.getItem('email') || "[]").subscribe((data: any) => {
             localStorage.setItem('id', data.Id);
-            this.router.navigate(['/home']);
+            this.router.navigate(['/dashboard']);
           })
         }, 1000)
       });

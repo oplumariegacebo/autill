@@ -25,7 +25,9 @@ export let Messages = {
   "DELETE_ITEM_MSG": "Si elimina el producto/servicio, no podrás añadirle ni editarle en presupuestos existentes.",
   "DELETE_CLIENT_TITLE": "¿Desea eliminar el cliente?",
   "DELETE_CLIENT_MSG": "Si elimina el cliente, no podrás asignarle un presupuesto ni aparecerá en ninguna página de la aplicación.",
-  "SEND_EMAIL": "¿Desea enviar el presupuesto en formato PDF al email: "
+  "SEND_EMAIL": "¿Desea enviar el presupuesto en formato PDF al email: ",
+  "DELETE_SUPPLIER_TITLE": "¿Desea eliminar el proveedor?",
+  "DELETE_SUPPLIER_MSG": "Si elimina el proveedor, no podrás asignarle un presupuesto ni aparecerá en ninguna página de la aplicación.",
 }
 
 @Injectable({
@@ -46,12 +48,17 @@ export class CommonService {
     });
 
     const file = new jsPDF();
-    const title = type === 'bill' ? 'Factura' : 'Presupuesto';
+    const title = type === 'bill'
+      ? 'Factura'
+      : type === 'budget'
+        ? 'Presupuesto'
+        : type === 'transport'
+          ? 'Detalle mercancía'
+          : 'Nota simple';
 
     this.budgetService.getBudgetById(id).subscribe((budget: any) => {
       this.userService.getUserById(budget.IdBusiness).subscribe((user: any) => {
         this.clientService.getClientById(budget.ClientId).subscribe((client: any) => {
-
           const logoY = 15;
           const logoX = 10;
           const logoWidth = 30;
@@ -60,7 +67,11 @@ export class CommonService {
 
           file.setFontSize(22);
 
-          file.text(title + ' ' + budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
+          if (type === 'transport') {
+            file.text(title, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
+          } else {
+            file.text(title + ' ' + budget.Name, file.internal.pageSize.getWidth() - 10, logoY + logoHeight / 2 + 5, { align: 'right' });
+          }
 
           file.setFontSize(14);
           file.setFont('helvetica', 'normal');
@@ -135,57 +146,86 @@ export class CommonService {
           let tableWidth = file.internal.pageSize.getWidth() - logoX * 2;
           let bodyFormatItems = [];
           const items = JSON.parse(budget.DescriptionItems);
-          for (let i = 0; i < items.length; i++) {
-            bodyFormatItems.push([
-              items[i].Name,
-              items[i].Units,
-              String(items[i].Price) + ' €',
-              String(items[i].TotalConcept) + ' €'
-            ]);
+
+          if (type === 'transport') {
+            for (let i = 0; i < items.length; i++) {
+              bodyFormatItems.push([
+                items[i].Ref,
+                items[i].Name,
+                items[i].Units
+              ]);
+            }
+            autoTable(file, {
+              startY: tableMargin.top,
+              margin: { left: tableMargin.left, right: tableMargin.right },
+              tableWidth: tableWidth,
+              head: [["Referencia", "Concepto", "Unidades"]],
+              body: bodyFormatItems,
+              headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+              styles: { fontSize: 12, cellPadding: 3 },
+              alternateRowStyles: { fillColor: [245, 245, 245] },
+            })
+          } else {
+            for (let i = 0; i < items.length; i++) {
+              bodyFormatItems.push([
+                items[i].Ref,
+                items[i].Name,
+                items[i].Units,
+                String(items[i].Price) + ' €',
+                String(items[i].TotalConcept) + ' €'
+              ]);
+            }
+            autoTable(file, {
+              startY: tableMargin.top,
+              margin: { left: tableMargin.left, right: tableMargin.right },
+              tableWidth: tableWidth,
+              head: [["Referencia", "Concepto", "Unidades", "Precio/Unidad €", "Total €"]],
+              body: bodyFormatItems,
+              headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
+              styles: { fontSize: 12, cellPadding: 3 },
+              alternateRowStyles: { fillColor: [245, 245, 245] },
+            })
+
+            const price = Number(budget.Price) || 0;
+            const iva = Number(budget.Iva) || 0;
+            const irpf = Number(budget.Irpf) || 0;
+
+            const ivaAmount = price * (iva / 100);
+            const irpfAmount = price * (irpf / 100);
+
+            file.setFontSize(14);
+            file.setTextColor(40);
+
+            if (budget.Iva > 0) {
+              file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
+              file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
+              file.text('IVA ' + iva + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
+              file.text(String(Number(ivaAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
+            }
+
+            if (budget.Irpf > 0) {
+              file.text('IRPF ' + irpf + '%:', file.internal.pageSize.getWidth() - 60, 280, { align: 'right' });
+              file.text(String(Number(irpfAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 280, { align: 'right' });
+            }
+
+            file.setFont('courier', 'bold');
+            file.setFontSize(16);
+            file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
+            file.text(String(budget.PriceImp || '') + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
           }
-          autoTable(file, {
-            startY: tableMargin.top,
-            margin: { left: tableMargin.left, right: tableMargin.right },
-            tableWidth: tableWidth,
-            head: [["Concepto", "Unidades", "Precio/Unidad €", "Total €"]],
-            body: bodyFormatItems,
-            headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
-            styles: { fontSize: 12, cellPadding: 3 },
-            alternateRowStyles: { fillColor: [245, 245, 245] },
-          })
 
-          const price = Number(budget.Price) || 0;
-          const iva = Number(budget.Iva) || 0;
-          const irpf = Number(budget.Irpf) || 0;
-
-          const ivaAmount = price * (iva / 100);
-          const irpfAmount = price * (irpf / 100);
-
-          file.setFontSize(14);
-          file.setTextColor(40);
-          file.text('Subtotal:', file.internal.pageSize.getWidth() - 60, 260, { align: 'right' });
-          file.text(String(budget.Price || '') + ' €', file.internal.pageSize.getWidth() - 20, 260, { align: 'right' });
-          file.text('IVA ' + iva + '%:', file.internal.pageSize.getWidth() - 60, 270, { align: 'right' });
-          file.text(String(Number(ivaAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 270, { align: 'right' });
-          
-          if(budget.Irpf > 0) {
-            file.text('IRPF ' + irpf + '%:', file.internal.pageSize.getWidth() - 60, 280, { align: 'right' });
-            file.text(String(Number(irpfAmount).toFixed(2)) + ' €', file.internal.pageSize.getWidth() - 20, 280, { align: 'right' });
-          } { align: 'right' }
-          file.setFont('courier', 'bold');
-          file.setFontSize(16);
-          file.text('TOTAL:', file.internal.pageSize.getWidth() - 60, 290, { align: 'right' });
-          file.text(String(budget.PriceImp || '') + ' €', file.internal.pageSize.getWidth() - 20, 290, { align: 'right' });
           if (action === 'email') {
             this.budgetService.sendEmail(user, client, budget, file.output('datauristring')).subscribe(() => {
               const dialogRef = this.dialog.open(InfoModalComponent);
               dialogRef.componentInstance.message = Messages.EMAIL_OK;
             });
           } else {
+            /*if (type === 'transport') {
+              file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
+            }*/
             file.save(title + '-' + budget.Name.split('-').pop() + ".pdf");
             spinnerRef.close();
           }
-
         });
       });
     }

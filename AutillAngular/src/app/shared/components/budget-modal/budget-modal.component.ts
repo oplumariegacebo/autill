@@ -13,7 +13,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { BudgetService } from '../../../core/services/budget.service';
 import { map, Observable, startWith } from 'rxjs';
 import { Client } from '../../../core/models/Client';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { ClientService } from '../../../core/services/client.service';
 import { BillService } from '../../../core/services/bill.service';
 import { ItemService } from '../../../core/services/item.service';
@@ -41,7 +41,7 @@ export const MY_FORMATS = {
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ],
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, AsyncPipe, SpinnerLoadingComponent, MatDatepickerModule],
+  imports: [CommonModule,ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, AsyncPipe, SpinnerLoadingComponent, MatDatepickerModule],
   templateUrl: './budget-modal.component.html',
   styleUrl: './budget-modal.component.css'
 })
@@ -80,7 +80,8 @@ export class BudgetModalComponent {
       Date: new FormControl(),
       CloseIt: new FormControl(false),
       Iva: new FormControl(),
-      Irpf: new FormControl()
+      Irpf: new FormControl(),
+      IvaExento: new FormControl(false)
     })
   }
 
@@ -119,6 +120,10 @@ export class BudgetModalComponent {
     this.budgetForm.get('Price')?.valueChanges.subscribe(() => this.updatePriceImp());
     this.budgetForm.get('Iva')?.valueChanges.subscribe(() => this.updatePriceImp());
     this.budgetForm.get('Irpf')?.valueChanges.subscribe(() => this.updatePriceImp());
+    this.budgetForm.get('IvaExento')?.valueChanges.subscribe(() => {
+      this.budgetForm.get('Price')?.setValue('');
+      this.budgetForm.get('PriceImp')?.setValue('');
+    });
   }
 
   updatePriceImp() {
@@ -132,14 +137,16 @@ export class BudgetModalComponent {
   }
 
   openTaskDialog() {
-    const dialogRef = this.dialog.open(BudgetDetailsComponent);
-    if (this.modalItemsArray.length > 0) {
-      dialogRef.componentInstance.data = this.modalItemsArray;
-    }
-    dialogRef.componentInstance.dbItems = this.dbItems;
+    const dialogRef = this.dialog.open(BudgetDetailsComponent, {
+      data: {
+        data: this.modalItemsArray,
+        dbItems: this.dbItems,
+        ivaExento: this.budgetForm.get('IvaExento')?.value
+      }
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && Array.isArray(result.data)) {
+      if (result && Array.isArray(result.data) && result.data.length > 0) {
         const validItems = result.data.filter((item: any) => item.Name && item.Name.trim() !== '' && item.Units > 0 && item.Price > 0);
         if (validItems.length > 0) {
           let sumTotalPrice = 0;

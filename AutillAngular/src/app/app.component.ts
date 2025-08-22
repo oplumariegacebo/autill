@@ -32,12 +32,11 @@ export class AppComponent {
           this.isLogin = true;
         } else {
           this.isLogin = false;
-          // Forzar scroll al top al navegar a cualquier ruta distinta de login
           window.scrollTo({ top: 0, behavior: 'auto' });
         }
       }
     });
-    // Refrescar el token cada 10 minutos si existe
+
     this.refreshInterval = setInterval(() => {
       const token = localStorage.getItem('token');
       if (token) {
@@ -48,11 +47,11 @@ export class AppComponent {
             }
           },
           error: () => {
-            // Si falla, puedes cerrar sesión o mostrar aviso
+            
           }
         });
       }
-    }, 10 * 60 * 1000); // 10 minutos
+    }, 10 * 60 * 1000);
   }
 
   onMenuStateChange(open: boolean) {

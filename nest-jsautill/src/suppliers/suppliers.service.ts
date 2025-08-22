@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateClientDto } from './dto/create-client.dto';
-import { UpdateClientDto } from './dto/update-client.dto';
-import { Clients } from './entities/client.entity';
+import { CreateSupplierDto } from './dto/create-supplier.dto';
+import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { Suppliers } from './entities/supplier.entity';
 import { ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class ClientsService {
+export class SuppliersService {
 
   constructor(
-    @InjectRepository(Clients) private clientsRepository: Repository<Clients>,
+    @InjectRepository(Suppliers) private suppliersRepository: Repository<Suppliers>,
   ) { }
 
   getPage(initialElement) {
@@ -34,8 +34,8 @@ export class ClientsService {
     return PAGINATION[PAGINATION.map(e => e.initialElement).indexOf(initialElement)];
   }
 
-  createClient(newClient: CreateClientDto) {
-    return this.clientsRepository.save(newClient);
+  createSupplier(newSupplier: CreateSupplierDto) {
+    return this.suppliersRepository.save(newSupplier);
   }
 
   async findAllFilter(options: any): Promise<any> {
@@ -55,7 +55,7 @@ export class ClientsService {
       filterObject['Name'] = ILike('%' + filterObject['Name'] + '%');
     }
 
-    const [result, total] = await this.clientsRepository.findAndCount({
+    const [result, total] = await this.suppliersRepository.findAndCount({
       where: filterObject,
       order: { Name: "ASC" },
       take,
@@ -67,7 +67,7 @@ export class ClientsService {
       nfd = 0;
     }
 
-        console.log(options);
+    console.log(options);
 
     return {
       data: result,
@@ -78,39 +78,39 @@ export class ClientsService {
   }
 
   async findAll(options: any): Promise<any> {
-    return await this.clientsRepository.findAndCount({
+    return await this.suppliersRepository.findAndCount({
       where: { IdBusiness: options.userId }
     });
   }
 
-  async findClient(clientId: number): Promise<any> {
-    const client = await this.clientsRepository.findOne({ where: { Id: clientId } });
-    if (!client) {
-      return { success: false, message: 'Cliente no encontrado', data: null };
+  async findSupplier(supplierId: number): Promise<any> {
+    const supplier = await this.suppliersRepository.findOne({ where: { Id: supplierId } });
+    if (!supplier) {
+      return { success: false, message: 'Proveedor no encontrado', data: null };
     }
-    return { success: true, message: 'Cliente encontrado', data: client };
+    return { success: true, message: 'Proveedor encontrado', data: supplier };
   }
 
-  async deleteClient(clientId: number): Promise<any> {
-    const client = await this.clientsRepository.findOne({ where: { Id: clientId } });
-    if (!client) {
-      return { success: false, message: 'Cliente no encontrado' };
+  async deleteSupplier(supplierId: number): Promise<any> {
+    const supplier = await this.suppliersRepository.findOne({ where: { Id: supplierId } });
+    if (!supplier) {
+      return { success: false, message: 'Proveedor no encontrado' };
     }
-    await this.clientsRepository.delete({ Id: clientId });
-    return { success: true, message: 'Cliente eliminado correctamente' };
+    await this.suppliersRepository.delete({ Id: supplierId });
+    return { success: true, message: 'Proveedor eliminado correctamente' };
   }
 
-  async updateClient(clientId: number, newClient: UpdateClientDto): Promise<any> {
-    let toUpdate = await this.clientsRepository.findOne({ where: { Id: clientId } });
+  async updateSupplier(supplierId: number, newSupplier: UpdateSupplierDto): Promise<any> {
+    let toUpdate = await this.suppliersRepository.findOne({ where: { Id: supplierId } });
     if (!toUpdate) {
-      return { success: false, message: 'Cliente no encontrado', data: null };
+      return { success: false, message: 'Proveedor no encontrado', data: null };
     }
-    let updated = Object.assign(toUpdate, newClient);
+    let updated = Object.assign(toUpdate, newSupplier);
     try {
-      const saved = await this.clientsRepository.save(updated);
-      return { success: true, message: 'Cliente actualizado correctamente', data: saved };
+      const saved = await this.suppliersRepository.save(updated);
+      return { success: true, message: 'Proveedor actualizado correctamente', data: saved };
     } catch {
-      return { success: false, message: 'Error al actualizar el cliente', data: null };
+      return { success: false, message: 'Error al actualizar el proveedor', data: null };
     }
   }
 }

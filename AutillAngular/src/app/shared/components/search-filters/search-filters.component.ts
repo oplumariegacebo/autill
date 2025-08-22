@@ -5,10 +5,12 @@ import { MatInputModule } from '@angular/material/input';
 import { filter, map, Observable, startWith } from 'rxjs';
 import { Client } from '../../../core/models/Client';
 import { ClientService } from '../../../core/services/client.service';
+import { SuppliersService } from '../../../core/services/suppliers.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Supplier } from '../../../core/models/Supplier';
 
 export const MY_FORMATS = {
   parse: {
@@ -36,16 +38,20 @@ export const MY_FORMATS = {
 export class SearchFiltersComponent {
   @Input() dataScreen: string = '';
   @Output() updateSearching = new EventEmitter<any>();
-  
+
   searchForm!: FormGroup
   clientService = inject(ClientService);
+  suppliersService = inject(SuppliersService);
   clients: any = [];
   filteredClients!: Observable<Client[]>;
+  suppliers: any = [];
+  filteredSuppliers!: Observable<Supplier[]>;
 
   initializeForm() {
     this.searchForm = new FormGroup({
       Name: new FormControl(),
       ClientId: new FormControl(),
+      SupplierId: new FormControl(),
       Date: new FormControl(),
       Cashed: new FormControl(),
       PriceMin: new FormControl(),
@@ -55,29 +61,43 @@ export class SearchFiltersComponent {
     })
   }
 
-  constructor(){
+  constructor() {
     this.initializeForm();
   }
 
   ngOnInit() {
-    this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
-      this.clients = clients.data;
+    if (this.dataScreen === 'suppliers') {
+      this.suppliersService.getAllSuppliers(localStorage.getItem('id') || "[]").subscribe((suppliers: any) => {
+        this.suppliers = suppliers.data;
 
-      this.filteredClients = this.searchForm.controls['ClientId'].valueChanges.pipe(
-        startWith(''),
-        map(value => {
-          const item = value;
-          return item ? this._filter(item as string) : this.clients || '';
-        }),
-      );
-    })
+        this.filteredSuppliers = this.searchForm.controls['SupplierId'].valueChanges.pipe(
+          startWith(''),
+          map(value => {
+            const item = value;
+            return item ? this._filter(item as string) : this.suppliers || '';
+          }),
+        );
+      })
+    } else {
+      this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
+        this.clients = clients.data;
+
+        this.filteredClients = this.searchForm.controls['ClientId'].valueChanges.pipe(
+          startWith(''),
+          map(value => {
+            const item = value;
+            return item ? this._filter(item as string) : this.clients || '';
+          }),
+        );
+      })
+    }
   }
 
-  search(){
-    this.updateSearching.emit(this.searchForm.value); 
+  search() {
+    this.updateSearching.emit(this.searchForm.value);
   }
 
-  reset(){
+  reset() {
     this.searchForm.reset();
     this.updateSearching.emit("");
   }
@@ -85,6 +105,6 @@ export class SearchFiltersComponent {
   private _filter(value: any): any[] {
     const filterValue = value.toLowerCase();
 
-    return this.clients.filter((option:any) => option.Name.toLowerCase().includes(filterValue));
+    return this.clients.filter((option: any) => option.Name.toLowerCase().includes(filterValue));
   }
 }

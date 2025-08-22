@@ -10,7 +10,7 @@ async function bootstrap() {
     next();
   });*/
   app.enableCors({
-    origin: ['https://autill-front.vercel.app'],
+    origin: ['https://autill-front.vercel.app', 'http://localhost:4200'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

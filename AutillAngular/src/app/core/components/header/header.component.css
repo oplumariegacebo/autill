@@ -2,13 +2,13 @@
 
 /* Usa el color hexadecimal real de primary-700 de Tailwind (ajusta si tu tailwind.config.js tiene otro valor) */
 .active-header {
-  background-color: #0d35a3;
-  color: #fff;
+  background-color: #fff;
+  color: black;
 }
 
 @media (min-width: 1024px) {
   .active-header {
     background-color: transparent;
-    color: #fff;
+    color: black;
   }
 }

@@ -1,21 +1,21 @@
 @if(loading){
 <app-spinner-loading></app-spinner-loading>
 }
-<div class="dark:bg-gray-900 font-[sans-serif]">
+<div class="bg-gray-100 min-h-screen font-[sans-serif]">
   <div class="min-h-screen flex flex-col items-center pt-10 py-6 px-4">
     <div class="max-w-2xl w-full">
       <div
-        class="p-8 rounded-2xl bg-white shadow text-gray-900 dark:text-white"
+        class="p-8 rounded-2xl bg-white shadow text-black"
       >
         <div class="flex items-center gap-4">
           <img class="w-20 h-20 rounded-full" [src]="logoPath" alt="" />
-          <div class="text-gray-800 text-2xl font-bold dark:text-black">
+          <div class="text-black text-2xl font-bold">
             <div>Datos Personales</div>
           </div>
         </div>
         <form [formGroup]="userInfo" class="mt-8 space-y-4">
           <div>
-            <label class="text-gray-800 text-sm mb-2 block"
+            <label class="text-black text-sm mb-2 block"
               >Nombre Completo</label
             >
             <div class="relative flex items-center">
@@ -24,7 +24,7 @@
                 name="fullName"
                 type="text"
                 required
-                class="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
+                class="w-full text-black text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600 bg-white"
                 placeholder="Nombre completo"
               />
             </div>

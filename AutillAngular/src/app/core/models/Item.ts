@@ -5,4 +5,5 @@ export interface Item {
     PriceImp: number;
     Stock: number;
     Ref: string;
+    displayName?: string;
 }

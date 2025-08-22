@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SpinnerLoadingComponent } from '../spinner-loading/spinner-loading.component';
 import { ClientService } from '../../../core/services/client.service';
 import { Messages } from '../../../core/services/common-service.service';
+import { SuppliersService } from '../../../core/services/suppliers.service';
 
 @Component({
   selector: 'app-clients-modal',
@@ -15,39 +16,45 @@ import { Messages } from '../../../core/services/common-service.service';
 export class ClientsModalComponent {
   clientForm!: FormGroup
   id!: number;
+  action!: string;
   client: Object = {};
-  loading:boolean = false;
+  loading: boolean = false;
   clientService = inject(ClientService);
+  suppliersService = inject(SuppliersService);
   formatNif = false;
   formatZip = false;
   formatName = false;
   formatPhoneNumber = false;
   formatEmail = false;
   messages = Messages;
+  title: string = 'Cliente'
 
-  initializeForm(){
+  initializeForm() {
     this.clientForm = new FormGroup({
       Id: new FormControl(),
-      Name: new FormControl('',[Validators.required,Validators.pattern('^[a-zA-Z ]*$')]),
+      Name: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]),
       Address: new FormControl(),
       Region: new FormControl(),
       City: new FormControl(),
-      PostalCode: new FormControl('',[Validators.pattern(/^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$/), Validators.required, Validators.maxLength(5)]),
-      Email: new FormControl('',[Validators.required, Validators.email]),
+      PostalCode: new FormControl('', [Validators.pattern(/^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$/), Validators.required, Validators.maxLength(5)]),
+      Email: new FormControl('', [Validators.required, Validators.email]),
       Country: new FormControl(),
       IdBusiness: new FormControl(localStorage.getItem('id') || "[]"),
-      Nif: new FormControl('',[Validators.pattern(/(^[ABCDFGHJKLMNPQRSUVWabcdfghlmnpqrsuvw]([0-9]{7})([0-9A-Ja]$))|(^[0-9]{8}[A-Z]$)/), Validators.required, Validators.maxLength(9)]),
-      PhoneNumber: new FormControl('',[Validators.pattern(/^[+]?(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?)(?:[ -]?(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?))*(?:[ ]?(?:x|ext)\.?[ ]?\d{1,5})?$/), Validators.required, Validators.maxLength(9)])
+      Nif: new FormControl('', [Validators.pattern(/(^[ABCDFGHJKLMNPQRSUVWabcdfghlmnpqrsuvw]([0-9]{7})([0-9A-Ja]$))|(^[0-9]{8}[A-Z]$)/), Validators.required, Validators.maxLength(9)]),
+      PhoneNumber: new FormControl('', [Validators.pattern(/^[+]?(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?)(?:[ -]?(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?))*(?:[ ]?(?:x|ext)\.?[ ]?\d{1,5})?$/), Validators.required, Validators.maxLength(9)])
     })
   }
 
-  constructor(public dialogRef: MatDialogRef<ClientsModalComponent>, private formBuilder: FormBuilder){
+  constructor(public dialogRef: MatDialogRef<ClientsModalComponent>, private formBuilder: FormBuilder) {
     this.initializeForm();
   }
 
   ngOnInit() {
-    if(this.id > 0){
-      this.clientService.getClientById(this.id).subscribe((client:any) =>{
+    if (this.action === 'supp') {
+      this.title = 'Proveedor'
+    }
+    if (this.id > 0) {
+      this.clientService.getClientById(this.id).subscribe((client: any) => {
         this.clientForm.setValue(client);
       })
     }
@@ -57,42 +64,44 @@ export class ClientsModalComponent {
     this.dialogRef.close();
   }
 
-  actionClient(){
-    if(this.clientForm.valid){
+  actionClient() {
+    const service = this.action === 'supp' ? this.suppliersService : this.clientService;
+
+    if (this.clientForm.valid) {
       this.loading = true;
-      if(this.id == 0){
+      if (this.id == 0) {
         this.clientForm.removeControl('Id');
-        this.clientService.addClient(this.clientForm.value).subscribe({
+        service.add(this.clientForm.value).subscribe({
           next: () => {
             this.clientForm.addControl('Id', new FormControl());
           },
           complete: () => {
             window.location.reload();
           }
-        })
-      }else{
-        this.clientService.editClient(this.id, this.clientForm.value).subscribe({
+        });
+      } else {
+        service.edit(this.id, this.clientForm.value).subscribe({
           complete: () => {
             setTimeout(() => {
               window.location.reload();
-            }, 1000)
+            }, 1000);
           }
-        })
+        });
       }
-    }else{
-      if(!this.clientForm.controls['PhoneNumber'].valid){
+    } else {
+      if (!this.clientForm.controls['PhoneNumber'].valid) {
         this.formatPhoneNumber = true;
       }
-      if(!this.clientForm.controls['Name'].valid){
+      if (!this.clientForm.controls['Name'].valid) {
         this.formatName = true;
       }
-      if(!this.clientForm.controls['Nif'].valid){
+      if (!this.clientForm.controls['Nif'].valid) {
         this.formatNif = true;
       }
-      if(!this.clientForm.controls['PostalCode'].valid){
+      if (!this.clientForm.controls['PostalCode'].valid) {
         this.formatZip = true;
       }
-      if(!this.clientForm.controls['Email'].valid){
+      if (!this.clientForm.controls['Email'].valid) {
         this.formatEmail = true;
       }
     }
