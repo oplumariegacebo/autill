@@ -8,4 +8,5 @@ export class CreateItemDto {
     readonly PriceImp: number;
     readonly Stock: number;
     readonly Ref: string;
+    readonly IdCategory: number;
 }

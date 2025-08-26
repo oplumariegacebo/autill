@@ -13,6 +13,7 @@ import { BillsModule } from './bills/bills.module';
 import * as Joi from 'joi';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { SuppliersModule } from './suppliers/suppliers.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [    
@@ -32,7 +33,8 @@ import { SuppliersModule } from './suppliers/suppliers.module';
     ClientsModule,
     ItemsModule,
     BillsModule,
-    SuppliersModule
+    SuppliersModule,
+    CategoriesModule
     /*MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,

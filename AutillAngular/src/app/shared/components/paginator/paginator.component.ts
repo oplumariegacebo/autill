@@ -43,8 +43,6 @@ export class PaginatorComponent {
   pPage: boolean = false;
 
   ngOnInit() {
-    this.nPage = true;
-    this.pPage = false;
     //this.updatePagination();
   }
 
