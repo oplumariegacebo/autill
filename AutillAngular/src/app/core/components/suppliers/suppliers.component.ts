@@ -10,11 +10,15 @@ import { PaginatorComponent } from '../../../shared/components/paginator/paginat
 import { SearchFiltersComponent } from '../../../shared/components/search-filters/search-filters.component';
 import { Messages } from '../../services/common-service.service';
 import { SuppliersService } from '../../services/suppliers.service';
+import { CategoryModalComponent } from '../../../shared/components/category-modal/category-modal.component';
+import { Router } from '@angular/router';
+import { SupplierModalComponent } from '../../../shared/components/supplier-modal/supplier-modal.component';
+import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
 
 @Component({
   selector: 'app-suppliers',
   standalone: true,
-  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent, SpinnerLoadingComponent],
   templateUrl: './suppliers.component.html',
   styleUrl: './suppliers.component.css'
 })
@@ -29,15 +33,18 @@ export class SuppliersComponent {
   errorMessage: string = '';
   dataSuppliers: any = [];
   filtersActivated: any = null;
+    loading: boolean = false;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
+    this.loading = true;
     this.suppliersService.getSuppliers(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
       next: (data: any) => {
         this.allSuppliers = data;
         this.dataSuppliers = data;
         this.suppliers = data;
+        this.loading = false;
       },
       error: (err: HttpErrorResponse) => {
         let error = '';
@@ -49,31 +56,37 @@ export class SuppliersComponent {
           error = 'Ha ocurrido un error, contacta con el administrador.'
         }
         this.errorMessage = error;
+        this.loading = false;
       }
     })
   }
 
   updateItems(pagination: any) {
+    this.loading = true;
     this.suppliersService.getSuppliers(localStorage.getItem('id') || "[]", null, 10, pagination.skip).subscribe((suppliers: any) => {
       this.allSuppliers = suppliers;
       this.dataSuppliers = suppliers;
       this.suppliers = suppliers;
+      this.loading = false;
     })
   }
 
   updateSearching(formControlValue: any) {
+    this.loading = true;
     if (formControlValue === "") {
       this.filtersActivated = null;
       this.suppliersService.getSuppliers(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((suppliers: any) => {
         this.allSuppliers = suppliers;
         this.dataSuppliers = suppliers;
         this.suppliers = suppliers;
+        this.loading = false;
       })
     } else {
       this.filtersActivated = formControlValue;
       this.suppliersService.getSuppliers(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBudgets: any) => {
         this.suppliers = filterBudgets;
         this.allSuppliers = this.suppliers;
+        this.loading = false;
       });
     }
   }
@@ -99,15 +112,28 @@ export class SuppliersComponent {
     })
   }
 
-  openTaskDialog(id: number) {
-    const dialogRef = this.dialog.open(ClientsModalComponent);
-    dialogRef.componentInstance.action = 'supp';
-    dialogRef.componentInstance.id = id;
+    openTaskDialog(action: string, supplier: any) {
+      if(action === 'view'){
+        this.router.navigate(['/items'], { queryParams: { IdSupplier: supplier } });
+      }else if (action === 'edit'){
+      const dialogRef = this.dialog.open(SupplierModalComponent);
+      dialogRef.componentInstance.action = 'edit';
+      dialogRef.componentInstance.id = supplier;
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // do something
+        }
+      });
+      }else{
+        const dialogRef = this.dialog.open(SupplierModalComponent);
+        dialogRef.componentInstance.action = 'add';
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // do something
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            // do something
+          }
+        });
       }
-    });
-  }
+    }
 }

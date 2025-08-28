@@ -45,7 +45,7 @@ export class SuppliersService {
     const filterObject = {};
     if (options.filters != null) {
       Object.entries(options.filters)
-        .filter(([, value]) => value !== null)
+        .filter(([key, value]) => value !== null && value !== "" && key !== 'PriceMin' && key !== 'PriceMax')
         .forEach(([key, value]) => (filterObject[key] = value));
     }
 
@@ -66,8 +66,6 @@ export class SuppliersService {
     if (result.length === 0 && options.filters != null) {
       nfd = 0;
     }
-
-    console.log(options);
 
     return {
       data: result,

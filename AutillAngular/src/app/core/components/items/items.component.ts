@@ -9,43 +9,73 @@ import { ItemService } from '../../services/item.service';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 import { SearchFiltersComponent } from '../../../shared/components/search-filters/search-filters.component';
 import { CommonService, Messages } from '../../services/common-service.service';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
 
 @Component({
   selector: 'app-items',
   standalone: true,
-  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent, SpinnerLoadingComponent],
   templateUrl: './items.component.html',
   styleUrl: './items.component.css'
 })
 export class ItemsComponent {
-  @Input() items: any;
-
   dataScreen: string = 'items'
-  dataItems: any = [];
   showModal = false;
   showFilters = false;
   itemService = inject(ItemService);
   commonService = inject(CommonService);
   errorMessage: string = '';
   allItems: any = [];
-  filtersActivated: any = null;
+  items: any;
+  loading: boolean = false;
+
+  private destroy$ = new Subject<void>();
+  private categoryFilter: { IdCategory: string } | null = null;
+  private supplierFilter: { IdSupplier: string } | null = null;
+  private searchFilter: any = null;
 
   displayedColumns: string[] = ['name', 'price', 'actions'];
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.itemService.getItems(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((items: any) => {
-      this.allItems = items;
-      this.dataItems = items;
-      this.items = items;
-    })
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const categoryId = params['categoryId'];
+        const supplierId = params['IdSupplier'];
+        this.categoryFilter = categoryId ? { IdCategory: categoryId } : null;
+        this.supplierFilter = supplierId ? { IdSupplier: supplierId } : null;
+        this.fetchItems();
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private fetchItems(skip: number = 0): void {
+    this.loading = true;
+    const finalFilters = { ...this.categoryFilter, ...this.supplierFilter, ...this.searchFilter };
+    const userId = localStorage.getItem('id') || "[]";
+    const filtersToSend = Object.keys(finalFilters).length > 0 ? finalFilters : null;
+
+    this.itemService.getItems(userId, filtersToSend, 10, skip)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((items: any) => {
+        this.allItems = items;
+        this.items = items;
+        this.loading = false;
+      });
   }
 
   openTaskDialog(action: string, item: Object) {
     const dialogRef = this.dialog.open(ItemModalComponent);
     dialogRef.componentInstance.item = item;
-
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // do something
@@ -54,28 +84,12 @@ export class ItemsComponent {
   }
 
   updateItems(pagination: any) {
-    this.itemService.getItems(localStorage.getItem('id') || "[]", null, 10, pagination.skip).subscribe((items: any) => {
-      this.allItems = items;
-      this.dataItems = items;
-      this.items = items;
-    })
+    this.fetchItems(pagination.skip);
   }
 
   updateSearching(formControlValue: any) {
-    if (formControlValue === "") {
-      this.filtersActivated = null;
-      this.itemService.getItems(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((items: any) => {
-        this.allItems = items;
-        this.dataItems = items;
-        this.items = items;
-      })
-    } else {
-      this.filtersActivated = formControlValue;
-      this.itemService.getItems(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterItems: any) => {
-        this.items = filterItems;
-        this.allItems = this.items;
-      });
-    }
+    this.searchFilter = (formControlValue === "" || formControlValue === null) ? null : formControlValue;
+    this.fetchItems();
   }
 
   deleteItem(id: number) {
@@ -87,9 +101,7 @@ export class ItemsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'confirm') {
-        this.items.data = this.items.data.filter((i: any) => i.Id !== id);
-        this.allItems.data = this.allItems.data.filter((i: any) => i.Id !== id);
-        this.dataItems.data = this.dataItems.data.filter((i: any) => i.Id !== id);
+        this.fetchItems(); // Re-fetch items to reflect the deletion
       }
     });
   }

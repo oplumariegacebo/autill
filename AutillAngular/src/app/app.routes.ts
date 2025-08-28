@@ -7,6 +7,7 @@ import { ClientsComponent } from './core/components/clients/clients.component';
 import { ItemsComponent } from './core/components/items/items.component';
 import { DashboardComponent } from './core/components/dashboard/dashboard.component';
 import { SuppliersComponent } from './core/components/suppliers/suppliers.component';
+import { CategoriesComponent } from './core/components/categories/categories.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path: 'budgets', component: BudgetsComponent },
     { path: 'clients', component: ClientsComponent},
     { path: 'items', component: ItemsComponent},
-    { path: 'suppliers', component: SuppliersComponent}
+    { path: 'suppliers', component: SuppliersComponent},
+    { path: 'categories', component: CategoriesComponent}
 ];

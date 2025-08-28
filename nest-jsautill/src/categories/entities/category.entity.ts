@@ -10,25 +10,4 @@ export class Categories {
 
     @Column()
     Name: string;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    Price: number;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    PriceImp: number;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    Iva: number;
-
-    @Column('decimal', { precision: 10, scale: 2 })
-    Irpf: number;
-
-    @Column()
-    Stock: number;
-
-    @Column()
-    Ref: string;
-
-    @Column()
-    IdCategory: number;
 }

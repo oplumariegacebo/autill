@@ -40,7 +40,7 @@ export class CategoriesService {
     const filterObject = {};
     if (options.filters != null) {
       Object.entries(options.filters)
-        .filter(([key, value]) => value !== null && key !== 'PriceMin' && key !== 'PriceMax')
+        .filter(([key, value]) => value !== null && value !== "" && key !== 'PriceMin' && key !== 'PriceMax')
         .forEach(([key, value]) => (filterObject[key] = value));
     }
 

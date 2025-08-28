@@ -52,7 +52,6 @@ export class PaginatorComponent {
 
   private updatePagination() {
     if (!this.allItems) return;
-    console.log(this.allItems);
     if(this.allItems.page.finalElement >= this.allItems.count) {
       this.allItems.page.finalElement = this.allItems.count;
       this.nPage = false;

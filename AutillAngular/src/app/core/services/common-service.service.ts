@@ -234,7 +234,14 @@ export class CommonService {
     )
   }
 
+  formatToTwoDigits(number: number) {
+    return number < 10 ? `0${number}` : `${number}`;
+  }
+
   transformDate(date: any): string {
-    return date._i.date + "/" + (date._i.month + 1) + "/" + date._i.year;
+    const dia = this.formatToTwoDigits(date._i.date);
+    const mes = this.formatToTwoDigits(date._i.month + 1);
+
+    return dia + "/" + mes + "/" + date._i.year;
   }
 }

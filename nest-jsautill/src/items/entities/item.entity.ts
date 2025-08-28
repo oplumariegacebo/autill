@@ -31,4 +31,7 @@ export class Items {
 
     @Column()
     IdCategory: number;
+
+    @Column()
+    IdSupplier: number;
 }

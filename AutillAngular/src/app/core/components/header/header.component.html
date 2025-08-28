@@ -38,6 +38,9 @@
           <li>
             <a routerLink="/suppliers" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Proveedores</a>
           </li>
+                    <li>
+            <a routerLink="/categories" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Categorías</a>
+          </li>
           <li class="lg:hidden">
             <a routerLink="/userInfo" routerLinkActive="text-black" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm" (click)="toggleMenu()">
               Datos Personales

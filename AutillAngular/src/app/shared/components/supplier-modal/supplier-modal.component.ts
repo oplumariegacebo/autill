@@ -1,25 +1,23 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { SpinnerLoadingComponent } from '../spinner-loading/spinner-loading.component';
-import { ClientService } from '../../../core/services/client.service';
 import { Messages } from '../../../core/services/common-service.service';
 import { SuppliersService } from '../../../core/services/suppliers.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { SpinnerLoadingComponent } from '../spinner-loading/spinner-loading.component';
 
 @Component({
-  selector: 'app-clients-modal',
+  selector: 'app-supplier-modal',
   standalone: true,
   imports: [ReactiveFormsModule, SpinnerLoadingComponent],
-  templateUrl: './clients-modal.component.html',
-  styleUrl: './clients-modal.component.css'
+  templateUrl: './supplier-modal.component.html',
+  styleUrl: './supplier-modal.component.css'
 })
-export class ClientsModalComponent {
-  clientForm!: FormGroup
+export class SupplierModalComponent {
   id!: number;
   action!: string;
+  supplierForm!: FormGroup;
   client: Object = {};
   loading: boolean = false;
-  clientService = inject(ClientService);
   suppliersService = inject(SuppliersService);
   formatNif = false;
   formatZip = false;
@@ -27,9 +25,10 @@ export class ClientsModalComponent {
   formatPhoneNumber = false;
   formatEmail = false;
   messages = Messages;
+  title: string = 'Cliente'
 
   initializeForm() {
-    this.clientForm = new FormGroup({
+    this.supplierForm = new FormGroup({
       Id: new FormControl(),
       Name: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]),
       Address: new FormControl(),
@@ -44,14 +43,14 @@ export class ClientsModalComponent {
     })
   }
 
-  constructor(public dialogRef: MatDialogRef<ClientsModalComponent>, private formBuilder: FormBuilder) {
+  constructor(public dialogRef: MatDialogRef<SupplierModalComponent>, private formBuilder: FormBuilder) {
     this.initializeForm();
   }
 
   ngOnInit() {
     if (this.id > 0) {
-      this.clientService.getClientById(this.id).subscribe((client: any) => {
-        this.clientForm.setValue(client);
+      this.suppliersService.getSupplierById(this.id).subscribe((supplier: any) => {
+        this.supplierForm.setValue(supplier.data);
       })
     }
   }
@@ -61,22 +60,22 @@ export class ClientsModalComponent {
   }
 
   actionClient() {
-    const service = this.action === 'supp' ? this.suppliersService : this.clientService;
+    const service = this.action === 'edit' ? this.suppliersService : this.suppliersService;
 
-    if (this.clientForm.valid) {
+    if (this.supplierForm.valid) {
       this.loading = true;
       if (this.id == 0) {
-        this.clientForm.removeControl('Id');
-        service.add(this.clientForm.value).subscribe({
+        this.supplierForm.removeControl('Id');
+        service.add(this.supplierForm.value).subscribe({
           next: () => {
-            this.clientForm.addControl('Id', new FormControl());
+            this.supplierForm.addControl('Id', new FormControl());
           },
           complete: () => {
             window.location.reload();
           }
         });
       } else {
-        service.edit(this.id, this.clientForm.value).subscribe({
+        service.edit(this.id, this.supplierForm.value).subscribe({
           complete: () => {
             setTimeout(() => {
               window.location.reload();
@@ -85,22 +84,21 @@ export class ClientsModalComponent {
         });
       }
     } else {
-      if (!this.clientForm.controls['PhoneNumber'].valid) {
+      if (!this.supplierForm.controls['PhoneNumber'].valid) {
         this.formatPhoneNumber = true;
       }
-      if (!this.clientForm.controls['Name'].valid) {
+      if (!this.supplierForm.controls['Name'].valid) {
         this.formatName = true;
       }
-      if (!this.clientForm.controls['Nif'].valid) {
+      if (!this.supplierForm.controls['Nif'].valid) {
         this.formatNif = true;
       }
-      if (!this.clientForm.controls['PostalCode'].valid) {
+      if (!this.supplierForm.controls['PostalCode'].valid) {
         this.formatZip = true;
       }
-      if (!this.clientForm.controls['Email'].valid) {
+      if (!this.supplierForm.controls['Email'].valid) {
         this.formatEmail = true;
       }
     }
   }
-
 }
