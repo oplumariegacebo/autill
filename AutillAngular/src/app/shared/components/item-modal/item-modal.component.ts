@@ -32,6 +32,9 @@ export class ItemModalComponent {
       Irpf: new FormControl(),
       Ref: new FormControl(),
       Stock: new FormControl(),
+      StockLimit: new FormControl(),
+      IdCategory: new FormControl(),
+      IdSupplier: new FormControl(),
       IdBusiness: new FormControl(localStorage.getItem('id') || "[]")
     })
   }
@@ -85,9 +88,13 @@ export class ItemModalComponent {
       });
     } else {
       const itemData = this.itemForm.getRawValue();
+      console.log(this.itemForm);
       this.itemService.editItem(this.item.Id, itemData).subscribe({
         next: (updatedItem) => {
-          this.dialogRef.close(updatedItem);
+          //this.dialogRef.close(updatedItem);
+        },
+        complete: () => {
+          window.location.reload();
         },
         error: () => {
           this.loading = false;

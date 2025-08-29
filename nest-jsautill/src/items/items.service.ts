@@ -34,48 +34,56 @@ export class ItemsService {
   }
 
   async findAllFilter(options: any): Promise<any> {
-    const take = options.take
-    const skip = options.skip
+    const { take, skip, userId, filters } = options;
 
-    const filterObject = {};
-    if (options.filters != null) {
-      Object.entries(options.filters)
-        .filter(([key, value]) => value !== null && value !== "" && key !== 'PriceMin' && key !== 'PriceMax')
-        .forEach(([key, value]) => (filterObject[key] = value));
+    const qb = this.itemsRepository.createQueryBuilder("item");
+
+    qb.where("item.IdBusiness = :userId", { userId });
+
+    if (filters) {
+      if (filters.PriceMin != null && filters.PriceMax != null) {
+        qb.andWhere("item.Price BETWEEN :priceMin AND :priceMax", { priceMin: filters.PriceMin, priceMax: filters.PriceMax });
+      } else if (filters.PriceMin != null) {
+        qb.andWhere("item.Price >= :priceMin", { priceMin: filters.PriceMin });
+      } else if (filters.PriceMax != null) {
+        qb.andWhere("item.Price <= :priceMax", { priceMax: filters.PriceMax });
+      }
+
+      if (filters.Name) {
+        qb.andWhere("item.Name ILIKE :name", { name: `%${filters.Name}%` });
+      }
+
+      if (filters.StockLimit === true) {
+        qb.andWhere("item.Stock < item.StockLimit");
+      }
+
+      // Manejar otros filtros genéricos dinámicamente
+      const speciallyHandledFilters = ['PriceMin', 'PriceMax', 'Name', 'StockLimit'];
+      Object.entries(filters)
+        .filter(([key, value]) =>
+          value !== null &&
+          value !== "" &&
+          !speciallyHandledFilters.includes(key)
+        )
+        .forEach(([key, value]) => {
+          qb.andWhere(`item.${key} = :${key}`, { [key]: value });
+        });
     }
 
-    filterObject['IdBusiness'] = options.userId;
+    const [result, total] = await qb
+      .orderBy("item.Name", "ASC")
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
 
-    if (options.filters?.PriceMin != null && options.filters?.PriceMax != null) {
-      filterObject['Price'] = Between(options.filters.PriceMin, options.filters.PriceMax);
-    } else if (options.filters?.PriceMin != null) {
-      filterObject['Price'] = Between(options.filters.PriceMin, Number.MAX_SAFE_INTEGER);
-    } else if (options.filters?.PriceMax != null) {
-      filterObject['Price'] = Between(0, options.filters.PriceMax);
-    }
-
-    if (filterObject['Name']) {
-      filterObject['Name'] = ILike('%' + filterObject['Name'] + '%');
-    }
-
-    const [result, total] = await this.itemsRepository.findAndCount({
-      where: filterObject,
-      order: { Name: "ASC" },
-      take,
-      skip
-    })
-
-    let nfd = 1;
-    if (result.length === 0 && options.filters != null) {
-      nfd = 0;
-    }
+    const nfd = (result.length === 0 && options.filters != null) ? 0 : 1;
 
     return {
       data: result,
       count: total,
       noFilterData: nfd,
-      page: this.getPage(options.skip)
-    }
+      page: this.getPage(options.skip),
+    };
   }
 
   async findItem(itemId: number): Promise<any> {

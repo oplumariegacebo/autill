@@ -34,4 +34,7 @@ export class Items {
 
     @Column()
     IdSupplier: number;
+
+    @Column()
+    StockLimit: number;
 }

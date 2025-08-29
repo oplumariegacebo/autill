@@ -6,4 +6,5 @@ export interface Item {
     Stock: number;
     Ref: string;
     displayName?: string;
+    StockLimit: number;
 }

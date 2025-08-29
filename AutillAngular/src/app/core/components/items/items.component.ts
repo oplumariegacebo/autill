@@ -31,6 +31,7 @@ export class ItemsComponent {
   allItems: any = [];
   items: any;
   loading: boolean = false;
+  panel: string = '';
 
   private destroy$ = new Subject<void>();
   private categoryFilter: { IdCategory: string } | null = null;
@@ -47,6 +48,10 @@ export class ItemsComponent {
       .subscribe(params => {
         const categoryId = params['categoryId'];
         const supplierId = params['IdSupplier'];
+        const panel = params['panel'];
+        if(panel === 'stockLimit'){
+          this.panel = panel;
+        }
         this.categoryFilter = categoryId ? { IdCategory: categoryId } : null;
         this.supplierFilter = supplierId ? { IdSupplier: supplierId } : null;
         this.fetchItems();
@@ -61,6 +66,10 @@ export class ItemsComponent {
   private fetchItems(skip: number = 0): void {
     this.loading = true;
     const finalFilters = { ...this.categoryFilter, ...this.supplierFilter, ...this.searchFilter };
+    if(this.panel === 'stockLimit'){
+      finalFilters['StockLimit'] = true;
+    }
+
     const userId = localStorage.getItem('id') || "[]";
     const filtersToSend = Object.keys(finalFilters).length > 0 ? finalFilters : null;
 
