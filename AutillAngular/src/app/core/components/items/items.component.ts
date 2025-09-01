@@ -32,6 +32,7 @@ export class ItemsComponent {
   items: any;
   loading: boolean = false;
   panel: string = '';
+  showPurchaseReportButton: boolean = false;
 
   private destroy$ = new Subject<void>();
   private categoryFilter: { IdCategory: string } | null = null;
@@ -51,6 +52,9 @@ export class ItemsComponent {
         const panel = params['panel'];
         if(panel === 'stockLimit'){
           this.panel = panel;
+          this.showPurchaseReportButton = true;
+        }else{
+          this.panel = '';
         }
         this.categoryFilter = categoryId ? { IdCategory: categoryId } : null;
         this.supplierFilter = supplierId ? { IdSupplier: supplierId } : null;

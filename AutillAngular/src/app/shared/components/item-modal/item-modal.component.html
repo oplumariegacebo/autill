@@ -19,15 +19,15 @@
             <form [formGroup]="itemForm" class="pt-6 max-w-md mx-auto px-2 sm:px-4">
                 <div class="mb-5">
                   <label for="ref" class="block mb-1 text-sm text-black">Referencia</label>
-                  <input formControlName="Ref" type="text" name="ref" id="ref" class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required />
+                  <input formControlName="Ref" type="text" name="ref" id="ref" class="input-field" required />
                 </div>
                 <div class="mb-5">
                   <label for="floating_repeat_name" class="block mb-1 text-sm text-black">Nombre</label>
-                  <input formControlName="Name" type="text" name="repeat_name" id="floating_repeat_name" class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required />
+                  <input formControlName="Name" type="text" name="repeat_name" id="floating_repeat_name" class="input-field" required />
                 </div>
                 <div class="mb-5">
                   <label for="floating_price" class="block mb-1 text-sm text-black">Precio Unidad</label>
-                  <input formControlName="Price" type="text" name="floating_price" id="floating_price" class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600" required />
+                  <input formControlName="Price" type="text" name="floating_price" id="floating_price" class="input-field" required />
                 </div>
                           <div
             class="flex flex-col md:flex-row md:gap-8 justify-center items-center"
@@ -44,7 +44,7 @@
                   name="iva"
                   id="iva"
                   (input)="updateLivePriceImp($event)"
-                  class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 "
+                  class="input-field "
                   required
                 />
                 <span class="text-gray-500 text-sm">%</span>
@@ -62,7 +62,7 @@
                   name="irpf"
                   id="irpf"
                   (input)="updateLivePriceImp($event)"
-                  class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  class="input-field"
                 />
                 <span class="text-gray-500 text-sm">%</span>
               </div>
@@ -71,15 +71,15 @@
           <div class="mb-8"></div>
                 <div class="mb-5">
                   <label for="floating_priceimp" class="block mb-1 text-sm">Precio Imp. Incl.</label>
-                  <input formControlName="PriceImp" type="text" name="floating_priceimp" id="floating_priceimp" class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 " required />
+                  <input formControlName="PriceImp" type="text" name="floating_priceimp" id="floating_priceimp" class="input-field " required />
                 </div>
                 <div class="mb-5">
                   <label for="stock" class="block mb-1 text-sm">Stock</label>
-                  <input formControlName="Stock" type="number" name="stock" id="stock" class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 " required />
+                  <input formControlName="Stock" type="number" name="stock" id="stock" class="input-field " required />
                 </div>
                 <div class="mb-5">
                   <label for="stocklimit" class="block mb-1 text-sm">Stock Límite</label>
-                  <input formControlName="StockLimit" type="number" name="stocklimit" id="stocklimit" class="block py-2 px-2 w-full text-sm text-black bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 " required />
+                  <input formControlName="StockLimit" type="number" name="stocklimit" id="stocklimit" class="input-field " required />
                 </div>
             </form>
               
