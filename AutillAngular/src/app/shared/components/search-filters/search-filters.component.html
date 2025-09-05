@@ -1,40 +1,28 @@
 <form [formGroup]="searchForm" class="max-w-screen mx-auto">
   <div class="p-5 shadow-lg bg-white">
-    <div
-      class="{{ dataScreen === 'clients' ? 'xl:grid-cols-3' : '' }} {{
+    <div class="{{ dataScreen === 'clients' ? 'xl:grid-cols-3' : '' }} {{
         dataScreen === 'items' ? 'xl:grid-cols-2' : ''
       }} {{
         dataScreen !== 'clients' && dataScreen !== 'items' && dataScreen !== 'bills'
           ? 'xl:grid-cols-4'
           : ''
-      }} mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5"
-    >
+      }} mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
+      @if(dataScreen !== 'purchaseReports'){
       <div class="flex flex-col">
-  <label for="name" class="text-black text-sm font-medium">Nombre</label>
-        <input
-          type="text"
-          formControlName="Name"
-          id="Name"
-          placeholder="Nombre"
-          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none bg-white text-black focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-        />
+        <label for="name" class="text-black text-sm font-medium">Nombre</label>
+        <input type="text" formControlName="Name" id="Name" placeholder="Nombre"
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none bg-white text-black focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
       </div>
+      }
 
-      @if(dataScreen !== 'clients' && dataScreen !== 'items' && dataScreen !== 'suppliers' && dataScreen !== 'categories'){
+      @if(dataScreen !== 'clients' && dataScreen !== 'items' && dataScreen !== 'suppliers' && dataScreen !==
+      'purchaseReports' && dataScreen !==
+      'categories'){
       <div class="flex flex-col">
-  <label for="manufacturer" class="text-black text-sm font-medium"
-          >Cliente</label
-        >
-        <input
-          type="text"
-          placeholder="Selecciona"
-          aria-label="Cliente"
-          matInput
+        <label for="manufacturer" class="text-black text-sm font-medium">Cliente</label>
+        <input type="text" placeholder="Selecciona" aria-label="Cliente" matInput
           class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none bg-white text-black focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          formControlName="ClientId"
-          id="ClientId"
-          [matAutocomplete]="autoClient"
-        />
+          formControlName="ClientId" id="ClientId" [matAutocomplete]="autoClient" />
         <mat-autocomplete autoActiveFirstOption #autoClient="matAutocomplete" [displayWith]="displayFn.bind(this)">
           <mat-option value=""></mat-option>
           @if(clients.length > 0){ @for (c of filteredClients | async; track c)
@@ -47,137 +35,94 @@
       <div class="flex flex-col">
         <label for="picker" class="text-black text-sm font-medium">Fecha</label>
         <div class="input-container">
-          <input
-            formControlName="Date"
-            matInput
-            [matDatepicker]="picker"
-            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          />
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+          <input formControlName="Date" matInput [matDatepicker]="picker"
+            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </div>
       </div>
       }
 
       @if(dataScreen === 'bills'){
-        <div class="flex flex-col">
-          <label for="status" class="text-black text-sm font-medium"
-            >Estado</label
-          >
-          <select
-            id="status"
-            formControlName="Cashed"
-            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          >
-            <option value="0">Pendiente</option>
-            <option value="1">Cobrado</option>
-          </select>
-        </div>
+      <div class="flex flex-col">
+        <label for="status" class="text-black text-sm font-medium">Estado</label>
+        <select id="status" formControlName="Cashed"
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+          <option value="0">Pendiente</option>
+          <option value="1">Cobrado</option>
+        </select>
+      </div>
       }
 
-            @if(dataScreen === 'budgets'){
-        <div class="flex flex-col">
-          <label for="status" class="text-black text-sm font-medium"
-            >Estado</label
-          >
-          <select
-            id="status"
-            formControlName="CloseIt"
-            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          >
-            <option value="0">Pendiente</option>
-            <option value="1">Cerrado</option>
-          </select>
-        </div>
+      @if(dataScreen === 'purchaseReports'){
+      <div class="flex flex-col">
+        <label for="status" class="text-black text-sm font-medium">Proveedor</label>
+        <select id="status" formControlName="Cashed"
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+          <option value="0">Pendiente</option>
+          <option value="1">Cobrado</option>
+        </select>
+      </div>
       }
 
-            @if(dataScreen === 'items'){
-        <div class="flex flex-col">
-          <label for="status" class="text-black text-sm font-medium"
-            >Categoría</label
-          >
-            <input
-              type="text"
-              placeholder="Selecciona"
-              aria-label="Categoría"
-              matInput
-              formControlName="IdCategory"
-              id="IdCategoryModal"
-              [matAutocomplete]="autoCategory"
-              class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            />
-            <mat-autocomplete autoActiveFirstOption #autoCategory="matAutocomplete" [displayWith]="displayFn.bind(this)">
-              @for (c of filteredCategories | async; track c) {
-                <mat-option [value]="c">{{ c.Name }}</mat-option>
-              }
-            </mat-autocomplete>
-        </div>
+      @if(dataScreen === 'budgets'){
+      <div class="flex flex-col">
+        <label for="status" class="text-black text-sm font-medium">Estado</label>
+        <select id="status" formControlName="CloseIt"
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+          <option value="0">Pendiente</option>
+          <option value="1">Cerrado</option>
+        </select>
+      </div>
+      }
+
+      @if(dataScreen === 'items'){
+      <div class="flex flex-col">
+        <label for="status" class="text-black text-sm font-medium">Categoría</label>
+        <input type="text" placeholder="Selecciona" aria-label="Categoría" matInput formControlName="IdCategory"
+          id="IdCategoryModal" [matAutocomplete]="autoCategory"
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+        <mat-autocomplete autoActiveFirstOption #autoCategory="matAutocomplete" [displayWith]="displayFn.bind(this)">
+          @for (c of filteredCategories | async; track c) {
+          <mat-option [value]="c">{{ c.Name }}</mat-option>
+          }
+        </mat-autocomplete>
+      </div>
       }
 
       @if(dataScreen === 'clients' || dataScreen === 'suppliers'){
       <div class="flex flex-col">
         <label for="Nif" class="text-black text-sm font-medium">NIF</label>
-        <input
-          type="text"
-          formControlName="Nif"
-          id="nif"
-          placeholder="NIF"
-          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-        />
+        <input type="text" formControlName="Nif" id="nif" placeholder="NIF"
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
       </div>
 
       <div class="flex flex-col">
-        <label for="PhoneNumber" class="text-black text-sm font-medium"
-          >Teléfono</label
-        >
-        <input
-          type="number"
-          formControlName="PhoneNumber"
-          id="phoneNumber"
-          placeholder="Teléfono"
+        <label for="PhoneNumber" class="text-black text-sm font-medium">Teléfono</label>
+        <input type="number" formControlName="PhoneNumber" id="phoneNumber" placeholder="Teléfono"
           onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"
-          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-        />
+          class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
       </div>
       } @if(dataScreen !== 'clients' && dataScreen !== 'suppliers' && dataScreen !== 'categories'){
       <div class="flex flex-col">
         <label class="text-black text-sm font-medium">Precio (con impuestos)</label>
         <div class="flex gap-2">
-          <input
-            type="number"
-            formControlName="PriceMin"
-            id="priceMin"
-            step="any"
-            placeholder="Mínimo"
-            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          />
-          <input
-            type="number"
-            formControlName="PriceMax"
-            id="priceMax"
-            step="any"
-            placeholder="Máximo"
-            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-          />
+          <input type="number" formControlName="PriceMin" id="priceMin" step="any" placeholder="Mínimo"
+            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+          <input type="number" formControlName="PriceMax" id="priceMax" step="any" placeholder="Máximo"
+            class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
         </div>
       </div>
       }
     </div>
 
     <div class="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
-      <button
-        (click)="reset()"
-        class="active:scale-95 rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-600 outline-none focus:ring hover:opacity-90"
-      >
+      <button (click)="reset()"
+        class="active:scale-95 rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-600 outline-none focus:ring hover:opacity-90">
         Limpiar
       </button>
-      <button
-        (click)="search()"
-        class="active:scale-95 rounded-lg bg-blue-300 px-8 py-2 font-medium text-black outline-none focus:ring hover:opacity-90"
-      >
+      <button (click)="search()"
+        class="active:scale-95 rounded-lg bg-blue-300 px-8 py-2 font-medium text-black outline-none focus:ring hover:opacity-90">
         Buscar
       </button>
     </div>

@@ -1,6 +1,5 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../services/api.service';
 import { DeleteItemModalComponent } from '../../../shared/components/delete-item-modal/delete-item-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemModalComponent } from '../../../shared/components/item-modal/item-modal.component';
@@ -13,6 +12,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
+import { GeneratePurchaseReportComponent } from '../../../shared/components/generate-purchase-report/generate-purchase-report.component';
+import { CategoryService } from '../../services/category.service';
+import { CategoryModalComponent } from '../../../shared/components/category-modal/category-modal.component';
 
 @Component({
   selector: 'app-items',
@@ -30,9 +32,12 @@ export class ItemsComponent {
   errorMessage: string = '';
   allItems: any = [];
   items: any;
+  categories: any;
   loading: boolean = false;
   panel: string = '';
   showPurchaseReportButton: boolean = false;
+  categoriesService = inject(CategoryService);
+  userId = localStorage.getItem('id') || "[]";
 
   private destroy$ = new Subject<void>();
   private categoryFilter: { IdCategory: string } | null = null;
@@ -44,16 +49,19 @@ export class ItemsComponent {
   constructor(private dialog: MatDialog, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.categoriesService.getAllCategories(this.userId).subscribe((result: any) => {
+      this.categories = result;
+    })
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
         const categoryId = params['categoryId'];
         const supplierId = params['IdSupplier'];
         const panel = params['panel'];
-        if(panel === 'stockLimit'){
+        if (panel === 'stockLimit') {
           this.panel = panel;
           this.showPurchaseReportButton = true;
-        }else{
+        } else {
           this.panel = '';
         }
         this.categoryFilter = categoryId ? { IdCategory: categoryId } : null;
@@ -70,14 +78,13 @@ export class ItemsComponent {
   private fetchItems(skip: number = 0): void {
     this.loading = true;
     const finalFilters = { ...this.categoryFilter, ...this.supplierFilter, ...this.searchFilter };
-    if(this.panel === 'stockLimit'){
+    if (this.panel === 'stockLimit') {
       finalFilters['StockLimit'] = true;
     }
 
-    const userId = localStorage.getItem('id') || "[]";
     const filtersToSend = Object.keys(finalFilters).length > 0 ? finalFilters : null;
 
-    this.itemService.getItems(userId, filtersToSend, 10, skip)
+    this.itemService.getItems(this.userId, filtersToSend, 10, skip)
       .pipe(takeUntil(this.destroy$))
       .subscribe((items: any) => {
         this.allItems = items;
@@ -87,13 +94,27 @@ export class ItemsComponent {
   }
 
   openTaskDialog(action: string, item: Object) {
-    const dialogRef = this.dialog.open(ItemModalComponent);
-    dialogRef.componentInstance.item = item;
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // do something
-      }
-    });
+    if (action === 'purchaseReport') {
+      const dialogRef = this.dialog.open(GeneratePurchaseReportComponent);
+      dialogRef.componentInstance.items = this.items.data;
+      dialogRef.componentInstance.ids = { "IdBusiness": localStorage.getItem('id'), "IdSupplier": this.supplierFilter?.IdSupplier };
+    } else if (action === 'add-category') {
+      const dialogRef = this.dialog.open(CategoryModalComponent);
+      dialogRef.componentInstance.category = 0;
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // do something
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(ItemModalComponent);
+      dialogRef.componentInstance.item = item;
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // do something
+        }
+      });
+    }
   }
 
   updateItems(pagination: any) {

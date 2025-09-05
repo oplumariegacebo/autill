@@ -41,11 +41,11 @@ export class ItemsService {
     qb.where("item.IdBusiness = :userId", { userId });
 
     if (filters) {
-      if (filters.PriceMin != null && filters.PriceMax != null) {
+      if (filters.PriceMin != null && filters.PriceMin !== '' && filters.PriceMax != null && filters.PriceMax !== '') {
         qb.andWhere("item.Price BETWEEN :priceMin AND :priceMax", { priceMin: filters.PriceMin, priceMax: filters.PriceMax });
-      } else if (filters.PriceMin != null) {
+      } else if (filters.PriceMin != null && filters.PriceMin !== '') {
         qb.andWhere("item.Price >= :priceMin", { priceMin: filters.PriceMin });
-      } else if (filters.PriceMax != null) {
+      } else if (filters.PriceMax != null && filters.PriceMax !== '') {
         qb.andWhere("item.Price <= :priceMax", { priceMax: filters.PriceMax });
       }
 
@@ -57,8 +57,11 @@ export class ItemsService {
         qb.andWhere("item.Stock < item.StockLimit");
       }
 
-      // Manejar otros filtros genéricos dinámicamente
-      const speciallyHandledFilters = ['PriceMin', 'PriceMax', 'Name', 'StockLimit'];
+      if (filters.IdCategory > 0) {
+        qb.andWhere("item.IdCategory = :idCategory", { idCategory: filters.IdCategory });
+      }
+
+      const speciallyHandledFilters = ['PriceMin', 'PriceMax', 'Name', 'StockLimit', 'IdCategory'];
       Object.entries(filters)
         .filter(([key, value]) =>
           value !== null &&
@@ -77,7 +80,6 @@ export class ItemsService {
       .getManyAndCount();
 
     const nfd = (result.length === 0 && options.filters != null) ? 0 : 1;
-
     return {
       data: result,
       count: total,
@@ -95,6 +97,7 @@ export class ItemsService {
   }
 
   createItem(newItem: CreateItemDto): Promise<any> {
+    console.log(newItem);
     return this.itemsRepository.save(newItem)
       .then(saved => ({ success: true, message: 'Item creado correctamente', data: saved }))
       .catch(() => ({ success: false, message: 'Error al crear el item', data: null }));

@@ -57,6 +57,7 @@ export class SearchFiltersComponent {
   filteredCategories!: Observable<Category[]>;
   items: any = [];
   filteredItems!: Observable<Item[]>;
+  userId = localStorage.getItem('id') || "[]";
 
   initializeForm() {
     this.searchForm = new FormGroup({
@@ -78,7 +79,7 @@ export class SearchFiltersComponent {
       this.searchForm.addControl('SupplierId', new FormControl(''));
       this.searchForm.addControl('Nif', new FormControl(''));
       this.searchForm.addControl('PhoneNumber', new FormControl(''));
-      this.suppliersService.getAllSuppliers(localStorage.getItem('id') || "[]").subscribe((suppliers: any) => {
+      this.suppliersService.getAllSuppliers(this.userId).subscribe((suppliers: any) => {
         this.suppliers = suppliers.data;
 
         this.filteredSuppliers = this.searchForm.controls['SupplierId'].valueChanges.pipe(
@@ -90,7 +91,7 @@ export class SearchFiltersComponent {
       this.searchForm.addControl('ClientId', new FormControl(''));
       this.searchForm.addControl('Nif', new FormControl(''));
       this.searchForm.addControl('PhoneNumber', new FormControl(''));
-      this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
+      this.clientService.getAllClients(this.userId).subscribe((clients: any) => {
         this.clients = clients.data;
 
         this.filteredClients = this.searchForm.controls['ClientId'].valueChanges.pipe(
@@ -100,7 +101,7 @@ export class SearchFiltersComponent {
       })
     } else if (this.dataScreen === 'items') {
       this.searchForm.addControl('IdCategory', new FormControl(''));
-      this.categoriesService.getAllCategories(localStorage.getItem('id') || "[]").subscribe((categories: any) => {
+      this.categoriesService.getAllCategories(this.userId).subscribe((categories: any) => {
         this.categories = categories.data;
 
         this.filteredCategories = this.searchForm.controls['IdCategory'].valueChanges.pipe(
@@ -110,7 +111,7 @@ export class SearchFiltersComponent {
       })
     } else if (this.dataScreen === 'budgets' || this.dataScreen === 'bills') {
       this.searchForm.addControl('ClientId', new FormControl(''));
-      this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
+      this.clientService.getAllClients(this.userId).subscribe((clients: any) => {
         this.clients = clients.data;
 
         this.filteredClients = this.searchForm.controls['ClientId'].valueChanges.pipe(
@@ -130,10 +131,10 @@ export class SearchFiltersComponent {
     if (formValue.SupplierId && typeof formValue.SupplierId === 'object') {
       formValue.SupplierId = formValue.SupplierId.Id;
     }
-    if (formValue.IdCategory && typeof formValue.IdCategory === 'object') {
-      formValue.IdCategory = formValue.IdCategory.Id;
-    }
-
+    // Si el valor es un objeto, usa su Id. Si no (es un string o null), usa null para no filtrar.
+    formValue.IdCategory = (formValue.IdCategory && typeof formValue.IdCategory === 'object')
+      ? formValue.IdCategory.Id : null;
+    
     this.updateSearching.emit(formValue);
   }
 

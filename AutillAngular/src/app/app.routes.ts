@@ -8,6 +8,7 @@ import { ItemsComponent } from './core/components/items/items.component';
 import { DashboardComponent } from './core/components/dashboard/dashboard.component';
 import { SuppliersComponent } from './core/components/suppliers/suppliers.component';
 import { CategoriesComponent } from './core/components/categories/categories.component';
+import { PurchaseReportsComponent } from './core/components/purchase-reports/purchase-reports.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
     { path: 'clients', component: ClientsComponent},
     { path: 'items', component: ItemsComponent},
     { path: 'suppliers', component: SuppliersComponent},
-    { path: 'categories', component: CategoriesComponent}
+    { path: 'categories', component: CategoriesComponent},
+    { path: 'purchaseReports', component: PurchaseReportsComponent}
 ];

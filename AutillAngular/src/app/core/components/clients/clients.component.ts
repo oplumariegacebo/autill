@@ -28,11 +28,13 @@ export class ClientsComponent {
   errorMessage: string = '';
   dataClients: any = [];
   filtersActivated: any = null;
+  userId = localStorage.getItem('id') || "[]";
+
 
   constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
+    this.clientService.getClients(this.userId, null, 10, 0).subscribe({
       next: (data: any) => {
         this.allClients = data;
         this.dataClients = data;
@@ -53,7 +55,7 @@ export class ClientsComponent {
   }
 
   updateItems(pagination: any) {
-    this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, pagination.skip).subscribe((clients: any) => {
+    this.clientService.getClients(this.userId, null, 10, pagination.skip).subscribe((clients: any) => {
       this.allClients = clients;
       this.dataClients = clients;
       this.clients = clients;
@@ -63,14 +65,14 @@ export class ClientsComponent {
   updateSearching(formControlValue: any) {
     if (formControlValue === "") {
       this.filtersActivated = null;
-      this.clientService.getClients(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((clients: any) => {
+      this.clientService.getClients(this.userId, null, 10, 0).subscribe((clients: any) => {
         this.allClients = clients;
         this.dataClients = clients;
         this.clients = clients;
       })
     } else {
       this.filtersActivated = formControlValue;
-      this.clientService.getClients(localStorage.getItem('id') || "[]", formControlValue, 10, 0).subscribe((filterBudgets: any) => {
+      this.clientService.getClients(this.userId, formControlValue, 10, 0).subscribe((filterBudgets: any) => {
         this.clients = filterBudgets;
         this.allClients = this.clients;
       });

@@ -7,76 +7,43 @@
     <ng-container *ngIf="items">
       <ng-container *ngIf="items.count > 0; else noRecords">
         <div>
-          <button
-            class="lg:hidden w-full bg-primary-700 text-black py-2 rounded mb-2 flex items-center justify-center"
-            (click)="showFilters = !showFilters"
-          >
+          <button class="lg:hidden w-full bg-primary-700 text-black py-2 rounded mb-2 flex items-center justify-center"
+            (click)="showFilters = !showFilters">
             <span>{{
               showFilters ? "Ocultar filtros" : "Mostrar filtros"
-            }}</span>
-            <svg
-              [ngClass]="{ 'rotate-180': showFilters }"
-              class="w-5 h-5 ml-2 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M19 9l-7 7-7-7"
-              />
+              }}</span>
+            <svg [ngClass]="{ 'rotate-180': showFilters }" class="w-5 h-5 ml-2 transition-transform" fill="none"
+              stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          <div
-            [ngClass]="{
+          <div [ngClass]="{
               block: showFilters,
               hidden: !showFilters,
               'lg:block': true
-            }"
-          >
-            <app-search-filters
-              [dataScreen]="dataScreen"
-              (updateSearching)="updateSearching($event)"
-            ></app-search-filters>
+            }">
+            <app-search-filters [dataScreen]="dataScreen"
+              (updateSearching)="updateSearching($event)"></app-search-filters>
           </div>
         </div>
-        <div
-          class="min-h-screen w-full bg-white text-black overflow-x-auto max-w-full px-2 md:px-8 py-6"
-        >
+        <div class="min-h-screen w-full bg-white text-black overflow-x-auto max-w-full px-2 md:px-8 py-6">
           <div class="flex flex-col lg:flex-row gap-4 mb-4">
-            <button
-              (click)="openTaskDialog('add', 0)"
+            <button (click)="openTaskDialog('add', 0)"
               class="w-full bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded inline-flex items-center justify-center"
-              [ngClass]="{ 'lg:w-1/2': showPurchaseReportButton }"
-            >
+              [ngClass]="{ 'lg:w-1/2': showPurchaseReportButton }">
               <svg class="svg-icon" viewBox="0 0 20 20">
                 <path
-                  d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10"
-                />
+                  d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10" />
               </svg>
               <span class="pl-1">Nuevo producto</span>
             </button>
-            <button
-              *ngIf="showPurchaseReportButton"
-              (click)="openTaskDialog('add', 0)"
-              class="w-full lg:w-1/2 bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded inline-flex items-center justify-center"
-            >
-              <svg
-                class="w-6 h-6 #4691f6 dark:fill-icon-blue"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
+            <button *ngIf="showPurchaseReportButton" (click)="openTaskDialog('purchaseReport', 0)"
+              class="w-full lg:w-1/2 bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded inline-flex items-center justify-center">
+              <svg class="w-6 h-6 #4691f6 dark:fill-icon-blue" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
                   d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z"
-                  clip-rule="evenodd"
-                />
+                  clip-rule="evenodd" />
               </svg>
 
               <span class="pl-1">Informe de compra</span>
@@ -106,44 +73,23 @@
                     <td class="px-6 py-2">{{ i.StockLimit }}</td>
                     <td class="px-4 py-2">
                       <div class="flex gap-2">
-                        <button
-                          (click)="openTaskDialog('edit', i)"
+                        <button (click)="openTaskDialog('edit', i)"
                           class="bg-blue-300 hover:bg-blue-200 text-black rounded-full p-2 flex items-center"
-                          title="Editar"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z"
-                            />
+                          title="Editar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z" />
                           </svg>
                         </button>
-                        <button
-                          type="button"
-                          (click)="deleteItem(i.Id)"
+                        <button type="button" (click)="deleteItem(i.Id)"
                           class="bg-red-300 hover:bg-red-200 text-black rounded-full p-2 flex items-center"
-                          title="Eliminar"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
+                          title="Eliminar">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path d="M3 6h18" />
                             <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-                            <path
-                              d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"
-                            />
+                            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
                             <path d="M10 11v6" />
                             <path d="M14 11v6" />
                           </svg>
@@ -158,16 +104,13 @@
           <div class="block lg:hidden">
             <ng-container *ngFor="let i of items.data">
               <div
-                class="rounded-xl shadow-xl bg-white border border-gray-200/60 p-4 mb-6 flex flex-col gap-2 transition-all"
-              >
+                class="rounded-xl shadow-xl bg-white border border-gray-200/60 p-4 mb-6 flex flex-col gap-2 transition-all">
                 <div class="flex justify-between items-center">
                   <span class="font-semibold text-lg text-black">{{
                     i.Name
-                  }}</span>
-                  <span class="text-xs text-gray-500"
-                    >Ref:
-                    <span class="font-bold text-black">{{ i.Ref }}</span></span
-                  >
+                    }}</span>
+                  <span class="text-xs text-gray-500">Ref:
+                    <span class="font-bold text-black">{{ i.Ref }}</span></span>
                 </div>
                 <div class="text-sm text-black">
                   Precio:
@@ -185,39 +128,18 @@
                   <span class="font-bold text-black">{{ i.StockLimit }}</span>
                 </div>
                 <div class="flex flex-wrap gap-2 justify-end mt-2">
-                  <button
-                    (click)="openTaskDialog('edit', i)"
-                    class="bg-blue-300 hover:bg-blue-200 text-black rounded-full p-2 flex items-center"
-                    title="Editar"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z"
-                      />
+                  <button (click)="openTaskDialog('edit', i)"
+                    class="bg-blue-300 hover:bg-blue-200 text-black rounded-full p-2 flex items-center" title="Editar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z" />
                     </svg>
                   </button>
-                  <button
-                    type="button"
-                    (click)="deleteItem(i.Id)"
-                    class="bg-red-300 hover:bg-red-200 text-black rounded-full p-2 flex items-center"
-                    title="Eliminar"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                  <button type="button" (click)="deleteItem(i.Id)"
+                    class="bg-red-300 hover:bg-red-200 text-black rounded-full p-2 flex items-center" title="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
                       <path d="M3 6h18" />
                       <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
                       <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
@@ -229,28 +151,58 @@
               </div>
             </ng-container>
           </div>
-          <app-paginator
-            [allItems]="allItems"
-            (updateItems)="updateItems($event)"
-          ></app-paginator>
+          <app-paginator [allItems]="allItems" (updateItems)="updateItems($event)"></app-paginator>
         </div>
       </ng-container>
+
       <ng-template #noRecords>
-        <div class="flex items-center justify-center h-screen">
-          <p class="text-center">No hay registros.</p>
-          <button
-            (click)="openTaskDialog('', 0)"
-            class="hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-          >
-            <svg class="svg-icon" viewBox="0 0 20 20">
-              <path
-                d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10"
-              ></path>
-            </svg>
-            <span class="pl-1">Nuevo Producto</span>
-          </button>
+        <div *ngIf="categories.count > 0">
+          <div class="flex items-center justify-center min-h-screen w-full bg-white">
+            <div class="text-center py-12">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                aria-hidden="true">
+                <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-semibold text-gray-900">No hay productos</h3>
+              <p class="mt-1 text-sm text-gray-500">Empieza por crear uno.</p>
+              <div class="mt-6">
+                <button (click)="openTaskDialog('add',0)" type="button"
+                  class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path
+                      d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                  </svg>
+                  Nuevo Producto
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </ng-template>
+      <div *ngIf="categories && categories.count == 0">
+        <div class="flex items-center justify-center min-h-screen w-full bg-white">
+          <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              aria-hidden="true">
+              <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-semibold text-gray-900">No hay productos</h3>
+            <p class="mt-1 text-sm text-gray-500">Empieza por crear una categoría.</p>
+            <div class="mt-6">
+              <button (click)="openTaskDialog('add-category',0)" type="button"
+                class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                </svg>
+                Nueva Categoría
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </ng-container>
   </ng-template>
 </div>

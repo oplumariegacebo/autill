@@ -5,11 +5,14 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SpinnerLoadingComponent } from '../spinner-loading/spinner-loading.component';
 import { ClientService } from '../../../core/services/client.service';
 import { ItemService } from '../../../core/services/item.service';
+import { CategoryService } from '../../../core/services/category.service';
+import { CommonModule } from '@angular/common';
+import { SuppliersService } from '../../../core/services/suppliers.service';
 
 @Component({
   selector: 'app-item-modal',
   standalone: true,
-  imports: [SpinnerLoadingComponent, ReactiveFormsModule],
+  imports: [SpinnerLoadingComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './item-modal.component.html',
   styleUrl: './item-modal.component.css'
 })
@@ -21,6 +24,12 @@ export class ItemModalComponent {
   apiService = inject(ApiService);
   clientService = inject(ClientService);
   itemService = inject(ItemService);
+  categoriesService = inject(CategoryService);
+  suppliersService = inject(SuppliersService);
+  categories: any;
+  suppliers: any;
+  userId = localStorage.getItem('id') || "[]";
+
 
   initializeForm() {
     this.itemForm = new FormGroup({
@@ -30,12 +39,16 @@ export class ItemModalComponent {
       PriceImp: new FormControl({ value: '', disabled: true }),
       Iva: new FormControl(),
       Irpf: new FormControl(),
+      OrderPrice: new FormControl(),
+      OrderPriceImp: new FormControl({ value: '', disabled: true }),
+      OrderIva: new FormControl(),
+      OrderIrpf: new FormControl(),
       Ref: new FormControl(),
       Stock: new FormControl(),
       StockLimit: new FormControl(),
       IdCategory: new FormControl(),
       IdSupplier: new FormControl(),
-      IdBusiness: new FormControl(localStorage.getItem('id') || "[]")
+      IdBusiness: new FormControl(this.userId)
     })
   }
 
@@ -44,6 +57,12 @@ export class ItemModalComponent {
   }
 
   ngOnInit() {
+    this.suppliersService.getAllSuppliers(this.userId).subscribe((result: any) => {
+      this.suppliers = result;
+    })
+    this.categoriesService.getAllCategories(this.userId).subscribe((result: any) => {
+      this.categories = result;
+    })
     if (this.item.Id > 0) {
       this.itemForm.setValue(this.item);
     }
@@ -53,53 +72,50 @@ export class ItemModalComponent {
     this.dialogRef.close();
   }
 
-  updateLivePriceImp($event: Event) {
-    const input = $event.target as HTMLInputElement;
-    const value = Number(input.value) || 0;
+  updatePriceWithTaxes(type: 'sale' | 'purchase') {
+    const priceControlName = type === 'sale' ? 'Price' : 'PricePurchase';
+    const ivaControlName = type === 'sale' ? 'Iva' : 'IvaPurchase';
+    const irpfControlName = type === 'sale' ? 'Irpf' : 'IrpfPurchase';
+    const priceImpControlName = type === 'sale' ? 'PriceImp' : 'PriceImpPurchase';
 
-    this.updatePriceImp();
-}
-
-  updatePriceImp() {
-    const price = Number(this.itemForm.get('Price')?.value) || 0;
-    const iva = Number(this.itemForm.get('Iva')?.value) || 0;
-    const irpf = Number(this.itemForm.get('Irpf')?.value) || 0;
+    const price = Number(this.itemForm.get(priceControlName)?.value) || 0;
+    const iva = Number(this.itemForm.get(ivaControlName)?.value) || 0;
+    const irpf = Number(this.itemForm.get(irpfControlName)?.value) || 0;
 
     const priceImp = price + (price * iva / 100) - (price * irpf / 100);
 
-    this.itemForm.controls['PriceImp'].setValue(priceImp.toFixed(2), { emitEvent: false });
+    this.itemForm.controls[priceImpControlName].setValue(priceImp.toFixed(2), {
+      emitEvent: false,
+    });
   }
 
   actionClient() {
     this.loading = true;
-    if (this.item == 0) {
+    const isNewItem = this.item == 0;
+
+    if (isNewItem) {
       this.itemForm.removeControl('Id');
-      const itemData = this.itemForm.getRawValue();
-      this.itemService.addItem(itemData).subscribe({
-        next: (newItem) => {
-          //this.dialogRef.close(newItem);
-        },
-        complete: () => {
-          window.location.reload();
-        },
-        error: () => {
-          this.loading = false;
-        }
-      });
-    } else {
-      const itemData = this.itemForm.getRawValue();
-      console.log(this.itemForm);
-      this.itemService.editItem(this.item.Id, itemData).subscribe({
-        next: (updatedItem) => {
-          //this.dialogRef.close(updatedItem);
-        },
-        complete: () => {
-          window.location.reload();
-        },
-        error: () => {
-          this.loading = false;
-        }
-      });
     }
+
+    const itemData = this.itemForm.getRawValue();
+    itemData.IdBusiness = Number(itemData.IdBusiness);
+    itemData.IdCategory = Number(itemData.IdCategory);
+    itemData.IdSupplier = Number(itemData.IdSupplier);
+
+    const action$ = isNewItem
+      ? this.itemService.addItem(itemData)
+      : this.itemService.editItem(this.item.Id, itemData);
+
+    action$.subscribe({
+      next: (result) => {
+        // this.dialogRef.close(result);
+      },
+      complete: () => {
+        window.location.reload();
+      },
+      error: () => {
+        this.loading = false;
+      },
+    });
   }
 }

@@ -3,17 +3,17 @@
   <nav class="bg-white border-b border-gray-200 px-4 text-black">
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
       <a routerLink="dashboard" class="flex items-center">
-        <img src="/assets/images/autill_logo.png" class="mr-3 h-14 sm:h-20" alt="Autill Logo" />
+        <img src="/assets/images/autill_logo.png" class="mr-3 h-12 sm:h-16" alt="Autill Logo" />
       </a>
       <div class="flex items-center lg:order-2">
 
-  <a routerLink="/userInfo" class="hidden lg:flex text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm px-3 py-2 mr-2 focus:outline-none items-center">
+  <a routerLink="/userInfo" class="hidden lg:flex text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm px-3 py-1 mr-2 focus:outline-none items-center">
           Datos Personales
-          <img class="ml-2 w-7 h-7 rounded" src="https://img.icons8.com/?size=100&id=AZazdsitsrgg&format=png&color=000000" />
+          <img class="ml-2 w-6 h-6 rounded" src="https://img.icons8.com/?size=100&id=AZazdsitsrgg&format=png&color=000000" />
         </a>
-  <a href="#" (click)="logout()" class="hidden lg:flex text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm px-3 py-2 mr-2 focus:outline-none items-center">
+  <a href="#" (click)="logout()" class="hidden lg:flex text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm px-3 py-1 mr-2 focus:outline-none items-center">
           Cerrar Sesión
-          <img class="ml-2 w-7 h-7 rounded" src="https://img.icons8.com/?size=100&id=Wgd88M98QIxt&format=png&color=000000" />
+          <img class="ml-2 w-6 h-6 rounded" src="https://img.icons8.com/?size=100&id=Wgd88M98QIxt&format=png&color=000000" />
         </a>
   <button (click)="toggleMenu()" type="button" class="inline-flex items-center p-2 text-sm text-black rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black" aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only">Abrir menú principal</span>
@@ -24,33 +24,50 @@
       <div [ngClass]="{'block': isMenuOpen, 'hidden': !isMenuOpen, 'lg:flex': true}" class="w-full lg:w-auto lg:order-1" id="mobile-menu">
   <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 text-black">
           <li>
-            <a routerLink="/bills" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Facturas</a>
+            <a routerLink="/bills" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Facturas</a>
           </li>
           <li>
-            <a routerLink="/budgets" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Presupuestos</a>
+            <a routerLink="/budgets" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Presupuestos</a>
           </li>
           <li>
-            <a routerLink="/clients" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Clientes</a>
+            <a routerLink="/clients" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Clientes</a>
           </li>
-          <li>
-            <a routerLink="/items" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Stock</a>
+          <li class="lg:relative group">
+            <a routerLink="/items" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center justify-between w-full py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">
+              Stock
+              <svg class="w-2.5 h-2.5 ml-2.5 hidden lg:inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </a>
+            <div class="lg:hidden lg:group-hover:block lg:absolute lg:bg-white lg:shadow-md rounded-md lg:pt-2 z-10 w-full lg:w-44">
+              <ul class="py-1 text-sm text-gray-700 lg:py-1">
+                <li><a routerLink="/categories" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-8 lg:pl-4 text-black hover:bg-gray-50 lg:hover:bg-gray-100" (click)="screenWidth < 1024 && toggleMenu()">Categorías</a></li>
+              </ul>
+            </div>
           </li>
-          <li>
-            <a routerLink="/suppliers" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Proveedores</a>
-          </li>
-                    <li>
-            <a routerLink="/categories" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Categorías</a>
+          <li class="lg:relative group">
+            <a routerLink="/suppliers" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center justify-between w-full py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">
+              Proveedores
+              <svg class="w-2.5 h-2.5 ml-2.5 hidden lg:inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+              </svg>
+            </a>
+            <div class="lg:hidden lg:group-hover:block lg:absolute lg:bg-white lg:shadow-md rounded-md lg:pt-2 z-10 w-full lg:w-52">
+              <ul class="py-1 text-sm text-gray-700 lg:py-1">
+                <li><a routerLink="/purchaseReports" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-8 lg:pl-4 text-black hover:bg-gray-50 lg:hover:bg-gray-100" (click)="screenWidth < 1024 && toggleMenu()">Informes de Compra</a></li>
+              </ul>
+            </div>
           </li>
           <li class="lg:hidden">
-            <a routerLink="/userInfo" routerLinkActive="text-black" class="block py-2 pr-4 pl-3 text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm" (click)="toggleMenu()">
+            <a routerLink="/userInfo" routerLinkActive="text-black" class="block py-1 pr-4 pl-3 text-black hover:bg-gray-50 focus:ring-4 focus:ring-black font-medium rounded-lg text-sm" (click)="toggleMenu()">
               Datos Personales
-              <img class="ml-2 w-7 h-7 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=AZazdsitsrgg&format=png&color=fefefe" style="filter: brightness(0.2);" />
+              <img class="ml-2 w-6 h-6 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=AZazdsitsrgg&format=png&color=fefefe" style="filter: brightness(0.2);" />
             </a>
           </li>
           <li class="lg:hidden">
-            <a href="#" class="block py-2 pr-4 pl-3 text-gray-800 hover:bg-gray-50 dark:hover:text-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm" (click)="logout(); toggleMenu();">
+            <a href="#" class="block py-1 pr-4 pl-3 text-gray-800 hover:bg-gray-50 dark:hover:text-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm" (click)="logout(); toggleMenu();">
               Cerrar Sesión
-              <img class="ml-2 w-7 h-7 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=Wgd88M98QIxt&format=png&color=fefefe" style="filter: brightness(0.2);" />
+              <img class="ml-2 w-6 h-6 rounded inline-block transition duration-200" src="https://img.icons8.com/?size=100&id=Wgd88M98QIxt&format=png&color=fefefe" style="filter: brightness(0.2);" />
             </a>
           </li>
         </ul>

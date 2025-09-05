@@ -23,6 +23,18 @@ export class Items {
     @Column('decimal', { precision: 10, scale: 2 })
     Irpf: number;
 
+    @Column('decimal', { precision: 10, scale: 2 })
+    OrderPrice: number;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    OrderPriceImp: number;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    OrderIva: number;
+
+    @Column('decimal', { precision: 10, scale: 2 })
+    OrderIrpf: number;
+
     @Column()
     Stock: number;
 

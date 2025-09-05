@@ -14,6 +14,7 @@ import * as Joi from 'joi';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { SuppliersModule } from './suppliers/suppliers.module';
 import { CategoriesModule } from './categories/categories.module';
+import { PurchaseReportsModule } from './purchaseReport/purchaseReports.module';
 
 @Module({
   imports: [    
@@ -34,7 +35,8 @@ import { CategoriesModule } from './categories/categories.module';
     ItemsModule,
     BillsModule,
     SuppliersModule,
-    CategoriesModule
+    CategoriesModule,
+    PurchaseReportsModule
     /*MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,

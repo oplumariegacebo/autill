@@ -6,6 +6,7 @@ import { BudgetService } from '../../../core/services/budget.service';
 import { BillService } from '../../../core/services/bill.service';
 import { ClientService } from '../../../core/services/client.service';
 import { ItemService } from '../../../core/services/item.service';
+import { PurchaseReportService } from '../../../core/services/purchase-report.service';
 
 @Component({
   selector: 'app-delete-item-modal',
@@ -24,6 +25,7 @@ export class DeleteItemModalComponent {
   billService = inject(BillService);
   clientService = inject(ClientService);
   itemService = inject(ItemService);
+  purchaseReportService = inject(PurchaseReportService);
   loading: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<DeleteItemModalComponent>) {
@@ -31,33 +33,35 @@ export class DeleteItemModalComponent {
   onClose(): void {
     this.dialogRef.close();
   }
-confirm() {
-  this.loading = true;
+  confirm() {
+    this.loading = true;
 
-  let deleteObservable;
+    let deleteObservable;
 
-  if (this.type.includes('factura')) {
-    deleteObservable = this.billService.deleteBill(this.id);
-  } else if (this.type.includes('presupuesto')) {
-    deleteObservable = this.budgetService.deleteBudget(this.id);
-  } else if (this.type.includes('producto')) {
-    deleteObservable = this.itemService.deleteProduct(this.id);
-  } else if (this.type.includes('cliente')) {
-    deleteObservable = this.clientService.deleteClient(this.id);
+    if (this.type.includes('factura')) {
+      deleteObservable = this.billService.deleteBill(this.id);
+    } else if (this.type.includes('presupuesto')) {
+      deleteObservable = this.budgetService.deleteBudget(this.id);
+    } else if (this.type.includes('producto')) {
+      deleteObservable = this.itemService.deleteProduct(this.id);
+    } else if (this.type.includes('cliente')) {
+      deleteObservable = this.clientService.deleteClient(this.id);
+    } else if (this.type.includes('purchase-report')) {
+      deleteObservable = this.purchaseReportService.deletePurchaseReport(this.id);
+    }
+
+    if (deleteObservable) {
+      deleteObservable.subscribe({
+        next: () => {
+          this.loading = false;
+          this.dialogRef.close('confirm'); // Cierra el modal y notifica al componente padre
+        },
+        error: () => {
+          this.loading = false;
+          alert('Error al eliminar');
+        }
+      });
+    }
   }
-
-  if (deleteObservable) {
-    deleteObservable.subscribe({
-      next: () => {
-        this.loading = false;
-        this.dialogRef.close('confirm'); // Cierra el modal y notifica al componente padre
-      },
-      error: () => {
-        this.loading = false;
-        alert('Error al eliminar');
-      }
-    });
-  }
-}
 
 }

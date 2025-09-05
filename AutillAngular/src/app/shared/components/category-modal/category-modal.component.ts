@@ -33,6 +33,7 @@ export class CategoryModalComponent {
   }
 
   ngOnInit() {
+    console.log(this.category);
     if (this.category.Id > 0) {
       this.categoryForm.setValue(this.category);
     }
@@ -79,7 +80,7 @@ export class CategoryModalComponent {
       const categoryData = this.categoryForm.getRawValue();
       this.categoriesService.editCategory(this.category.Id, categoryData).subscribe({
         next: (updatedCategory) => {
-          this.dialogRef.close(updatedCategory);
+          window.location.reload();
         },
         error: () => {
           this.loading = false;

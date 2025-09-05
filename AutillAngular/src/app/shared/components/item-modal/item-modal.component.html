@@ -1,92 +1,126 @@
 @if(loading){
-    <app-spinner-loading></app-spinner-loading>
+<app-spinner-loading></app-spinner-loading>
 }
-<div tabindex="-1" aria-hidden="true" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
-    <div class="relative p-4 w-full max-w-2xl max-h-full px-2 sm:px-4">
-  <div class="relative bg-white rounded-lg shadow">
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                <h3 class="text-xl font-semibold text-black">
-                    @if(item==0){Nuevo Registro}@else{Editar Registro}
-                </h3>
-                <button (click)="onClose()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-black rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <form [formGroup]="itemForm" class="pt-6 max-w-md mx-auto px-2 sm:px-4">
-                <div class="mb-5">
-                  <label for="ref" class="block mb-1 text-sm text-black">Referencia</label>
-                  <input formControlName="Ref" type="text" name="ref" id="ref" class="input-field" required />
-                </div>
-                <div class="mb-5">
-                  <label for="floating_repeat_name" class="block mb-1 text-sm text-black">Nombre</label>
-                  <input formControlName="Name" type="text" name="repeat_name" id="floating_repeat_name" class="input-field" required />
-                </div>
-                <div class="mb-5">
-                  <label for="floating_price" class="block mb-1 text-sm text-black">Precio Unidad</label>
-                  <input formControlName="Price" type="text" name="floating_price" id="floating_price" class="input-field" required />
-                </div>
-                          <div
-            class="flex flex-col md:flex-row md:gap-8 justify-center items-center"
-          >
-            <div class="w-full md:w-1/2 mb-4 md:mb-0">
-              <label for="iva" class="block mb-1 text-sm text-black">IVA (%)</label>
-              <div class="flex gap-2 items-center">
-                <input
-                  formControlName="Iva"
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  name="iva"
-                  id="iva"
-                  (input)="updateLivePriceImp($event)"
-                  class="input-field "
-                  required
-                />
-                <span class="text-gray-500 text-sm">%</span>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2">
-              <label for="irpf" class="block mb-1 text-sm text-gray-700 ">IRPF (%)</label>
-              <div class="flex gap-2 items-center">
-                <input
-                  formControlName="Irpf"
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  name="irpf"
-                  id="irpf"
-                  (input)="updateLivePriceImp($event)"
-                  class="input-field"
-                />
-                <span class="text-gray-500 text-sm">%</span>
-              </div>
+<div tabindex="-1" aria-hidden="true"
+  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+  <div class="relative p-4 w-full max-w-2xl max-h-full px-2 sm:px-4">
+    <div class="relative bg-white rounded-lg shadow">
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-black">
+          @if(item==0){Nuevo Registro}@else{Editar Registro}
+        </h3>
+        <button (click)="onClose()" type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-black rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <form [formGroup]="itemForm" class="pt-6 max-w-md mx-auto px-2 sm:px-4">
+        <div class="mb-5">
+          <label for="supplier" class="block mb-1 text-sm text-black">Proveedor</label>
+          <select formControlName="IdSupplier" id="supplier" class="input-field">
+            <option value="" disabled selected>Selecciona un proveedor</option>
+            <option *ngFor="let s of suppliers?.data" [value]="s.Id">
+              {{ s.Name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-5">
+          <label for="category" class="block mb-1 text-sm text-black">Categoría</label>
+          <select formControlName="IdCategory" id="category" class="input-field">
+            <option value="" disabled selected>Selecciona una categoría</option>
+            <option *ngFor="let category of categories?.data" [value]="category.Id">
+              {{ category.Name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-5">
+          <label for="ref" class="block mb-1 text-sm text-black">Referencia</label>
+          <input formControlName="Ref" type="text" name="ref" id="ref" class="input-field" required />
+        </div>
+        <div class="mb-5">
+          <label for="floating_repeat_name" class="block mb-1 text-sm text-black">Nombre</label>
+          <input formControlName="Name" type="text" name="repeat_name" id="floating_repeat_name" class="input-field"
+            required />
+        </div>
+        <div class="mb-5">
+          <label for="floating_price" class="block mb-1 text-sm text-black">Precio Unidad</label>
+          <input formControlName="Price" type="text" name="floating_price" id="floating_price"
+            (input)="updatePriceWithTaxes('sale')" class="input-field" required />
+        </div>
+        <div class="flex flex-col md:flex-row md:gap-8 justify-center items-center">
+          <div class="w-full md:w-1/2 mb-4 md:mb-0">
+            <label for="iva" class="block mb-1 text-sm text-black">IVA (%)</label>
+            <div class="flex gap-2 items-center">
+              <input formControlName="Iva" type="number" min="0" max="100" step="0.01" name="iva" id="iva"
+                (input)="updatePriceWithTaxes('sale')" class="input-field " required />
+              <span class="text-gray-500 text-sm">%</span>
             </div>
           </div>
-          <div class="mb-8"></div>
-                <div class="mb-5">
-                  <label for="floating_priceimp" class="block mb-1 text-sm">Precio Imp. Incl.</label>
-                  <input formControlName="PriceImp" type="text" name="floating_priceimp" id="floating_priceimp" class="input-field " required />
-                </div>
-                <div class="mb-5">
-                  <label for="stock" class="block mb-1 text-sm">Stock</label>
-                  <input formControlName="Stock" type="number" name="stock" id="stock" class="input-field " required />
-                </div>
-                <div class="mb-5">
-                  <label for="stocklimit" class="block mb-1 text-sm">Stock Límite</label>
-                  <input formControlName="StockLimit" type="number" name="stocklimit" id="stocklimit" class="input-field " required />
-                </div>
-            </form>
-              
-            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
-                <button (click)="actionClient()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">@if(item==0){Añadir}@else{Editar}</button>
-                <button (click)="onClose()" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">Cerrar</button>
-              </div>
+          <div class="w-full md:w-1/2">
+            <label for="irpf" class="block mb-1 text-sm text-gray-700 ">IRPF (%)</label>
+            <div class="flex gap-2 items-center">
+              <input formControlName="Irpf" type="number" min="0" max="100" step="0.01" name="irpf" id="irpf"
+                (input)="updatePriceWithTaxes('sale')" class="input-field" />
+              <span class="text-gray-500 text-sm">%</span>
+            </div>
+          </div>
         </div>
+        <div class="mb-8"></div>
+        <div class="mb-5">
+          <label for="floating_priceimp" class="block mb-1 text-sm">Precio Imp. Incl.</label>
+          <input formControlName="PriceImp" type="text" name="floating_priceimp" id="floating_priceimp"
+            class="input-field " required />
+        </div>
+        <div class="mb-5">
+          <label for="stock" class="block mb-1 text-sm">Stock</label>
+          <input formControlName="Stock" type="number" name="stock" id="stock" class="input-field " required />
+        </div>
+        <div class="mb-5">
+          <label for="stocklimit" class="block mb-1 text-sm">Stock Límite</label>
+          <input formControlName="StockLimit" type="number" name="stocklimit" id="stocklimit" class="input-field "
+            required />
+        </div>
+        <div class="mb-4"></div>
+        <div class="mb-5">
+          <label for="floating_price" class="block mb-1 text-sm text-black">Precio Unidad de Compra</label>
+          <input formControlName="OrderPrice" type="text" name="floating_price" id="floating_price"
+            (input)="updatePriceWithTaxes('purchase')" class="input-field" required />
+        </div>
+        <div class="flex flex-col md:flex-row md:gap-8 justify-center items-center">
+          <div class="w-full md:w-1/2 mb-4 md:mb-0">
+            <label for="iva" class="block mb-1 text-sm text-black">IVA (%)</label>
+            <div class="flex gap-2 items-center">
+              <input formControlName="OrderIva" type="number" min="0" max="100" step="0.01" name="iva" id="iva"
+                (input)="updatePriceWithTaxes('purchase')" class="input-field " required />
+              <span class="text-gray-500 text-sm">%</span>
+            </div>
+          </div>
+          <div class="w-full md:w-1/2">
+            <label for="irpf" class="block mb-1 text-sm text-gray-700 ">IRPF (%)</label>
+            <div class="flex gap-2 items-center">
+              <input formControlName="OrderIrpf" type="number" min="0" max="100" step="0.01" name="irpf" id="irpf"
+                (input)="updatePriceWithTaxes('purchase')" class="input-field" />
+              <span class="text-gray-500 text-sm">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4"></div>
+        <div class="mb-4">
+          <label for="floating_priceimp" class="block mb-1 text-sm">Precio de Compra Imp. Incl.</label>
+          <input formControlName="OrderPriceImp" type="text" name="floating_priceimp" id="floating_priceimp"
+            class="input-field " required />
+        </div>
+      </form>
+
+      <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+        <button (click)="actionClient()" type="button" class="button-blue">@if(item==0){Añadir}@else{Editar}</button>
+        <button (click)="onClose()" type="button" class="button-close">Cerrar</button>
+      </div>
     </div>
+  </div>
 </div>
