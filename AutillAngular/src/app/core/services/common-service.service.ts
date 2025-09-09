@@ -369,6 +369,7 @@ export class CommonService {
               const fullItem = supplierItems.find((si: any) => si.Id === reportItem.Id);
 
               if (fullItem) {
+                console.log(fullItem);
                 const price = Number(fullItem.OrderPrice) || 0;
                 const quantity = Number(reportItem.toOrder) || 0;
                 const totalConcept = price * quantity;
@@ -431,7 +432,7 @@ export class CommonService {
             file.text('TOTAL:', pageWidth - 60, currentY, { align: 'right' });
             file.text(String(grandTotal.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' });
 
-            file.save(`${title}-${report.Id}.pdf`);
+            //file.save(`${title}-${report.Id}.pdf`);
             spinnerRef.close();
           });
         });

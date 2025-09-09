@@ -54,7 +54,7 @@ export class ItemsService {
       }
 
       if (filters.StockLimit === true) {
-        qb.andWhere("item.Stock < item.StockLimit");
+        qb.andWhere("item.Stock < (item.StockLimit * 1.25) AND item.StockLimit > 0");
       }
 
       if (filters.IdCategory > 0) {

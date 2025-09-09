@@ -118,27 +118,6 @@ export class PurchaseReportService {
     }
 
     async updatePurchaseReport(purchaseReportId: number, newPurchaseReport: PurchaseReportDto) {
-        const oldPurchaseReport = await this.purchaseReportRepository.findOne({ where: { Id: purchaseReportId } });
-
-        if (oldPurchaseReport) {
-            const oldItems = JSON.parse(oldPurchaseReport.DescriptionItems);
-            for (let item of oldItems) {
-                let dbItem = await this.itemsService.findItem(item.Id);
-                if (dbItem.success && dbItem.data.Stock != null && item.Units > 0) {
-                    dbItem.data.Stock += item.Units;
-                    await this.itemsService.updateItem(dbItem.data.Id, dbItem.data);
-                }
-            }
-        }
-
-        const newItems = JSON.parse(newPurchaseReport.DescriptionItems);
-        for (let item of newItems) {
-            let dbItem = await this.itemsService.findItem(item.Id);
-            if (dbItem.success && dbItem.data.Stock != null && item.Units > 0) {
-                dbItem.data.Stock -= item.Units;
-                await this.itemsService.updateItem(dbItem.data.Id, dbItem.data);
-            }
-        }
         let toUpdate = await this.purchaseReportRepository.findOne({ where: { Id: purchaseReportId } });
 
         let updated = Object.assign(toUpdate, newPurchaseReport);

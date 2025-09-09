@@ -2,25 +2,25 @@
 <div class="relative overflow-x-auto">
     <ng-container *ngIf="reports">
         <ng-container *ngIf="reports.count > 0; else noRecords">
-                                <div>
-                        <button
-                            class="lg:hidden w-full bg-primary-700 text-black py-2 rounded mb-2 flex items-center justify-center"
-                            (click)="showFilters = !showFilters">
-                            <span>{{ showFilters ? "Ocultar filtros" : "Mostrar filtros" }}</span>
-                            <svg [ngClass]="{ 'rotate-180': showFilters }" class="w-5 h-5 ml-2 transition-transform"
-                                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div [ngClass]="{
+            <div>
+                <button
+                    class="lg:hidden w-full bg-primary-700 text-black py-2 rounded mb-2 flex items-center justify-center"
+                    (click)="showFilters = !showFilters">
+                    <span>{{ showFilters ? "Ocultar filtros" : "Mostrar filtros" }}</span>
+                    <svg [ngClass]="{ 'rotate-180': showFilters }" class="w-5 h-5 ml-2 transition-transform" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div [ngClass]="{
             block: showFilters,
             hidden: !showFilters,
             'lg:block': true
           }">
-                            <app-search-filters [dataScreen]="dataScreen"
-                                (updateSearching)="updateSearching($event)"></app-search-filters>
-                        </div>
-                    </div>
+                    <app-search-filters [dataScreen]="dataScreen"
+                        (updateSearching)="updateSearching($event)"></app-search-filters>
+                </div>
+            </div>
             <div class="min-h-screen w-full bg-white text-black overflow-x-auto max-w-full px-2 md:px-8 py-6">
                 <div class="flex flex-col lg:flex-row gap-4 mb-4">
                 </div>
@@ -30,6 +30,7 @@
                             <tr>
                                 <th class="px-4 py-2 text-left">Id</th>
                                 <th class="px-8 py-2 text-left">Proveedor</th>
+                                <th class="px-8 py-2 text-left">Importe Total</th>
                                 <th class="px-4 py-2 text-right">Acciones</th>
                             </tr>
                         </thead>
@@ -37,18 +38,18 @@
                             <tr *ngFor="let r of reports.data" class="border-b last:border-none hover:bg-gray-50">
                                 <td class="px-4 py-2">{{ r.Id }}</td>
                                 <td class="px-8 py-2 font-semibold">{{ r.supplierName }}</td>
+                                <td class="px-8 py-2">{{ r.TotalPrice }} €</td>
                                 <td class="px-4 py-2">
                                     <div class="flex gap-2 justify-end">
-                                        <button (click)="openTaskDialog('generatePDF', r)"
-                                            class="bg-purple-300 hover:bg-purple-200 text-black rounded-full p-2 flex items-center"
-                                            title="Ver Informe PDF">
-                                            <svg class="w-5 h-5 text-gray-800 dark:text-black" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" width="5" height="5" fill="none"
-                                                viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-width="2"
-                                                    d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
-                                                <path stroke="currentColor" stroke-width="2"
-                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        <button (click)="commonService.generatePurchaseReportPDF(r.Id)"
+                                            class="bg-yellow-300 hover:bg-yellow-400 text-black rounded-full p-2 flex items-center"
+                                            title="Descargar PDF">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                                <polyline points="7 11 12 16 17 11" />
+                                                <line x1="12" y1="4" x2="12" y2="16" />
                                             </svg>
                                         </button>
                                         <button *ngIf="!r.Execute" (click)="openTaskDialog('order', r)"
@@ -63,7 +64,7 @@
                                             </svg>
 
                                         </button>
-                                        <button (click)="openTaskDialog('edit', r)"
+                                        <button *ngIf="!r.Execute" (click)="openTaskDialog('edit', r)"
                                             class="text-black bg-blue-600 hover:bg-blue-700 rounded-full p-2 flex items-center"
                                             title="Editar">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
@@ -94,24 +95,26 @@
                     <ng-container *ngFor="let r of reports.data">
                         <div
                             class="rounded-xl shadow-xl bg-white border border-gray-200/60 p-4 mb-6 flex flex-col gap-2 transition-all">
-                            <div class="flex justify-between items-center">
-                                <span class="font-semibold text-lg text-black">Informe de compra {{
-                                    r.Id
-                                    }}</span>
-                                <span class="text-xs text-gray-500">Proveedor:
-                                    <span class="font-bold text-black">{{ r.supplierName }}</span></span>
-                            </div>
+                            <span class="font-semibold text-lg text-black">Informe de compra {{
+                                r.Id
+                                }}</span>
+                            <span class="font-bold text-xs">Proveedor:
+                                <span class="font-normal
+ text-black">{{ r.supplierName }}</span></span>
+                            <span class="font-bold text-xs">Precio Total:
+                                <span class="font-normal
+ text-black">{{ r.TotalPrice }}</span></span>
+
                             <div class="flex flex-wrap gap-2 justify-end mt-2">
-                                <button (click)="openTaskDialog('generatePDF', r)"
-                                    class="bg-purple-300 hover:bg-purple-200 text-black rounded-full p-2 flex items-center"
-                                    title="Ver informe en PDF">
-                                    <svg class="w-5 h-5 text-gray-800 dark:text-black" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="5" height="5" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-width="2"
-                                            d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
-                                        <path stroke="currentColor" stroke-width="2"
-                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                <button (click)="commonService.generatePurchaseReportPDF(r.Id)"
+                                    class="bg-yellow-300 hover:bg-yellow-400 text-black rounded-full p-2 flex items-center"
+                                    title="Descargar PDF">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                                        <polyline points="7 11 12 16 17 11" />
+                                        <line x1="12" y1="4" x2="12" y2="16" />
                                     </svg>
                                 </button>
                                 <button *ngIf="!r.Execute" (click)="openTaskDialog('order', r)"
@@ -125,7 +128,7 @@
                                     </svg>
 
                                 </button>
-                                <button (click)="openTaskDialog('edit', r)"
+                                <button *ngIf="!r.Execute" (click)="openTaskDialog('edit', r)"
                                     class="text-black bg-blue-600 hover:bg-blue-700 rounded-full p-2 flex items-center"
                                     title="Editar">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"

@@ -109,6 +109,10 @@ export class BillsService {
     let bill = await this.billsRepository.findOne({ where: { Id: billId } });
     let budget = await this.budgetService.findBudget(bill.IdBudget);
 
+    if (!budget) {
+      return await this.billsRepository.delete({ Id: billId });
+    }
+
     budget.CloseIt = false;
     await this.budgetService.updateBudget(budget.Id, budget);
 

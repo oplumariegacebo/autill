@@ -50,7 +50,7 @@ export class GeneratePurchaseReportComponent implements OnInit {
 
       if (orderItems.length > 0) {
         this.purchaseOrderGenerated.emit(orderItems);
-        console.log(orderItems);
+
         let purchaseReport = { "IdBusiness": this.ids['IdBusiness'], "IdSupplier": this.ids['IdSupplier'], "DescriptionItems": JSON.stringify(orderItems), "Execute": false, "TotalPrice": 0 }
 
         this.purchaseReportService.addPurchaseReport(purchaseReport).subscribe((res: any) => {
@@ -58,6 +58,12 @@ export class GeneratePurchaseReportComponent implements OnInit {
           window.location.reload();
         });
       }
+    }else if(action === 'edit'){
+      const updatedReport = { ...this.report, DescriptionItems: JSON.stringify(this.items) };
+      this.purchaseReportService.editPurchaseReport(this.report.Id, updatedReport).subscribe((res: any) => {
+        this.onClose();
+        window.location.reload();
+      })
     } else {
       this.purchaseReportService.confirmOrder(this.report.Id, this.items).subscribe((res: any) => {
         this.onClose();

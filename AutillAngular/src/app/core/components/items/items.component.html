@@ -69,7 +69,13 @@
                     <td class="px-8 py-2 font-semibold">{{ i.Name }}</td>
                     <td class="px-6 py-2">{{ i.Price }} €</td>
                     <td class="px-6 py-2">{{ i.PriceImp }} €</td>
-                    <td class="px-6 py-2">{{ i.Stock }}</td>
+                    <td class="px-6 py-2" [ngClass]="{
+                'stock-high': i.Stock / i.StockLimit > 1.8,
+                'stock-medium': i.Stock / i.StockLimit <= 1.8 && i.Stock / i.StockLimit >= 1.25,
+                'stock-low': i.Stock / i.StockLimit < 1.25
+  }">
+                      {{ i.Stock }}
+                    </td>
                     <td class="px-6 py-2">{{ i.StockLimit }}</td>
                     <td class="px-4 py-2">
                       <div class="flex gap-2">
@@ -120,12 +126,21 @@
                   Precio Imp. incld:
                   <span class="font-bold text-black">{{ i.PriceImp }} €</span>
                 </div>
-                <div class="text-sm text-black">
-                  Stock: <span class="font-bold text-black">{{ i.Stock }}</span>
-                </div>
-                <div class="text-sm text-black">
-                  Stock Limite:
-                  <span class="font-bold text-black">{{ i.StockLimit }}</span>
+                <div>
+                  <div class="text-sm text-black">
+                    Stock:
+                    <span class="font-bold text-black" [ngClass]="{
+                'stock-high': i.Stock / i.StockLimit > 0.5,
+                'stock-medium': i.Stock / i.StockLimit <= 0.5 && i.Stock / i.StockLimit >= 0.25,
+                'stock-low': i.Stock / i.StockLimit < 0.25
+            }">
+                      {{ i.Stock }}
+                    </span>
+                  </div>
+                  <div class="text-sm text-black">
+                    Stock Limite:
+                    <span class="font-bold text-black">{{ i.StockLimit }}</span>
+                  </div>
                 </div>
                 <div class="flex flex-wrap gap-2 justify-end mt-2">
                   <button (click)="openTaskDialog('edit', i)"

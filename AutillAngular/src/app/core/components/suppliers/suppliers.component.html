@@ -99,11 +99,15 @@
             <div
               class="rounded-xl shadow-xl bg-white border border-gray-200/60 p-4 mb-6 flex flex-col gap-2 transition-all">
               <span class="font-semibold text-lg text-black">{{ c.Name }}</span>
-              <span class="text-sm text-black">NIF: {{ c.Nif }}</span>
-              <span class="text-sm text-black">Email: {{ c.Email }}</span>
-              <span class="text-sm text-black">Dirección: {{ c.Address }}, {{ c.City }} ({{ c.Region }}), {{
-                c.PostalCode }}</span>
-              <span class="text-sm text-black">Teléfono: {{ c.PhoneNumber }}</span>
+              <span class="font-bold text-sm text-black">NIF: <span class="font-normal text-black">{{ c.Nif
+                  }}</span></span>
+              <span class="font-bold text-sm text-black">Email: <span class="font-normal text-black">{{ c.Email
+                  }}</span></span>
+              <span class="font-bold text-sm text-black">Dirección: <span class="font-normal text-black">{{ c.Address
+                  }}, {{ c.City }} ({{ c.Region }}),
+                  {{ c.PostalCode }}</span></span>
+              <span class="font-bold text-sm text-black">Teléfono: <span class="font-normal text-black">{{ c.PhoneNumber
+                  }}</span></span>
               <div class="flex flex-wrap gap-2 justify-end mt-2">
                 <button (click)="openTaskDialog('edit',c.Id)"
                   class="bg-blue-300 hover:bg-blue-200 text-black rounded-full p-2 flex items-center" title="Editar">
@@ -135,27 +139,26 @@
   </ng-container>
 </ng-template>
 
-        <ng-template #noSuppliers>
-            <div class="flex items-center justify-center min-h-screen w-full bg-white">
-                <div class="text-center py-12">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        aria-hidden="true">
-                        <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    </svg>
-                    <h3 class="mt-2 text-sm font-semibold text-gray-900">No hay proveedores</h3>
-                    <p class="mt-1 text-sm text-gray-500">Empieza por crear uno nuevo.</p>
-                    <div class="mt-6">
-                        <button (click)="openTaskDialog('add',0)" type="button"
-                            class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path
-                                    d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                            </svg>
-                            Nuevo Proveedor
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </ng-template>
+<ng-template #noSuppliers>
+  <div class="flex items-center justify-center min-h-screen w-full bg-white">
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        aria-hidden="true">
+        <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+      </svg>
+      <h3 class="mt-2 text-sm font-semibold text-gray-900">No hay proveedores</h3>
+      <p class="mt-1 text-sm text-gray-500">Empieza por crear uno nuevo.</p>
+      <div class="mt-6">
+        <button (click)="openTaskDialog('add',0)" type="button"
+          class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+          <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path
+              d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+          </svg>
+          Nuevo Proveedor
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

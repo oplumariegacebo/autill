@@ -12,50 +12,61 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <form [formGroup]="detailsForm" class="flex flex-col gap-6 px-2 sm:px-8 py-6">
+            <form [formGroup]="detailsForm" class="flex flex-col gap-6 px-2 sm:px-8 py-6" novalidate>
 
-              @for (i of items; track i.Id) {
-                <div class="w-full rounded-xl flex flex-col justify-center mb-2">
+              <div formArrayName="items">
+                @for (item of itemsControls.controls; track $index; let i = $index) {
+                <div class="w-full rounded-xl flex flex-col justify-center mb-2" [formGroupName]="$index">
                   <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
-                    <span class="font-semibold text-gray-800 dark:text-white">{{ detailsForm.get('Item'+i.Id)?.value || 'Producto' }}</span>
+                    <span class="font-semibold text-gray-800 dark:text-white">{{ item.get('Item')?.value || 'Producto' }}</span>
                     <div class="flex gap-2">
-                      <button type="button" (click)="i.showDetails = !i.showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ i.showDetails ? 'Ocultar' : 'Editar' }}</button>
-                      <button type="button" (click)="removeItem(i.Id)" class="text-xs px-2 py-1 rounded bg-red-600 text-white">Eliminar</button>
+                      <button type="button" (click)="items[i].showDetails = !items[i].showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ items[i].showDetails ? 'Ocultar' : 'Editar' }}</button>
+                      <button type="button" (click)="removeItem(items[i].Id)" class="text-xs px-2 py-1 rounded bg-red-600 text-white">Eliminar</button>
                     </div>
                   </div>
-                  <div *ngIf="i.showDetails" class="mt-2">
+                  <div *ngIf="items[i].showDetails" class="mt-2">
                     <div class="flex flex-col md:flex-row gap-4">
+                      <mat-form-field class="flex-1 min-w-[180px]">
+                        <mat-label>Categoría</mat-label>
+                        <mat-select formControlName="Category">
+                          <mat-option value="">Todas las categorías</mat-option>
+                          @for (category of categories; track category) {
+                            <mat-option [value]="category.Id">{{category.Name}}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
                       <mat-form-field class="flex-1 min-w-[180px]">
                         <mat-label>Producto</mat-label>
                         <input type="text"
                                placeholder="Selecciona"
                                aria-label="Producto"
                                matInput
-                               formControlName="Item{{i.Id}}"
-                               id="detailInput{{i.Id}}"
+                               formControlName="Item"
+                               [id]="'detailInput' + i"
                                [matAutocomplete]="auto">
                         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                           <mat-option value=""></mat-option>
-                          @for (dbi of filteredItems | async; track dbi) {
-                            <mat-option (onSelectionChange)="changeSelection(i.Id, dbi.displayName ?? '', $event)" id="{{i.Id}}" [value]="dbi.displayName">{{dbi.displayName}}</mat-option>                          
+                          @for (dbi of items[i].filteredItems | async; track dbi) {
+                            <mat-option (onSelectionChange)="changeSelection(items[i].Id, dbi.displayName ?? '', $event)" [id]="'option-' + i + '-' + dbi.Id" [value]="dbi.displayName">{{dbi.displayName}}</mat-option>
                           }
                         </mat-autocomplete>
                       </mat-form-field>
                       <div class="flex-1 flex flex-col justify-center">
-                        <label for="units{{i.Id}}" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Unidades/Horas</label>
-                        <input value="{{i.Units}}" formControlName="Units{{i.Id}}" (change)="unitsChange(i.Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" id="units{{i.Id}}" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
-                        <ng-container *ngIf="i.Stock && i.Units > i.Stock">
-                          <span class="text-xs text-red-500 mt-1">Cantidad solicitada supera el stock disponible ({{i.Stock}})</span>
+                        <label [for]="'units' + i" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Unidades/Horas</label>
+                        <input formControlName="Units" (change)="unitsChange(items[i].Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" [id]="'units' + i" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
+                        <ng-container *ngIf="disabledCreate">
+                          <span class="text-xs text-red-500 mt-1">Cantidad solicitada supera el stock disponible ({{items[i].Stock}})</span>
                         </ng-container>
                       </div>
                       <div class="flex-1 flex flex-col justify-center">
-                        <label for="PriceTD{{i.Id}}" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Precio/(Unidad-Hora)</label>
-                        <input type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD{{i.Id}}" name="priceTD" id="PriceTD{{i.Id}}" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
+                        <label [for]="'PriceTD' + i" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Precio/(Unidad-Hora)</label>
+                        <input type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD" name="priceTD" [id]="'PriceTD' + i" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
                       </div>
                     </div>
                   </div>
                 </div>
-              }
+                }
+              </div>
               <div class="w-full flex justify-center mt-2">
                 <button type="button"
                         [disabled]="hasEmptyItem()"
@@ -66,7 +77,7 @@
               </div>
             </form>
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button (click)="addItems()" type="button" class="button-blue">Añadir Conceptos</button>
+                <button [disabled]="disabledCreate" (click)="addItems()" type="button" class="button-blue">Añadir Conceptos</button>
                 <button (click)="onClose()" type="button" class="button-close">Cerrar</button>
             </div>
         </div>

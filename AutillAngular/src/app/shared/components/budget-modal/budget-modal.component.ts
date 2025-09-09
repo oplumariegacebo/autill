@@ -95,6 +95,11 @@ export class BudgetModalComponent {
         var dateParts = budget.Date.split("/");
         var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
         budget.Date = dateObject;
+        console.log(budget);
+        if(budget.Iva > 0){
+          this.budgetForm.controls['IvaExento'].setValue(false);
+          budget.IvaExento = false;
+        }
 
         this.budgetForm.setValue(budget);
         this.budgetForm.controls['ClientId'].setValue(budget.ClientName);

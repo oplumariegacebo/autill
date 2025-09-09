@@ -100,11 +100,11 @@
             <div
               class="rounded-xl shadow-xl bg-white border border-gray-200/60 p-4 mb-6 flex flex-col gap-2 transition-all">
               <span class="font-semibold text-lg text-black">{{ c.Name }}</span>
-              <span class="text-sm text-black">NIF: {{ c.Nif }}</span>
-              <span class="text-sm text-black">Email: {{ c.Email }}</span>
-              <span class="text-sm text-black">Dirección: {{ c.Address }}, {{ c.City }} ({{ c.Region }}),
-                {{ c.PostalCode }}</span>
-              <span class="text-sm text-black">Teléfono: {{ c.PhoneNumber }}</span>
+              <span class="font-bold text-sm text-black">NIF: <span class="font-normal text-black">{{ c.Nif }}</span></span>
+              <span class="font-bold text-sm text-black">Email: <span class="font-normal text-black">{{ c.Email }}</span></span>
+              <span class="font-bold text-sm text-black">Dirección: <span class="font-normal text-black">{{ c.Address }}, {{ c.City }} ({{ c.Region }}),
+              {{ c.PostalCode }}</span></span>
+              <span class="font-bold text-sm text-black">Teléfono: <span class="font-normal text-black">{{ c.PhoneNumber }}</span></span>
               <div class="flex flex-wrap gap-2 justify-end mt-2">
                 <button (click)="openTaskDialog(c.Id)"
                   class="bg-blue-300 hover:bg-blue-200 text-black rounded-full p-2 flex items-center" title="Editar">
