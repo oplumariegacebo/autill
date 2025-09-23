@@ -139,4 +139,12 @@ export class ItemsComponent {
       }
     });
   }
+
+  getCategoryName(categoryId: number): string {
+    if (!this.categories || !this.categories.data) {
+      return '';
+    }
+    const category = this.categories.data.find((cat:any) => cat.Id === categoryId);
+    return category ? category.Name : '';
+  }
 }

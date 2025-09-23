@@ -7,4 +7,5 @@ export interface Item {
     Ref: string;
     displayName?: string;
     StockLimit: number;
+    IdCategory: number;
 }

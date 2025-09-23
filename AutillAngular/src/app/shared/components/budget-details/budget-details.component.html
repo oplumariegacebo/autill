@@ -1,85 +1,120 @@
-<div tabindex="-1" aria-hidden="true" class="overflow-x-hidden overflow-y-auto fixed p-4 inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
-    <div class="relative p-4 w-full max-w-3xl max-h-full px-2 sm:px-6">
-        <div class="relative p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">
-                    Detalles Presupuesto
-                </h3>
-                <button (click)="onClose()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <form [formGroup]="detailsForm" class="flex flex-col gap-6 px-2 sm:px-8 py-6" novalidate>
+<div tabindex="-1" aria-hidden="true"
+  class="overflow-x-hidden overflow-y-auto fixed p-4 inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+  <div class="relative p-4 w-full max-w-3xl max-h-full px-2 sm:px-6">
+    <div class="relative p-6 bg-white rounded-lg shadow">
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+        <h3 class="text-xl font-semibold text-gray-800">
+          Detalles Presupuesto
+        </h3>
+        <button (click)="onClose()" type="button"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  ">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <form [formGroup]="detailsForm" class="flex flex-col gap-6 px-2 sm:px-8 py-6" novalidate>
 
-              <div formArrayName="items">
-                @for (item of itemsControls.controls; track $index; let i = $index) {
-                <div class="w-full rounded-xl flex flex-col justify-center mb-2" [formGroupName]="$index">
-                  <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
-                    <span class="font-semibold text-gray-800 dark:text-white">{{ item.get('Item')?.value || 'Producto' }}</span>
-                    <div class="flex gap-2">
-                      <button type="button" (click)="items[i].showDetails = !items[i].showDetails" class="text-xs px-2 py-1 rounded bg-blue-700 text-white">{{ items[i].showDetails ? 'Ocultar' : 'Editar' }}</button>
-                      <button type="button" (click)="removeItem(items[i].Id)" class="text-xs px-2 py-1 rounded bg-red-600 text-white">Eliminar</button>
+        <div formArrayName="items">
+          @for (itemControl of itemsControls.controls; track $index; let i = $index) {
+          <div class="w-full rounded-xl flex flex-col justify-center mb-2" [formGroupName]="$index">
+            <div class="flex items-center justify-between bg-white rounded-lg px-3 py-2 border-b">
+              <span class="font-semibold text-gray-800">{{ itemControl.get('Item')?.value || 'Producto' }}</span>
+              <div class="flex gap-2">
+                <a (click)="items[i].showDetails = !items[i].showDetails" class="cursor-pointer flex items-center">
+                  <svg *ngIf="!items[i].showDetails" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z" />
+                  </svg>
+                  <svg *ngIf="items[i].showDetails" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59" />
+                  </svg>
+                  <span class="ml-1">{{ items[i].showDetails ? 'Ocultar' : 'Editar' }}</span>
+                </a>
+                <a (click)="removeItem(items[i].Id)" class="cursor-pointer flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path d="M3 6h18" />
+                    <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                  </svg>
+                  <span class="ml-1">Eliminar</span>
+                </a>
+              </div>
+            </div>
+            <div *ngIf="items[i].showDetails" class="mt-2">
+              <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 flex flex-col justify-center min-w-[180px]">
+                  <label [for]="'category' + i" class="block mb-1 text-sm text-gray-700 ">Categoría</label>
+                  <select formControlName="Category" [id]="'category' + i"
+                    class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <option value="">Todas las categorías</option>
+                    @for (category of categories; track category) {
+                    <option [value]="category.Id">{{category.Name}}</option>
+                    }
+                  </select>
+                </div>
+                <div class="flex-1 flex flex-col justify-center min-w-[180px] relative">
+                  <label [for]="'detailInput' + i" class="block mb-1 text-sm text-gray-700 ">Producto</label>
+                  <input type="text" placeholder="Selecciona" aria-label="Producto" formControlName="Item"
+                    [id]="'detailInput' + i"
+                    class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    (input)="onProductInput(i, $event)" (focus)="showSuggestions[i] = true" (blur)="hideSuggestions(i)">
+                  <div *ngIf="showSuggestions[i] && itemControl.get('filteredItems')?.value?.length > 0"
+                    class="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto shadow-lg">
+                    @for (dbi of itemControl.get('filteredItems')?.value; track dbi.Id) {
+                    <div class="px-3 py-2 cursor-pointer hover:bg-gray-100" (mousedown)="selectProduct(i, dbi)">
+                      {{ dbi.displayName }}
                     </div>
-                  </div>
-                  <div *ngIf="items[i].showDetails" class="mt-2">
-                    <div class="flex flex-col md:flex-row gap-4">
-                      <mat-form-field class="flex-1 min-w-[180px]">
-                        <mat-label>Categoría</mat-label>
-                        <mat-select formControlName="Category">
-                          <mat-option value="">Todas las categorías</mat-option>
-                          @for (category of categories; track category) {
-                            <mat-option [value]="category.Id">{{category.Name}}</mat-option>
-                          }
-                        </mat-select>
-                      </mat-form-field>
-                      <mat-form-field class="flex-1 min-w-[180px]">
-                        <mat-label>Producto</mat-label>
-                        <input type="text"
-                               placeholder="Selecciona"
-                               aria-label="Producto"
-                               matInput
-                               formControlName="Item"
-                               [id]="'detailInput' + i"
-                               [matAutocomplete]="auto">
-                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                          <mat-option value=""></mat-option>
-                          @for (dbi of items[i].filteredItems | async; track dbi) {
-                            <mat-option (onSelectionChange)="changeSelection(items[i].Id, dbi.displayName ?? '', $event)" [id]="'option-' + i + '-' + dbi.Id" [value]="dbi.displayName">{{dbi.displayName}}</mat-option>
-                          }
-                        </mat-autocomplete>
-                      </mat-form-field>
-                      <div class="flex-1 flex flex-col justify-center">
-                        <label [for]="'units' + i" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Unidades/Horas</label>
-                        <input formControlName="Units" (change)="unitsChange(items[i].Id, $event)" type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" name="units" [id]="'units' + i" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
-                        <ng-container *ngIf="disabledCreate">
-                          <span class="text-xs text-red-500 mt-1">Cantidad solicitada supera el stock disponible ({{items[i].Stock}})</span>
-                        </ng-container>
-                      </div>
-                      <div class="flex-1 flex flex-col justify-center">
-                        <label [for]="'PriceTD' + i" class="block mb-1 text-sm text-gray-700 dark:text-gray-300">Precio/(Unidad-Hora)</label>
-                        <input type="number" onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'" formControlName="PriceTD" name="priceTD" [id]="'PriceTD' + i" class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 dark:text-white dark:bg-gray-800 dark:border-gray-600" required />
-                      </div>
-                    </div>
+                    }
                   </div>
                 </div>
-                }
+                <div class="flex-1 flex flex-col justify-center">
+                  <label [for]="'units' + i" class="block mb-1 text-sm text-gray-700 ">Unidades/Horas</label>
+                  <input formControlName="Units" (change)="unitsChange(items[i].Id, $event)" type="number"
+                    onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"
+                    name="units" [id]="'units' + i"
+                    class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600   "
+                    required />
+                  <ng-container *ngIf="disabledCreate">
+                    <span class="text-xs text-red-500 mt-1">Cantidad solicitada supera el stock disponible
+                      ({{items[i].Stock}})</span>
+                  </ng-container>
+                </div>
+                <div class="flex-1 flex flex-col justify-center">
+                  <label [for]="'PriceTD' + i" class="block mb-1 text-sm text-gray-700 ">Precio/(Unidad-Hora)</label>
+                  <input type="number"
+                    onkeydown="javascript: return ['Backspace','Delete','ArrowLeft','ArrowRight'].includes(event.code) ? true : !isNaN(Number(event.key)) && event.code!=='Space'"
+                    formControlName="PriceTD" name="priceTD" [id]="'PriceTD' + i"
+                    class="block py-2 px-2 w-full text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600   "
+                    required />
+                </div>
               </div>
-              <div class="w-full flex justify-center mt-2">
-                <button type="button"
-                        [disabled]="hasEmptyItem()"
-                        (click)="addAnotherProduct()"
-                        class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-800">
-                  Añadir producto
-                </button>
-              </div>
-            </form>
-            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button [disabled]="disabledCreate" (click)="addItems()" type="button" class="button-blue">Añadir Conceptos</button>
-                <button (click)="onClose()" type="button" class="button-close">Cerrar</button>
             </div>
+          </div>
+          }
         </div>
+        <div class="w-full flex justify-center mt-2">
+          <button type="button" [disabled]="hasEmptyItem()" (click)="addAnotherProduct()"
+            class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
+            Añadir producto
+          </button>
+        </div>
+      </form>
+      <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b ">
+        <button [disabled]="disabledCreate" (click)="addItems()" type="button"
+          class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   dark:focus:ring-blue-800">Añadir
+          Conceptos</button>
+        <button (click)="onClose()" type="button"
+          class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100      ">Cerrar</button>
+      </div>
     </div>
+  </div>
 </div>

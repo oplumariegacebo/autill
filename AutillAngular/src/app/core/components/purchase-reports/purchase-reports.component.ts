@@ -11,12 +11,13 @@ import { DeleteItemModalComponent } from '../../../shared/components/delete-item
 import { CommonService, Messages } from '../../services/common-service.service';
 import { PurchaseReport } from '../../models/PurchaseReport';
 import { SearchFiltersComponent } from '../../../shared/components/search-filters/search-filters.component';
+import { ErrorsComponent } from '../../../shared/components/errors/errors.component';
 
 
 @Component({
   selector: 'app-purchase-reports',
   standalone: true,
-  imports: [CommonModule, SpinnerLoadingComponent, SearchFiltersComponent],
+  imports: [CommonModule, SpinnerLoadingComponent, SearchFiltersComponent, ErrorsComponent],
   templateUrl: './purchase-reports.component.html',
   styleUrl: './purchase-reports.component.css'
 })
@@ -29,6 +30,7 @@ export class PurchaseReportsComponent {
   loading: boolean = false;
   showFilters = false;
   filtersActivated: any = null;
+  errorMessage: string = '';
   allReports: any = [];
   dataReports: any = [];
   dataScreen: string = 'purchaseReports';

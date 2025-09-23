@@ -1,0 +1,18 @@
+/*
+ * Estilo para el enlace activo en la cabecera.
+ * La directiva `routerLinkActive` añade la clase `.router-link-active`.
+ */
+@media (min-width: 1024px) { /* Corresponde al breakpoint 'lg' de Tailwind CSS */
+  a.router-link-active {
+    /*
+     * Un borde inferior con el color primario proporciona una mejor
+     * indicación visual para el elemento activo.
+     * El color se heredará del texto del enlace, que ya está definido
+     * con la clase `lg:text-primary-700` de Tailwind.
+     */
+    border-bottom: 2px solid;
+
+    /* Para que el subrayado no esté pegado al texto, asegúrate de que los enlaces tengan un padding vertical.
+       Por ejemplo, puedes usar `py-2` en lugar de `lg:p-0` en tu HTML. */
+  }
+}

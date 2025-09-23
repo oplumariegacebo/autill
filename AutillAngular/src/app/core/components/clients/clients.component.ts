@@ -100,9 +100,10 @@ export class ClientsComponent {
     })
   }
 
-  openTaskDialog(id: number) {
+  openTaskDialog(action: string, data: any) {
     const dialogRef = this.dialog.open(ClientsModalComponent);
-    dialogRef.componentInstance.id = id;
+    dialogRef.componentInstance.id = data.Id;
+    dialogRef.componentInstance.action = action;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

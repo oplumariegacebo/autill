@@ -369,7 +369,6 @@ export class CommonService {
               const fullItem = supplierItems.find((si: any) => si.Id === reportItem.Id);
 
               if (fullItem) {
-                console.log(fullItem);
                 const price = Number(fullItem.OrderPrice) || 0;
                 const quantity = Number(reportItem.toOrder) || 0;
                 const totalConcept = price * quantity;
@@ -392,7 +391,7 @@ export class CommonService {
               startY: tableMargin.top,
               margin: { left: tableMargin.left, right: tableMargin.right },
               tableWidth: tableWidth,
-              head: [["Producto", "Unidades a pedir", "Precio/Unidad €", "Total €"]],
+              head: [["Producto", "Unidades", "Precio/Unidad €", "Total €"]],
               body: bodyFormatItems,
               headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: 'bold' },
               styles: { fontSize: 12, cellPadding: 3 },
@@ -404,16 +403,16 @@ export class CommonService {
             const pageWidth = file.internal.pageSize.getWidth();
             const grandTotal = subTotal + totalIva - totalIrpf;
 
-            let summaryHeight = 10; // For TOTAL line
+            let summaryHeight = 10;
             if (totalIrpf > 0) {
               summaryHeight += 10;
             }
             if (totalIva > 0) {
               summaryHeight += 10;
             }
-            summaryHeight += 10; // For Subtotal line
+            summaryHeight += 10;
 
-            let currentY = pageHeight - 20 - summaryHeight; // 20 is bottom margin
+            let currentY = pageHeight - 20 - summaryHeight;
 
             if (finalY > currentY) {
               file.addPage();
@@ -422,7 +421,7 @@ export class CommonService {
             file.setFontSize(14);
             file.setTextColor(40);
             file.text('Subtotal:', pageWidth - 60, currentY, { align: 'right' });
-            file.text(String(subTotal.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' });
+            file.text(String(report.TotalPrice.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' });
             currentY += 10;
             totalIva > 0 && (file.text('IVA:', pageWidth - 60, currentY, { align: 'right' }), file.text(String(totalIva.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' }), currentY += 10);
             totalIrpf > 0 && (file.text('IRPF:', pageWidth - 60, currentY, { align: 'right' }), file.text(String(totalIrpf.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' }), currentY += 10);
@@ -430,9 +429,9 @@ export class CommonService {
             file.setFont('courier', 'bold');
             file.setFontSize(16);
             file.text('TOTAL:', pageWidth - 60, currentY, { align: 'right' });
-            file.text(String(grandTotal.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' });
+            file.text(String(report.TotalPriceImp.toFixed(2)) + ' €', pageWidth - 20, currentY, { align: 'right' });
 
-            //file.save(`${title}-${report.Id}.pdf`);
+            file.save(`${title}-${report.Id}.pdf`);
             spinnerRef.close();
           });
         });

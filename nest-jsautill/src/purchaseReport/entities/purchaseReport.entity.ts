@@ -19,4 +19,7 @@ export class PurchaseReports {
 
   @Column()
   TotalPrice: number;
+
+  @Column()
+  TotalPriceImp: number;
 }

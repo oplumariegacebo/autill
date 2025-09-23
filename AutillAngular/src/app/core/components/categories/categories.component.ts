@@ -1,6 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DeleteItemModalComponent } from '../../../shared/components/delete-item-modal/delete-item-modal.component';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemModalComponent } from '../../../shared/components/item-modal/item-modal.component';
 import { ErrorsComponent } from '../../../shared/components/errors/errors.component';
@@ -9,12 +10,13 @@ import { PaginatorComponent } from '../../../shared/components/paginator/paginat
 import { SearchFiltersComponent } from '../../../shared/components/search-filters/search-filters.component';
 import { CommonService, Messages } from '../../services/common-service.service';
 import { CategoryModalComponent } from '../../../shared/components/category-modal/category-modal.component';
+import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent],
+  imports: [CommonModule, ErrorsComponent, PaginatorComponent, SearchFiltersComponent, SpinnerLoadingComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
 })
@@ -30,16 +32,31 @@ export class CategoriesComponent {
   errorMessage: string = '';
   allCategories: any = [];
   filtersActivated: any = null;
+  loading: boolean = false;
 
   displayedColumns: string[] = ['name', 'price', 'actions'];
 
   constructor(private dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
-    this.categoriesService.getCategories(localStorage.getItem('id') || "[]", null, 10, 0).subscribe((Categories: any) => {
-      this.allCategories = Categories;
-      this.dataCategories = Categories;
-      this.categories = Categories;
+    this.loading = true;
+    this.categoriesService.getCategories(localStorage.getItem('id') || "[]", null, 10, 0).subscribe({
+      next: (data: any) => {
+        this.allCategories = data;
+        this.dataCategories = data;
+        this.categories = data;
+        this.loading = false;
+      },
+      error: (err: HttpErrorResponse) => {
+        let error = '';
+        if (err.status === 500) {
+          error = 'Internal server error.'
+        } else {
+          error = 'Ha ocurrido un error, contacta con el administrador.'
+        }
+        this.errorMessage = error;
+        this.loading = false;
+      }
     })
   }
 
@@ -83,18 +100,20 @@ export class CategoriesComponent {
     }
   }
 
-  deleteItem(id: number) {
+  deleteCategory(id: number) {
     const dialogRef = this.dialog.open(DeleteItemModalComponent);
-    dialogRef.componentInstance.type = 'producto';
-    dialogRef.componentInstance.title = Messages.DELETE_ITEM_TITLE;
-    dialogRef.componentInstance.message = Messages.DELETE_ITEM_MSG;
+    dialogRef.componentInstance.type = 'categoría';
+    dialogRef.componentInstance.title = '¿Desea eliminar la categoría?';
+    dialogRef.componentInstance.message = 'Si elimina la categoría, se eliminarán los productos/servicios asociados.';
     dialogRef.componentInstance.id = id;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'confirm') {
-        this.categories.data = this.categories.data.filter((i: any) => i.Id !== id);
-        this.allCategories.data = this.allCategories.data.filter((i: any) => i.Id !== id);
-        this.dataCategories.data = this.dataCategories.data.filter((i: any) => i.Id !== id);
+        this.categoriesService.deleteCategory(id).subscribe({
+          next: () => {
+            window.location.reload();
+          }
+        });
       }
     });
   }

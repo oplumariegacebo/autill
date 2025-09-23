@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BudgetModalComponent } from '../../../shared/components/budget-modal/budget-modal.component';
+import { BudgetDetailsComponent } from '../../../shared/components/budget-details/budget-details.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorsComponent } from "../../../shared/components/errors/errors.component";
 import { DeleteItemModalComponent } from '../../../shared/components/delete-item-modal/delete-item-modal.component';
@@ -37,6 +38,7 @@ export class BudgetsComponent {
   errorMessage: string = '';
   filtersActivated: any = null;
   loading: boolean = false;
+  budgetActions: any;
 
   constructor(private dialog: MatDialog, public commonService: CommonService) { }
 
@@ -106,7 +108,7 @@ export class BudgetsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // do something
+        // TODO: Implement post-closing logic if needed
       }
     });
   }
@@ -145,5 +147,4 @@ export class BudgetsComponent {
       })
     })
   }
-
 }

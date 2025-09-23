@@ -3,15 +3,16 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+// import { MatAutocompleteModule } from '@angular/material/autocomplete';
+// import { MatSelectModule } from '@angular/material/select';
+// import { MatInputModule } from '@angular/material/input';
+// import { MatFormFieldModule } from '@angular/material/form-field';
 import { AsyncPipe } from '@angular/common';
 import { combineLatest, map, Observable, startWith } from 'rxjs';
 import { Item } from '../../../core/models/Item';
 import { ItemService } from '../../../core/services/item.service';
 import { CategoryService } from '../../../core/services/category.service';
+
 
 interface BudgetItem {
   Id: number;
@@ -21,7 +22,7 @@ interface BudgetItem {
   Price: number;
   TotalConcept: number;
   showDetails: boolean;
-  Category: string;
+  Category: number;
   filteredItems: Observable<Item[]>;
   displayName: string;
   PriceImp: number;
@@ -31,7 +32,7 @@ interface BudgetItem {
 @Component({
   selector: 'app-budget-details',
   standalone: true,
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, ReactiveFormsModule, AsyncPipe, CommonModule, MatSelectModule],
+  imports: [FormsModule, ReactiveFormsModule, AsyncPipe, CommonModule],
   templateUrl: './budget-details.component.html',
   styleUrl: './budget-details.component.css'
 })
@@ -48,6 +49,56 @@ export class BudgetDetailsComponent {
   disabledCreate: boolean = false;
   categories: any = [];
   userId = localStorage.getItem('id') || "[]";
+  showSuggestions: boolean[] = [];
+
+  onProductInput(index: number, event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const itemControl = this.itemsControls.at(index).get('Item');
+    if (itemControl) {
+      itemControl.setValue(inputElement.value);
+    }
+    this.showSuggestions[index] = true;
+  }
+
+  hideSuggestions(index: number) {
+    // Delay hiding to allow click event on suggestions to register
+    setTimeout(() => {
+      this.showSuggestions[index] = false;
+    }, 100);
+  }
+
+  selectProduct(index: number, selectedItem: Item) {
+    const itemIndex = this.items.findIndex(i => i.Id === this.items[index].Id);
+    const formGroup = this.itemsControls.at(itemIndex);
+
+    if (itemIndex === -1) {
+      console.warn(`Could not find item with id ${this.items[index].Id} to update. This may be a timing issue.`);
+      return;
+    }
+
+    const newPrice = this.ivaExento ? parseFloat(selectedItem.Price.toString()) : parseFloat(selectedItem.PriceImp.toString());
+
+    // Update the data model (BudgetItem)
+    const updatedItem = this.items[itemIndex];
+    updatedItem.Id = selectedItem.Id;
+    updatedItem.Name = selectedItem.Name;
+    updatedItem.Stock = selectedItem.Stock;
+    updatedItem.Ref = selectedItem.Ref || '';
+    updatedItem.Category = selectedItem.IdCategory;
+    updatedItem.Price = newPrice;
+    updatedItem.PriceImp = selectedItem.PriceImp;
+    updatedItem.displayName = selectedItem.displayName?.toString() || '';
+
+    // Update the form model (FormGroup in FormArray)
+    formGroup.patchValue({
+      internalId: selectedItem.Id,
+      Item: selectedItem.displayName,
+      PriceTD: newPrice,
+      Category: selectedItem.IdCategory
+    });
+
+    this.hideSuggestions(index);
+  }
 
   get itemsControls() {
     return this.detailsForm.get('items') as FormArray;
@@ -104,14 +155,22 @@ export class BudgetDetailsComponent {
             Units: item.Units,
             filteredItems: new Observable<Item[]>()
           };
-
-          this.addFormGroupForItem(newItem, price);
-
-          this.setupFilteredItems(newItem);
           return newItem;
         });
+
+        this.items.forEach(item => {
+          const dbItem = this.dbItems.find((db: any) => db.Id === item.Id);
+          const price = this.ivaExento
+            ? (dbItem ? dbItem.Price : item.Price)
+            : (dbItem ? dbItem.PriceImp : item.PriceImp);
+          this.addFormGroupForItem(item, price);
+          this.setupFilteredItems(item);
+        });
+        this.showSuggestions = Array(this.items.length).fill(false);
+
       } else {
         this.items = [];
+        this.showSuggestions = [];
       }
 
     });
@@ -129,75 +188,12 @@ export class BudgetDetailsComponent {
   private addFormGroupForItem(item: BudgetItem, price?: number) {
     const formGroup = this.fb.group({
       internalId: [item.Id], // Keep track of our BudgetItem Id
-      Category: [item.Category || ''],
+      Category: [item.Category || 0],
       Item: [item.displayName],
       Units: [item.Units],
       PriceTD: [price ?? item.Price]
     });
     this.itemsControls.push(formGroup);
-  }
-
-  changeSelection(id: number, name: string, event: any) {
-    if (event.isUserInput) {
-      const displayNameSelected = name;
-      const itemSelected = this.dbItems.find((item: any) => item.displayName === displayNameSelected);
-
-      if (itemSelected) {
-        const itemIndex = this.items.findIndex(i => i.Id === id);
-        const formGroup = this.itemsControls.at(itemIndex);
-
-        if (itemIndex === -1) {
-          // This can happen if the form control value change triggers another event before this one completes.
-          // The robust solution below should prevent this, but we keep the guard just in case.
-          console.warn(`Could not find item with id ${id} to update. This may be a timing issue.`);
-          return;
-        }
-
-        const newPrice = this.ivaExento ? parseFloat(itemSelected.Price) : parseFloat(itemSelected.PriceImp);
-
-        // Update the data model (BudgetItem)
-        const updatedItem = this.items[itemIndex];
-        updatedItem.Id = itemSelected.Id;
-        updatedItem.Name = itemSelected.Name;
-        updatedItem.Stock = itemSelected.Stock;
-        updatedItem.Ref = itemSelected.Ref || '';
-        updatedItem.Category = itemSelected.IdCategory;
-        updatedItem.Price = newPrice;
-        updatedItem.PriceImp = itemSelected.PriceImp;
-        updatedItem.displayName = displayNameSelected;
-
-        // Update the form model (FormGroup in FormArray)
-        formGroup.patchValue({
-          internalId: itemSelected.Id,
-          Item: displayNameSelected,
-          PriceTD: newPrice,
-          Category: itemSelected.IdCategory
-        });
-      }
-    }
-  }
-
-  private setupFilteredItems(item: any) {
-    const itemIndex = this.items.findIndex(i => i.Id === item.Id);
-    const formGroup = this.itemsControls.at(itemIndex);
-    if (!formGroup) return;
-
-    const itemControl = formGroup.get('Item');
-    const categoryControl = formGroup.get('Category');
-    if (itemControl && categoryControl) {
-      item.filteredItems = combineLatest([
-        itemControl.valueChanges.pipe(startWith(itemControl.value || '')),
-        categoryControl.valueChanges.pipe(startWith(categoryControl.value || ''))
-      ]).pipe(
-        map(([itemValue, categoryValue]) => this._filter(itemValue, categoryValue))
-      );
-    }
-  }
-
-  private _filter(value: any, category: string | null): any[] {
-    const filterValue = (typeof value === 'string' ? value : (value.displayName || '')).toLowerCase();    
-    const itemsByCategory = category ? this.dbItems.filter((option: any) => option.IdCategory == category) : this.dbItems;
-    return itemsByCategory.filter((option: any) => option.displayName.toLowerCase().includes(filterValue));
   }
 
   addItems() {
@@ -228,13 +224,17 @@ export class BudgetDetailsComponent {
 
   addAnotherProduct() {
     const newId = --this._nextId;
-    const newItem: BudgetItem = { Id: newId, Name: '', Ref: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true, Category: '', filteredItems: new Observable<Item[]>(), displayName: '', PriceImp: 0 };
+    const newItem: BudgetItem = {
+      Id: newId, Name: '', Ref: '', Units: 0, Price: 0, TotalConcept: 0, showDetails: true, Category: 0, displayName: '', PriceImp: 0,
+      filteredItems: new Observable<Item[]>()
+    };
 
     const existeVacio = this.items.some(item => !item.Name && item.Units === 0 && item.Price === 0);
     if (!existeVacio) {
       this.items.push(newItem);
       this.addFormGroupForItem(newItem);
       this.setupFilteredItems(newItem);
+      this.showSuggestions.push(false);
     }
   }
 
@@ -265,6 +265,30 @@ export class BudgetDetailsComponent {
       this.itemsControls.removeAt(itemIndex);
     }
   }
+
+  private setupFilteredItems(item: any) {
+    const itemIndex = this.items.findIndex(i => i.Id === item.Id);
+    const formGroup = this.itemsControls.at(itemIndex);
+    if (!formGroup) return;
+
+    const itemControl = formGroup.get('Item');
+    const categoryControl = formGroup.get('Category');
+    if (itemControl && categoryControl) {
+      item.filteredItems = combineLatest([
+        itemControl.valueChanges.pipe(startWith(itemControl.value || '')),
+        categoryControl.valueChanges.pipe(startWith(categoryControl.value || ''))
+      ]).pipe(
+        map(([itemValue, categoryValue]) => this._filter(itemValue, categoryValue))
+      );
+    }
+  }
+
+  private _filter(value: any, category: string | null): any[] {
+    const filterValue = (typeof value === 'string' ? value : (value.displayName || '')).toLowerCase();
+    const itemsByCategory = category ? this.dbItems.filter((option: any) => option.IdCategory === Number(category)) : this.dbItems;
+    return itemsByCategory.filter((option: any) => option.displayName.toLowerCase().includes(filterValue));
+  }
+
 }
 
 export class ItemInit {

@@ -24,37 +24,52 @@
       <div [ngClass]="{'block': isMenuOpen, 'hidden': !isMenuOpen, 'lg:flex': true}" class="w-full lg:w-auto lg:order-1" id="mobile-menu">
   <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 text-black">
           <li>
-            <a routerLink="/bills" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Facturas</a>
+            <a routerLink="/bills" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:py-[23px] focus:text-black focus:font-bold relative group">
+              Facturas
+              <span class="underline-span"></span>
+            </a>
           </li>
           <li>
-            <a routerLink="/budgets" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Presupuestos</a>
+            <a routerLink="/budgets" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:py-[23px] focus:text-black focus:font-bold relative group">
+              Presupuestos
+              <span class="underline-span"></span>
+            </a>
           </li>
           <li>
-            <a routerLink="/clients" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">Clientes</a>
+            <a routerLink="/clients" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:py-[23px] focus:text-black focus:font-bold relative group">
+              Clientes
+              <span class="underline-span"></span>
+            </a>
           </li>
           <li class="lg:relative group">
-            <a routerLink="/items" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center justify-between w-full py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">
+            <a routerLink="/items" routerLinkActive="active-header" class="flex items-center justify-between w-full py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:py-[23px] focus:text-black focus:font-bold relative">
               Stock
+              <span class="underline-span"></span>
               <svg class="w-2.5 h-2.5 ml-2.5 hidden lg:inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
               </svg>
             </a>
-            <div class="lg:hidden lg:group-hover:block lg:absolute lg:bg-white lg:shadow-md rounded-md lg:pt-2 z-10 w-full lg:w-44">
+            <div class="lg:hidden lg:group-hover:block lg:absolute lg:bg-white lg:shadow-md rounded-md z-10 w-full lg:w-44">
               <ul class="py-1 text-sm text-gray-700 lg:py-1">
-                <li><a routerLink="/categories" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-8 lg:pl-4 text-black hover:bg-gray-50 lg:hover:bg-gray-100" (click)="screenWidth < 1024 && toggleMenu()">Categorías</a></li>
+                <li><a routerLink="/categories" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-8 lg:pl-4 lg:py-[23px] text-black hover:bg-gray-50 lg:hover:bg-gray-100 relative group">Categorías
+                  <span class="underline-span"></span>
+                </a></li>
               </ul>
             </div>
           </li>
           <li class="lg:relative group">
-            <a routerLink="/suppliers" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center justify-between w-full py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:p-0 focus:text-black focus:font-bold" (click)="screenWidth < 1024 && toggleMenu()">
+            <a routerLink="/suppliers" routerLinkActive="active-header" class="flex items-center justify-between w-full py-1 pr-4 pl-3 text-black border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:py-[23px] focus:text-black focus:font-bold relative">
               Proveedores
+              <span class="underline-span"></span>
               <svg class="w-2.5 h-2.5 ml-2.5 hidden lg:inline-block" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
               </svg>
             </a>
-            <div class="lg:hidden lg:group-hover:block lg:absolute lg:bg-white lg:shadow-md rounded-md lg:pt-2 z-10 w-full lg:w-52">
+            <div class="lg:hidden lg:group-hover:block lg:absolute lg:bg-white lg:shadow-md rounded-md z-10 w-full lg:w-52">
               <ul class="py-1 text-sm text-gray-700 lg:py-1">
-                <li><a routerLink="/purchaseReports" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-8 lg:pl-4 text-black hover:bg-gray-50 lg:hover:bg-gray-100" (click)="screenWidth < 1024 && toggleMenu()">Informes de Compra</a></li>
+                <li><a routerLink="/purchaseReports" routerLinkActive="active-header" [routerLinkActiveOptions]="{ exact: true }" class="block py-1 pr-4 pl-8 lg:pl-4 lg:py-[23px] text-black hover:bg-gray-50 lg:hover:bg-gray-100 relative group">Informes de Compra
+                  <span class="underline-span"></span>
+                </a></li>
               </ul>
             </div>
           </li>

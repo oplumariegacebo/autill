@@ -51,7 +51,7 @@ export class ClientsModalComponent {
   ngOnInit() {
     if (this.id > 0) {
       this.clientService.getClientById(this.id).subscribe((client: any) => {
-        this.clientForm.setValue(client);
+        this.clientForm.setValue(client.data);
       })
     }
   }

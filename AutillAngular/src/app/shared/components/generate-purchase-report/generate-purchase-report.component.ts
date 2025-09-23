@@ -45,20 +45,33 @@ export class GeneratePurchaseReportComponent implements OnInit {
           Id: item.Id,
           Name: item.Name,
           Stock: item.Stock,
-          toOrder: item.toOrder
+          toOrder: item.toOrder,
+          OrderPriceImp: item.OrderPriceImp,
+          OrderPrice: item.OrderPrice
         }));
 
       if (orderItems.length > 0) {
         this.purchaseOrderGenerated.emit(orderItems);
 
-        let purchaseReport = { "IdBusiness": this.ids['IdBusiness'], "IdSupplier": this.ids['IdSupplier'], "DescriptionItems": JSON.stringify(orderItems), "Execute": false, "TotalPrice": 0 }
+        let purchaseReport = { "IdBusiness": this.ids['IdBusiness'], "IdSupplier": this.ids['IdSupplier'], "DescriptionItems": JSON.stringify(orderItems), "Execute": false, "TotalPrice": 0, "TotalPriceImp": 0 }
+
+        const totalPriceImp = orderItems.reduce((acc, item) => {
+          return acc + (item.toOrder * item.OrderPriceImp);
+        }, 0);
+
+        const totalPrice = orderItems.reduce((acc, item) => {
+          return acc + (item.toOrder * item.OrderPrice);
+        }, 0);
+        
+        purchaseReport.TotalPrice = totalPrice;
+        purchaseReport.TotalPriceImp = totalPriceImp;
 
         this.purchaseReportService.addPurchaseReport(purchaseReport).subscribe((res: any) => {
           this.onClose();
           window.location.reload();
         });
       }
-    }else if(action === 'edit'){
+    } else if (action === 'edit') {
       const updatedReport = { ...this.report, DescriptionItems: JSON.stringify(this.items) };
       this.purchaseReportService.editPurchaseReport(this.report.Id, updatedReport).subscribe((res: any) => {
         this.onClose();

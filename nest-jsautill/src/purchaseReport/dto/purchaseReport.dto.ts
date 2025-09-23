@@ -5,4 +5,5 @@ export class PurchaseReportDto {
     readonly DescriptionItems: string;
     readonly Execute: boolean;
     readonly TotalPrice: number;
+    readonly TotalPriceImp: number;
   }

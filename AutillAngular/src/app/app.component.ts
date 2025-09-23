@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { ApiService } from './core/services/api.service';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { FooterComponent } from "./core/components/footer/footer.component";
 import { HeaderComponent } from './core/components/header/header.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FooterComponent, HeaderComponent, CommonModule],
+  imports: [RouterOutlet, HeaderComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

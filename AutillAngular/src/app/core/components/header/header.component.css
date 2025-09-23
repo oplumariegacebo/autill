@@ -1,14 +1,29 @@
-/* El nav activo solo tendrá color de texto blanco en escritorio y fondo azul en móvil/tablet */
+/* Estilos para el subrayado de los enlaces de navegación */
+.underline-span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px; /* Grosor del subrayado */
+  background-color: var(--carolina-blue, #4B9CD3); /* Color personalizado o azul por defecto */
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+  transform-origin: left;
+}
 
-/* Usa el color hexadecimal real de primary-700 de Tailwind (ajusta si tu tailwind.config.js tiene otro valor) */
-.active-header {
-  background-color: #fff;
-  color: black;
+/* Muestra el subrayado en el enlace activo */
+.active-header .underline-span {
+  transform: scaleX(1) !important;
 }
 
 @media (min-width: 1024px) {
-  .active-header {
-    background-color: transparent;
-    color: black;
+  /* Muestra el subrayado al pasar el ratón sobre cualquier enlace (principal o submenú) */
+  a.group:hover > .underline-span {
+    transform: scaleX(1);
+  }
+
+  /* Oculta el subrayado del menú principal si un submenú está activo */
+  li.group > a.active-header .underline-span {
+    transform: scaleX(0) !important;
   }
 }
