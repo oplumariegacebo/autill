@@ -117,9 +117,8 @@
         </div>
       </form>
 
-      <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
-        <button (click)="actionClient()" type="button" class="button-blue">@if(item==0){Añadir}@else{Editar}</button>
-        <button (click)="onClose()" type="button" class="button-close">Cerrar</button>
+      <div class="flex items-center justify-end p-4 md:p-5 space-x-3 border-t border-gray-200 rounded-b">
+        <button (click)="actionClient()" type="button" class="btn-primary">@if(item==0){Añadir}@else{Editar}</button>
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isLogin; else loggedIn">
   <app-header (menuStateChange)="onMenuStateChange($event)"></app-header>
-  <div class="bg-gray-100 min-h-screen">
+  <div class="main-content-area">
     <router-outlet></router-outlet>
   </div>
 </ng-container>

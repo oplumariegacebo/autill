@@ -15,6 +15,7 @@ import { UserService } from '../../services/user.service';
 import { ClientService } from '../../services/client.service';
 import { SendEmailComponent } from '../../../shared/components/send-email/send-email.component';
 import { SpinnerLoadingComponent } from '../../../shared/components/spinner-loading/spinner-loading.component';
+import { Budget } from '../../models/Budget';
 
 @Component({
   selector: 'app-budgets',
@@ -101,9 +102,9 @@ export class BudgetsComponent {
     }
   }
 
-  openTaskDialog(action: string, id: number) {
+  openTaskDialog(action: string, budget: Budget | null) {
     const dialogRef = this.dialog.open(BudgetModalComponent);
-    dialogRef.componentInstance.id = id;
+    dialogRef.componentInstance.budget = budget;
     dialogRef.componentInstance.action = action;
 
     dialogRef.afterClosed().subscribe(result => {

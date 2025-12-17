@@ -1,0 +1,23 @@
+/* Hacemos que el componente anfitrión (<app-budgets>) se comporte como un contenedor
+   flex vertical para organizar su contenido interno (tabla y paginador). */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda la altura que le da su contenedor padre (.main-content-area) */
+  background-color: white; /* Fondo para todo el componente */
+  padding: 1.5rem 2rem; /* Equivalente a px-8 py-6 de Tailwind */
+  box-sizing: border-box; /* Asegura que el padding no incremente la altura total */
+}
+
+/* Este contenedor (filtros, botones, tabla) crecerá para ocupar el espacio
+   disponible entre la cabecera del componente y el paginador. */
+.budgets-container {
+  flex: 1 1 80%; /* Ocupa el 80% del espacio disponible. flex-grow: 1, flex-shrink: 1, flex-basis: 80% */
+  overflow-y: auto; /* Añade un scroll vertical solo a esta área si el contenido excede la altura */
+}
+
+/* Seleccionamos el componente paginador directamente para darle el espacio restante */
+app-paginator {
+  flex: 0 0 auto; /* No crece, no se encoge, ocupa su altura natural. */
+  padding-top: 1rem; /* Añadimos un poco de espacio superior para separarlo de la tabla */
+}

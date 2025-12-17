@@ -20,6 +20,7 @@ import { ItemService } from '../../../core/services/item.service';
 import { UserService } from '../../../core/services/user.service';
 import { SpinnerLoadingComponent } from '../spinner-loading/spinner-loading.component';
 import { MatDatepickerInput, MatDatepickerModule } from '@angular/material/datepicker';
+import { Budget } from '../../../core/models/Budget';
 
 export const MY_FORMATS = {
   parse: {
@@ -33,7 +34,6 @@ export const MY_FORMATS = {
   }
 };
 
-
 @Component({
   selector: 'app-budget-modal',
   standalone: true,
@@ -41,11 +41,10 @@ export const MY_FORMATS = {
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ],
-  imports: [CommonModule,ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, AsyncPipe, SpinnerLoadingComponent, MatDatepickerModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatAutocompleteModule, AsyncPipe, SpinnerLoadingComponent, MatDatepickerModule],
   templateUrl: './budget-modal.component.html',
   styleUrl: './budget-modal.component.css'
 })
-
 
 export class BudgetModalComponent {
   budgetForm!: FormGroup
@@ -58,7 +57,7 @@ export class BudgetModalComponent {
   clientService = inject(ClientService);
   itemService = inject(ItemService);
   userService = inject(UserService);
-  id!: number;
+  budget: Budget | null = null;
   nextName!: string;
   modalItemsArray = [];
   action: string = '';
@@ -90,22 +89,27 @@ export class BudgetModalComponent {
   }
 
   ngOnInit() {
-    if (this.id > 0) {
-      this.budgetService.getBudgetById(this.id).subscribe((budget: any) => {
-        var dateParts = budget.Date.split("/");
-        var dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
-        budget.Date = dateObject;
-        console.log(budget);
-        if(budget.Iva > 0){
-          this.budgetForm.controls['IvaExento'].setValue(false);
-          budget.IvaExento = false;
-        }
+    if (this.budget) {
+      this.budget.IvaExento = true;
+      if (this.budget.Iva > 0) {
+        this.budgetForm.controls['IvaExento'].setValue(false);
+        this.budget.IvaExento = false;
+      }
 
-        this.budgetForm.setValue(budget);
-        this.budgetForm.controls['ClientId'].setValue(budget.ClientName);
+      let dateObject: Date;
+      if (typeof this.budget.Date === 'string' && this.budget.Date.includes('/')) {
+        const dateParts = this.budget.Date.split("/");
+        const year = parseInt(dateParts[2], 10);
+        const month = parseInt(dateParts[1], 10) - 1;
+        const day = parseInt(dateParts[0], 10);
+        dateObject = new Date(year, month, day);
+      } else {
+        dateObject = new Date(this.budget.Date);
+      }
+      
+      this.budgetForm.patchValue({...this.budget, Date: dateObject, ClientId: this.budget.ClientName});
 
-        this.modalItemsArray = JSON.parse(budget.DescriptionItems);
-      })
+      this.modalItemsArray = JSON.parse(this.budget.DescriptionItems)
     }
     this.clientService.getAllClients(localStorage.getItem('id') || "[]").subscribe((clients: any) => {
       this.clients = clients.data;
@@ -185,7 +189,7 @@ export class BudgetModalComponent {
     let formData = this.budgetForm.getRawValue();
     formData.Price = Number(formData.Price).toFixed(2);
 
-    if (this.id == 0) {
+    if (!this.budget || this.budget.Id === 0) {
       this.budgetForm.removeControl('Id');
       formData.ClientId = this.clientSelected.Id;
       formData.ClientName = this.clientSelected.Name;
@@ -203,7 +207,7 @@ export class BudgetModalComponent {
       }
       formData.ClientId = this.clientSelected.Id;
       formData.ClientName = this.clientSelected.Name;
-      this.budgetService.editBudget(this.id, formData).subscribe({
+      this.budgetService.editBudget(this.budget.Id, formData).subscribe({
         complete: () => {
           setTimeout(() => {
             window.location.reload();
@@ -220,13 +224,15 @@ export class BudgetModalComponent {
   generateBill() {
     this.loading = true;
 
-    this.billService.cloneRegister(this.id).subscribe({
-      complete: () => {
-        this.loading = false;
-        this.onClose();
-        this.router.navigate(['/bills']);
-      }
-    })
+    if (this.budget) {
+      this.billService.cloneRegister(this.budget.Id).subscribe({
+        complete: () => {
+          this.loading = false;
+          this.onClose();
+          this.router.navigate(['/bills']);
+        }
+      })
+    }
   }
 
   private _filter(value: any): any[] {

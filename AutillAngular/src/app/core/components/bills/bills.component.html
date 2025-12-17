@@ -1,114 +1,154 @@
 <app-spinner-loading *ngIf="loading"></app-spinner-loading>
 @if(bills){
-  @if(allBills && allBills.data && allBills.data.length > 0){
-  <div class="flex mb-4">
-          <button (click)="showFilters = !showFilters"
-            class="w-full bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded inline-flex items-center justify-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-            Filtros
-          </button>
-        </div>
-  }
-  @if(bills.data && bills.data.length > 0){
-  <div class="min-h-screen w-full bg-white text-black overflow-x-auto max-w-full px-2 md:px-8 py-6">
-      <!-- Tabla en PC -->
-         <div class="hidden lg:block bg-white min-h-screen">
-        <table class="min-w-full rounded-xl overflow-hidden shadow-lg bg-white">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="px-4 py-2 text-left">#</th>
-              <th class="px-4 py-2 text-left">Nombre</th>
-              <th class="px-4 py-2 text-left">Cliente</th>
-              <th class="px-4 py-2 text-left">Fecha</th>
-              <th class="px-4 py-2 text-left">Precio</th>
-              <th class="px-4 py-2 text-left">Precio Imp.</th>
-              <th class="px-4 py-2 text-left">Estado</th>
-              <th class="px-4 py-2 text-left">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (b of bills.data; track b.Id) {
-              <tr class="border-b last:border-none hover:bg-gray-50">
-                <td class="px-4 py-2">{{ b.Id }}</td>
-                <td class="px-4 py-2 font-semibold">{{ b.Name }}</td>
-                <td class="px-4 py-2">{{ b.ClientName }}</td>
-                <td class="px-4 py-2">{{ b.Date }}</td>
-                <td class="px-4 py-2">{{ b.Price }} €</td>
-                <td class="px-4 py-2">{{ b.PriceImp }} €</td>
-                <td class="px-4 py-2">
-                  <span [ngClass]="{
+@if(allBills && allBills.data && allBills.data.length > 0){
+<div class="flex mb-4">
+  <button (click)="showFilters = !showFilters"
+    class="w-full bg-gray-200 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded inline-flex items-center justify-center">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
+      </path>
+    </svg>
+    Filtros
+  </button>
+</div>
+}
+@if(bills.data && bills.data.length > 0){
+<div class="min-h-screen w-full bg-white text-black overflow-x-auto max-w-full px-2 md:px-8 py-6">
+  <!-- Tabla en PC -->
+  <div class="hidden lg:block bg-white min-h-screen">
+    <table class="min-w-full rounded-xl overflow-hidden shadow-lg bg-white">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left">#</th>
+          <th class="px-4 py-2 text-left">Nombre</th>
+          <th class="px-4 py-2 text-left">Cliente</th>
+          <th class="px-4 py-2 text-left">Fecha</th>
+          <th class="px-4 py-2 text-left">Precio</th>
+          <th class="px-4 py-2 text-left">Precio Imp.</th>
+          <th class="px-4 py-2 text-left">Estado</th>
+          <th class="px-4 py-2 text-left">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (b of bills.data; track b.Id) {
+        <tr class="border-b last:border-none hover:bg-gray-50">
+          <td class="px-4 py-2">{{ b.Id }}</td>
+          <td class="px-4 py-2 font-semibold">{{ b.Name }}</td>
+          <td class="px-4 py-2">{{ b.ClientName }}</td>
+          <td class="px-4 py-2">{{ b.Date }}</td>
+          <td class="px-4 py-2">{{ b.Price }} €</td>
+          <td class="px-4 py-2">{{ b.PriceImp }} €</td>
+          <td class="px-4 py-2">
+            <span [ngClass]="{
                     'bg-green-100 text-green-700': b.Cashed === true,
                     'bg-red-100 text-red-700': b.Cashed === false
                   }" class="px-3 py-1 rounded-full text-xs font-semibold">
-                    {{ b.Cashed ? 'Cobrado' : 'Pendiente' }}
-                  </span>
-                </td>
-                <td class="px-4 py-2">
-                  <div class="flex gap-2">
-                    <a *ngIf="!b.Cashed" (click)="cashed(b.Id)" class="cursor-pointer flex items-center" title="Cobrar">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
-                      <span class="ml-1">Cobrar</span>
-                    </a>
-                    <a (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="cursor-pointer flex items-center" title="Descargar PDF">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>
-                      <span class="ml-1">Descargar</span>
-                    </a>
-                    <a (click)="deleteBill(b.Id)" class="cursor-pointer flex items-center" title="Eliminar">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" /><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /></svg>
-                      <span class="ml-1">Eliminar</span>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-      <!-- Cards en móvil -->
-      <div class="block lg:hidden">
-        @for (b of bills.data; track b.Id) {
-          <div class="rounded-xl shadow-lg bg-gray-50 dark:bg-gray-900 p-4 mb-4 flex flex-col gap-2">
-            <div class="flex justify-between items-center">
-              <span class="font-semibold text-lg text-primary-700 dark:text-primary-400">{{ b.Name }}</span>
-              <span [ngClass]="{
-                'bg-green-100 text-green-700': b.Cashed === true,
-                'bg-red-100 text-red-700': b.Cashed === false
-              }" class="px-3 py-1 rounded-full text-xs font-semibold">
-                {{ b.Cashed ? 'Cobrado' : 'Pendiente' }}
-              </span>
-            </div>
-            <div class="text-sm text-gray-600 dark:text-gray-300">Cliente: {{ b.ClientName }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-300">Fecha: {{ b.Date }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-300">Precio: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.Price }} €</span></div>
-            <div class="text-sm text-gray-600 dark:text-gray-300">Precio con impuestos: <span class="font-bold text-primary-700 dark:text-primary-400">{{ b.PriceImp }} €</span></div>
-            <div class="flex flex-wrap gap-2 justify-end mt-2">
-              <a *ngIf="!b.Cashed" (click)="cashed(b.Id)" class="cursor-pointer p-2 flex items-center" title="Cobrar">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
+              {{ b.Cashed ? 'Cobrado' : 'Pendiente' }}
+            </span>
+          </td>
+          <td class="px-4 py-2">
+            <div class="flex gap-2">
+              <a *ngIf="!b.Cashed" (click)="cashed(b.Id)" class="cursor-pointer flex items-center" title="Cobrar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
                 <span class="ml-1">Cobrar</span>
               </a>
-              <a (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="cursor-pointer p-2 flex items-center" title="Descargar PDF">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>
+              <a (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="cursor-pointer flex items-center"
+                title="Descargar PDF">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                  <polyline points="7 11 12 16 17 11" />
+                  <line x1="12" y1="4" x2="12" y2="16" />
+                </svg>
                 <span class="ml-1">Descargar</span>
               </a>
-              <a (click)="deleteBill(b.Id)" class="cursor-pointer p-2 flex items-center" title="Eliminar">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18" /><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" /><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /></svg>
+              <a (click)="deleteBill(b.Id)" class="cursor-pointer flex items-center" title="Eliminar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                  <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+                  <path d="M10 11v6" />
+                  <path d="M14 11v6" />
+                </svg>
                 <span class="ml-1">Eliminar</span>
               </a>
             </div>
-          </div>
+          </td>
+        </tr>
         }
+      </tbody>
+    </table>
+  </div>
+  <!-- Cards en móvil -->
+  <div class="block lg:hidden">
+    @for (b of bills.data; track b.Id) {
+    <div class="rounded-xl shadow-lg bg-gray-50 dark:bg-gray-900 p-4 mb-4 flex flex-col gap-2">
+      <div class="flex justify-between items-center">
+        <span class="font-semibold text-lg text-primary-700 dark:text-primary-400">{{ b.Name }}</span>
+        <span [ngClass]="{
+                'bg-green-100 text-green-700': b.Cashed === true,
+                'bg-red-100 text-red-700': b.Cashed === false
+              }" class="px-3 py-1 rounded-full text-xs font-semibold">
+          {{ b.Cashed ? 'Cobrado' : 'Pendiente' }}
+        </span>
       </div>
-            <app-paginator [allItems]="allBills" (updateItems)="updateItems($event)"></app-paginator>
+      <div class="text-sm text-gray-600 dark:text-gray-300">Cliente: {{ b.ClientName }}</div>
+      <div class="text-sm text-gray-600 dark:text-gray-300">Fecha: {{ b.Date }}</div>
+      <div class="text-sm text-gray-600 dark:text-gray-300">Precio: <span
+          class="font-bold text-primary-700 dark:text-primary-400">{{ b.Price }} €</span></div>
+      <div class="text-sm text-gray-600 dark:text-gray-300">Precio con impuestos: <span
+          class="font-bold text-primary-700 dark:text-primary-400">{{ b.PriceImp }} €</span></div>
+      <div class="flex flex-wrap gap-2 justify-end mt-2">
+        <a *ngIf="!b.Cashed" (click)="cashed(b.Id)" class="cursor-pointer p-2 flex items-center" title="Cobrar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor"><text x="6" y="18" font-size="16" fill="currentColor">€</text></svg>
+          <span class="ml-1">Cobrar</span>
+        </a>
+        <a (click)="commonService.generatePDF('save','bill',b.IdBudget)" class="cursor-pointer p-2 flex items-center"
+          title="Descargar PDF">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+            <polyline points="7 11 12 16 17 11" />
+            <line x1="12" y1="4" x2="12" y2="16" />
+          </svg>
+          <span class="ml-1">Descargar</span>
+        </a>
+        <a (click)="deleteBill(b.Id)" class="cursor-pointer p-2 flex items-center" title="Eliminar">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M3 6h18" />
+            <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+          </svg>
+          <span class="ml-1">Eliminar</span>
+        </a>
+      </div>
     </div>
-  }@else{
-    <div class="flex flex-col items-center justify-center h-screen gap-6">
-      <p class="text-center text-black dark:text-black">
-        @if(allBills && allBills.data && allBills.data.length === 0){
-          No hay facturas registradas.
-        }@else{
-          No hay facturas que coincidan con la búsqueda.
-        }
-      </p>
-    </div>
-  }
+    }
+  </div>
+  <app-paginator [allItems]="allBills" (updateItems)="updateItems($event)"></app-paginator>
+</div>
+}@else{
+<div class="flex items-center justify-center min-h-screen w-full bg-white">
+  <div class="text-center py-12">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+      aria-hidden="true">
+      <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+    </svg>
+    @if(allBills && allBills.data && allBills.data.length === 0){
+    <h3 class="mt-2 text-sm font-semibold text-gray-900">No hay facturas registradas.</h3>
+    }@else{
+
+    <h3 class="mt-2 text-sm font-semibold text-gray-900">No hay facturas que coincidan con la búsqueda.</h3>
+    }
+  </div>
+</div>
+}
 }

@@ -12,6 +12,7 @@ import { CommonService, Messages } from '../../services/common-service.service';
 import { PurchaseReport } from '../../models/PurchaseReport';
 import { SearchFiltersComponent } from '../../../shared/components/search-filters/search-filters.component';
 import { ErrorsComponent } from '../../../shared/components/errors/errors.component';
+import { GeneratePurchaserModalComponent } from '../../../shared/components/generate-purchaser-modal/generate-purchaser-modal.component';
 
 
 @Component({
@@ -85,6 +86,16 @@ export class PurchaseReportsComponent {
       dialogRef.componentInstance.isView = false;
     }
   }
+
+    openTaskDialogAdd(action: string, id: number) {
+      const dialogRef = this.dialog.open(GeneratePurchaserModalComponent);
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          // TODO: Implement post-closing logic if needed
+        }
+      });
+    }
 
   updateSearching(formControlValue: any) {
     if (formControlValue === "") {

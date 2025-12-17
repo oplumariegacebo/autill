@@ -7,6 +7,8 @@ export interface Budget {
     Date: string;
     DescriptionItems: string;
     Price: number;
+    Iva: number;
+    IvaExento: boolean;
 }
 
 export interface BudgetResults {

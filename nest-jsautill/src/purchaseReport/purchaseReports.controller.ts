@@ -14,22 +14,22 @@ export class PurchaseReportsController {
   }
 
   @Get(':purchaseReportId')
-  findBudget(@Param('purchaseReportId') purchaseReportId: number): Promise<PurchaseReportDto> {
+  findReport(@Param('purchaseReportId') purchaseReportId: number): Promise<PurchaseReportDto> {
     return this.purchaseReportService.findPurchaseReport(purchaseReportId);
   }
 
   @Post() 
-  createBudget(@Body() newPurchaseReport: PurchaseReportDto): Promise<PurchaseReportDto> { 
+  createReport(@Body() newPurchaseReport: PurchaseReportDto): Promise<PurchaseReportDto> { 
     return this.purchaseReportService.createPurchaseReport(newPurchaseReport); 
   }
 
   @Delete(':purchaseReportId') 
-  deleteBudget(@Param('purchaseReportId') budgetId: number): Promise<PurchaseReportDto> { 
-    return this.purchaseReportService.deletePurchaseReport(budgetId);  
+  deleteReport(@Param('purchaseReportId') reportId: number): Promise<PurchaseReportDto> { 
+    return this.purchaseReportService.deletePurchaseReport(reportId);  
   }
 
   @Put(':purchaseReportId') 
-  editBudget(@Param('purchaseReportId') purchaseReportId: number, @Body() newPurchaseReport: PurchaseReportDto): Promise<PurchaseReportDto> { 
+  editReport(@Param('purchaseReportId') purchaseReportId: number, @Body() newPurchaseReport: PurchaseReportDto): Promise<PurchaseReportDto> { 
     return this.purchaseReportService.updatePurchaseReport(purchaseReportId, newPurchaseReport); 
   }
 
@@ -40,6 +40,6 @@ export class PurchaseReportsController {
   
   /*@Post('/mailInfo')
   sendEmail(@Body() options: any){
-    return this.budgetsService.sendEmail(options);
+    return this.ReportsService.sendEmail(options);
   }*/
 }

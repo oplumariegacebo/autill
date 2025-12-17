@@ -4,5 +4,6 @@ export interface PurchaseReport {
     IdSupplier: number;
     DescriptionItems: string;
     Execute: boolean;
-    TotalPrice: number;
+    TotalPrice: number | string;
+    TotalPriceImp: number | string;
 }

@@ -17,9 +17,9 @@ export class PurchaseReports {
   @Column()
   Execute: boolean;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   TotalPrice: number;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   TotalPriceImp: number;
 }

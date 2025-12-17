@@ -22,6 +22,11 @@ export class ItemsController {
     const result = await this.itemsService.findAllFilter(options);
     return result;
   }
+  @Post('getItemsLowStock')
+  async findAllitemsLowStock(@Body() options: any) {
+    const result = await this.itemsService.getAllItemsLowStock(options);
+    return result;
+  }
 
   @Get('')
   async findAll(@Body() options: any) {

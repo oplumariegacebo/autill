@@ -8,4 +8,9 @@ export interface Item {
     displayName?: string;
     StockLimit: number;
     IdCategory: number;
+    IdSupplier: number;
+    [key: string]: any;
+    OrderPrice: string;
+    OrderPriceImp: string;
+    toOrder: number;
 }

@@ -54,7 +54,7 @@ export class ItemsService {
       }
 
       if (filters.StockLimit === true) {
-        qb.andWhere("item.Stock < (item.StockLimit * 1.35) AND item.StockLimit > 0");
+        qb.andWhere("item.Stock < (item.StockLimit * 1.25) AND item.StockLimit > 0");
       }
 
       if (filters.IdCategory > 0) {
@@ -137,4 +137,25 @@ export class ItemsService {
     await this.itemsRepository.delete({ Id: itemId });
     return { success: true, message: 'Item eliminado correctamente' };
   }
+
+  async getAllItemsLowStock(options: any): Promise<any> {
+    const { userId } = options;
+
+    const qb = this.itemsRepository.createQueryBuilder("item");
+
+    qb.where("item.IdBusiness = :userId", { userId });
+    qb.andWhere("item.Stock <= (item.StockLimit * 1.25) AND item.StockLimit > 0");
+
+    const [result, total] = await qb
+      .orderBy("item.Name", "ASC")
+      .getManyAndCount();
+
+    const nfd = (result.length === 0 && options.filters != null) ? 0 : 1;
+    return {
+      data: result,
+      count: total,
+      noFilterData: nfd
+    };
+  }
+
 }

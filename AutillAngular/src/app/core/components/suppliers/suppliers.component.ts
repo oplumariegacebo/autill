@@ -152,7 +152,7 @@ export class SuppliersComponent implements OnDestroy {
     } else if (action === 'edit') {
       const dialogRef = this.dialog.open(SupplierModalComponent);
       dialogRef.componentInstance.action = 'edit';
-      dialogRef.componentInstance.id = supplier;
+      dialogRef.componentInstance.id = supplier.Id;
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {

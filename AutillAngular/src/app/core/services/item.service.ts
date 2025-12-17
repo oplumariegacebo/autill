@@ -22,28 +22,34 @@ export class ItemService {
     });
   }
 
-  deleteProduct(id: number){
+  deleteProduct(id: number) {
     const headers = this.getHeaders();
-    return this.http.delete(this.api+'/Items/'+id, {headers});
+    return this.http.delete(this.api + '/Items/' + id, { headers });
   }
-  getItems(id:string, filters: any, t: number, s:number): Observable<any>{
-    const body = {userId: id, filters: filters, take: t, skip: s};
+  getItems(id: string, filters: any, t: number, s: number): Observable<any> {
+    const body = { userId: id, filters: filters, take: t, skip: s };
     const headers = this.getHeaders();
 
-    return this.http.post(this.api+'/Items/getList',body, {headers});
+    return this.http.post(this.api + '/Items/getList', body, { headers });
   }
-  getAllItems(id:string): Observable<any>{
-    const body = {userId: id};
+  getAllItems(id: string): Observable<any> {
+    const body = { userId: id };
     const headers = this.getHeaders();
 
-    return this.http.post(this.api+'/Items/getList',body, {headers});
+    return this.http.post(this.api + '/Items/getList', body, { headers });
   }
-  editItem(id:number, item:Item){
+  getItemsLowStock(id: string) {
+    const body = { userId: id };
     const headers = this.getHeaders();
-    return this.http.put(this.api+'/Items/'+id, item,{headers});
+
+    return this.http.post(this.api + '/Items/getItemsLowStock', body, { headers });
   }
-  addItem(item:Item){
+  editItem(id: number, item: Item) {
     const headers = this.getHeaders();
-    return this.http.post<Item>(this.api+'/Items', item,{headers});
+    return this.http.put(this.api + '/Items/' + id, item, { headers });
+  }
+  addItem(item: Item) {
+    const headers = this.getHeaders();
+    return this.http.post<Item>(this.api + '/Items', item, { headers });
   }
 }
